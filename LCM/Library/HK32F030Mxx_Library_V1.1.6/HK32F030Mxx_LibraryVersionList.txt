@@ -1,0 +1,68 @@
+/*
+* @File name: HK32F030Mxx_LibraryVersionList.txt
+* @Description: 本文件是用来描述HK32F030M系列芯片固件库的版本列表
+* @Author: HKMicroChip AE Team
+* @Vender：HK_MicroChip
+* @WebSite:http://www.hsxp-hk.com
+*/
+
+HK32F030Mxx_Library_V1.1.6  2021-03-29
+1、更新库函数 HK32F030Mxx_gpio.c: IOMUX 函数
+
+HK32F030Mxx_Library_V1.1.5  2021-03-25
+1、更新库函数 HK32F030Mxx_flash.h: 读保护等级值
+
+HK32F030Mxx_Library_V1.1.4  2021-02-01
+1、更新库函数 HK32F030Mxx_gpio.c/.h
+
+HK32F030Mxx_Library_V1.1.3  2020-12-09
+更新函数库的system_hk32f030m.c
+
+HK32F030Mxx_Library_V1.1.2  2020-09-30
+1、优化FLASH的相关函数
+2、优化hk32f030m_sys.c文件里相关函数
+3、将LSI 128k改为114k
+
+ HK32F030Mxx_Library_V1.1.1  2020-06-30
+1、增加dbg_mcu部分的函数库
+
+HK32F030Mxx_Library_V1.1.0  2020-06-23
+1、修复ADC 库函数中的bug：可能会导致ADC的通道切换不成功
+
+HK32F030Mxx_Library_V1.0.9  2020-06-16
+1、cmsis文件夹中更新HK32F030M.h文件
+
+HK32F030Mxx_Library_V1.0.8  2020-05-26
+1、cmsis文件夹中添加IAR工程中需要用到的启动文件 IAR_Sartup_hk32f030m.s
+
+HK32F030Mxx_Library_V1.0.7  2020-05-12
+1、优化IOMUX的功能函数
+2、优化FLASH的功能函数
+
+
+HK32F030Mxx_Library_V1.0.6  2020-04-28
+1、更新HK32F030M_FLASH.c/.h文件：将HK32F0301M_FLASH.c/h中关于 FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP,uint8_t VDDA);函数改为
+FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP );
+
+HK32F030Mxx_Library_V1.0.5  2020-04-16
+1、修改库HK32F030M_FLASH.c文件中64bitUID函数
+2、修改HK32F030M.h的UID_base基地址
+
+
+HK32F030Mxx_Library_V1.0.4  2020-03-26
+1、完善system_hk32f030m.c文件中关于HSI8M/HSI16M/HSI32M的HCLK和PCLK配置
+
+HK32F030Mxx_Library_V1.0.3  2020-03-23
+1、修改hk32f0301m_beep.h文件中的条件编译
+	#ifndef __HK32F0301M_BEEP_H
+	#define __HK32F0301M_BEEP_H
+
+HK32F030Mxx_Library_V1.0.2  2020-03-09
+1、增加API函数 PWR_EnterDeepSleepMode()
+  该函数用来进入deepsleepmode
+2、更新beep.c中的BEEP_SetTRGOPrescaler()函数配置
+3、将hk32f030m_conf.h文件中的LSI值改为128000
+
+
+HK32F030Mxx_Library_V1.0.1 2020-03-03
+1、初始版本
