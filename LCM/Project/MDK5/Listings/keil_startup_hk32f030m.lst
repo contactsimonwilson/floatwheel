@@ -333,12 +333,11 @@ ARM Macro Assembler    Page 6
               00000200 
               00000200 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
-ork --depend=.\objects\keil_startup_hk32f030m.d -o.\objects\keil_startup_hk32f0
-30m.o -I.\RTE\_LCM_Light_Control_IO_WS2812_New -IC:\Keil_v5\ARM\CMSIS\Include -
--predefine="__UVISION_VERSION SETA 530" --predefine="_RTE_ SETA 1" --list=.\lis
-tings\keil_startup_hk32f030m.lst ..\..\Library\HK32F030Mxx_Library_V1.1.6\HK32F
-030M\CMSIS\HK32F030M\Source\ARM\KEIL_Startup_hk32f030m.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M0 --depe
+nd=.\objects\keil_startup_hk32f030m.d -o.\objects\keil_startup_hk32f030m.o --pr
+edefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 538" --list=.\listi
+ngs\keil_startup_hk32f030m.lst ..\..\Library\HK32F030Mxx_Library_V1.1.6\HK32F03
+0M\CMSIS\HK32F030M\Source\ARM\KEIL_Startup_hk32f030m.s
 
 
 
