@@ -7,23 +7,24 @@
 #include "flag_bit.h"
 #include "vesc_uasrt.h"
 
-#define	  CHARGING_VOLTAGE	  		40   		//³äµçµçÑ¹¼ì²â ´óÓÚ´ËÖµÈÏÎª³äµçÆ÷²åÈë
-#define   BATTERY_STRING      		20    		//µç³Ø´®Êý
-#define   SHUTDOWN_TIME		  		30   		//¹Ø»úÊ±¼ä µ¥Î»·ÖÖÓ
-#define   VESC_RPM            		250  		//×ªËÙ
-#define   VESC_BOOT_TIME      		6000 		//VESC¿ª»úÊ±¼ä µ¥Î»ms
-#define   DUTY_CYCLE          		0.7  		//Õ¼¿Õ±È´óÓÚ´ËÖµ ßÙßÙßÙµÄÏì
-#define   VOLTAGE_RECEIPT     		0.02 		//µçÑ¹»ØÖ´ µ¥Î»V
+#define	  CHARGING_VOLTAGE	  		40   		//ï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½Öµï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define   BATTERY_STRING      		20    		//ï¿½ï¿½Ø´ï¿½ï¿½ï¿½
+#define   SHUTDOWN_TIME		  		30   		//ï¿½Ø»ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
+#define   VESC_RPM            		250  		//×ªï¿½ï¿½
+#define   VESC_BOOT_TIME      		6000 		//VESCï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½Î»ms
+#define   DUTY_CYCLE          		0.7  		//Õ¼ï¿½Õ±È´ï¿½ï¿½Ú´ï¿½Öµ ï¿½ï¿½ï¿½ï¿½ï¿½Ùµï¿½ï¿½ï¿½
+#define   VOLTAGE_RECEIPT     		0.02 		//ï¿½ï¿½Ñ¹ï¿½ï¿½Ö´ ï¿½ï¿½Î»V
+#define   ADC_THRESHOLD             2.0         // Threshold value for footpad activation detection
 /*******************************************************************************/
-#define   VESC_RPM_WIDTH      		-200 		//×ªËÙÔÚ¡À100Ö®¼ä²»×öÇ°ºóµÆÇÐ»» ±£³ÖÇ°Ãæ°×µÆºóÃæºìµÆ
-#define   WS2812_1_BRIGHTNESS 		204			//WS2812 1µ²ÁÁ¶È £¨0-255£©
-#define   WS2812_2_BRIGHTNESS 		128			//WS2812 2µ²ÁÁ¶È £¨0-255£©
-#define   WS2812_3_BRIGHTNESS 		30			//WS2812 3µ²ÁÁ¶È £¨0-255£©
-#define   CHARGE_CURRENT			0.3         //³äµçµçÁ÷ µ¥Î»A
-#define   CHARGE_CURRENT_L			0.1         //³äµçµçÁ÷ µ¥Î»A
-#define   CHARGE_CURRENT_H			0.24        //³äµçµçÁ÷ µ¥Î»A
-#define   DETECTION_SWITCH_TIME     500         //¼ì²âÇÐ»»Ê±¼ä µ¥Î»ms
-#define   CHARGER_DETECTION_DELAY	1000        //³äµçÆ÷¼ì²âÑÓÊ± µ¥Î»ms
+#define   VESC_RPM_WIDTH      		-200 		//×ªï¿½ï¿½ï¿½Ú¡ï¿½100Ö®ï¿½ä²»ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½×µÆºï¿½ï¿½ï¿½ï¿½ï¿½
+#define   LIGHTBAR_BRIGHTNESS_1 	204			// High brightness value (0-255)
+#define   LIGHTBAR_BRIGHTNESS_2 	128			// Medium brightness value (0-255)
+#define   LIGHTBAR_BRIGHTNESS_3 	30			// Low brightness value (0-255)
+#define   CHARGE_CURRENT			0.3         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î»A
+#define   CHARGE_CURRENT_L			0.1         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î»A
+#define   CHARGE_CURRENT_H			0.24        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î»A
+#define   DETECTION_SWITCH_TIME     500         //ï¿½ï¿½ï¿½ï¿½Ð»ï¿½Ê±ï¿½ï¿½ ï¿½ï¿½Î»ms
+#define   CHARGER_DETECTION_DELAY	1000        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê± ï¿½ï¿½Î»ms
 
 void LED_Task(void);
 void KEY1_Task(void);

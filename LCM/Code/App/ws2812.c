@@ -5,9 +5,9 @@ uint8_t WS2812_Buff[WS2812_N][24];
 
 /**************************************************
  * @brie   :WS2812_Init()
- * @note   :WS2812³õÊ¼»¯ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :WS2812ï¿½ï¿½Ê¼ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Init(void)
 {
@@ -27,20 +27,20 @@ void WS2812_Init(void)
 
 /**************************************************
  * @brie   :WS2812_Set_Colour()
- * @note   :WS2812ÉèÖÃÑÕÉ« 
- * @param  :num 	µÚ¼¸¸öµÆ
+ * @note   :WS2812ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É« 
+ * @param  :num 	ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½ï¿½
  *          red 	0-255
  *          green	0-255
  *          blue    0-255
- * @retval :ÎÞ
+ * @retval :ï¿½ï¿½
  **************************************************/
-void WS2812_Set_Colour(uint8_t num,uint8_t green,uint8_t red,uint8_t blue)
+void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 {
 	uint8_t i = 0;
 	
 	for(i=0; i<24; i++)
 	{
-		if(i<8)   //ºìµÆ
+		if(i<8)   //ï¿½ï¿½ï¿½
 		{
 			if(green&0x80)
 			{
@@ -52,7 +52,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t green,uint8_t red,uint8_t blue)
 			}
 			green <<= 1;
 		}
-		else if(i<16)  //ÂÌµÆ
+		else if(i<16)  //ï¿½Ìµï¿½
 		{
 			if(red&0x80)
 			{
@@ -64,7 +64,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t green,uint8_t red,uint8_t blue)
 			}
 			red <<= 1;		
 		}
-		else if(i<24)  //À¶µÆ
+		else if(i<24)  //ï¿½ï¿½ï¿½ï¿½
 		{
 			if(blue&0x80)
 			{
@@ -83,9 +83,9 @@ void WS2812_Set_Colour(uint8_t num,uint8_t green,uint8_t red,uint8_t blue)
 
 /**************************************************
  * @brie   :WS2812_Left()
- * @note   :WS2812×óÒÆ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :WS2812ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Left(void)
 {
@@ -113,16 +113,16 @@ void WS2812_Left(void)
 
 ///**************************************************
 // * @brie   :WS2812_Refresh()
-// * @note   :WS2812Ë¢ÐÂÒ»´Î
-// * @param  :ÎÞ
-// * @retval :ÎÞ
+// * @note   :WS2812Ë¢ï¿½ï¿½Ò»ï¿½ï¿½
+// * @param  :ï¿½ï¿½
+// * @retval :ï¿½ï¿½
 // **************************************************/
 //void WS2812_Refresh(void)
 //{
 //	uint16_t 	i = 0;
 //	uint8_t*	ws2812_buff_add = (uint8_t*)&WS2812_Buff;
 //	
-//	for(i=0; i<250; i++)   //¸´Î»ÐÅºÅ
+//	for(i=0; i<250; i++)   //ï¿½ï¿½Î»ï¿½Åºï¿½
 //	{
 //		SPI1_Send_Byte(WS2812_R);
 //	}
@@ -145,9 +145,9 @@ void WS2812_Refresh(void)
 	uint16_t i = 0;
 	uint8_t* ws2812_buff_add = (uint8_t*)&WS2812_Buff;
 	
-	//WS2812ÔÚ·¢Êý¾ÝÊ±²»ÔÊÐíÖÐ¶Ï´ò¶Ï·ñÔò²»Õý³£
+	//WS2812ï¿½Ú·ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
-	__set_PRIMASK(1);//¹Ø×ÜÖÐ¶Ï
+	__set_PRIMASK(1);//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 	
 	GPIOD->BRR = GPIO_Pin_4;
 	delay(250);
@@ -165,6 +165,6 @@ void WS2812_Refresh(void)
 		ws2812_buff_add++;
 	}
 	
-	__set_PRIMASK(0);//¿ª×ÜÖÐ¶Ï
+	__set_PRIMASK(0);//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 	//GPIOD->BSRR = GPIO_Pin_4;
 }
