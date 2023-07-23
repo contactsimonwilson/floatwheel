@@ -1926,50 +1926,50 @@ Image Symbol Table
     __arm_cp.4_0                             0x08002828   Number         4  task.o(.text.WS2812_Boot)
     __arm_cp.4_1                             0x0800282c   Number         4  task.o(.text.WS2812_Boot)
     [Anonymous Symbol]                       0x08002830   Section        0  task.o(.text.WS2812_Charge)
-    __arm_cp.6_0                             0x080028b0   Number         4  task.o(.text.WS2812_Charge)
-    __arm_cp.6_1                             0x080028b4   Number         4  task.o(.text.WS2812_Charge)
-    [Anonymous Symbol]                       0x080028b8   Section        0  ws2812.o(.text.WS2812_Init)
-    [Anonymous Symbol]                       0x080028cc   Section        0  ws2812.o(.text.WS2812_Refresh)
-    __arm_cp.4_0                             0x08002900   Number         4  ws2812.o(.text.WS2812_Refresh)
-    [Anonymous Symbol]                       0x08002904   Section        0  ws2812.o(.text.WS2812_Set_Colour)
-    __arm_cp.1_0                             0x0800295c   Number         4  ws2812.o(.text.WS2812_Set_Colour)
-    [Anonymous Symbol]                       0x08002960   Section        0  task.o(.text.WS2812_Task)
-    __arm_cp.7_0                             0x08002a08   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_1                             0x08002a0c   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_2                             0x08002a10   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_3                             0x08002a14   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_4                             0x08002a18   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_5                             0x08002a1c   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_6                             0x08002a20   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_7                             0x08002a24   Number         4  task.o(.text.WS2812_Task)
-    __arm_cp.7_8                             0x08002a28   Number         4  task.o(.text.WS2812_Task)
-    [Anonymous Symbol]                       0x08002a2c   Section        0  crc.o(.text.crc16)
-    __arm_cp.0_0                             0x08002a54   Number         4  crc.o(.text.crc16)
-    [Anonymous Symbol]                       0x08002a58   Section        0  main.o(.text.main)
-    __arm_cp.0_0                             0x08002ab8   Number         4  main.o(.text.main)
-    __arm_cp.0_1                             0x08002abc   Number         4  main.o(.text.main)
-    .text_divfast                            0x08002ac0   Section      502  aeabi_sdivfast.o(.text_divfast)
-    i._dgeq                                  0x08002cb6   Section        0  dcmp.o(i._dgeq)
-    i._dgr                                   0x08002ccc   Section        0  dcmp.o(i._dgr)
-    i._dleq                                  0x08002ce2   Section        0  dcmp.o(i._dleq)
-    i._dls                                   0x08002cfc   Section        0  dcmp.o(i._dls)
-    i._fgeq                                  0x08002d12   Section        0  fcmp.o(i._fgeq)
-    i._fleq                                  0x08002d28   Section        0  fcmp.o(i._fleq)
-    i._fls                                   0x08002d42   Section        0  fcmp.o(i._fls)
-    x$fpl$dgeqf                              0x08002d58   Section      100  dgef.o(x$fpl$dgeqf)
-    x$fpl$dleqf                              0x08002dbc   Section      100  dlef.o(x$fpl$dleqf)
-    x$fpl$fadd                               0x08002e20   Section      140  faddsub.o(x$fpl$fadd)
-    _fadd1                                   0x08002e2d   Thumb Code     0  faddsub.o(x$fpl$fadd)
-    x$fpl$fgeqf                              0x08002eac   Section       84  fgef.o(x$fpl$fgeqf)
-    x$fpl$fleqf                              0x08002f00   Section       84  flef.o(x$fpl$fleqf)
-    x$fpl$fmul                               0x08002f54   Section      176  fmul.o(x$fpl$fmul)
-    x$fpl$fsub                               0x08003004   Section      208  faddsub.o(x$fpl$fsub)
-    _fsub1                                   0x08003011   Thumb Code     0  faddsub.o(x$fpl$fsub)
-    fdiv_tab                                 0x080030d4   Data          64  fdiv.o(.constdata)
-    .constdata                               0x080030d4   Section       64  fdiv.o(.constdata)
-    x$fpl$usenofp                            0x080030d4   Section        0  usenofp.o(x$fpl$usenofp)
-    [Anonymous Symbol]                       0x08003114   Section        0  task.o(.rodata..L__const.Apply_BatteryPowerFlag.battVoltages)
-    [Anonymous Symbol]                       0x08003364   Section        0  task.o(.rodata.str4.4)
+    __arm_cp.6_0                             0x080028bc   Number         4  task.o(.text.WS2812_Charge)
+    __arm_cp.6_1                             0x080028c0   Number         4  task.o(.text.WS2812_Charge)
+    [Anonymous Symbol]                       0x080028c4   Section        0  ws2812.o(.text.WS2812_Init)
+    [Anonymous Symbol]                       0x080028d8   Section        0  ws2812.o(.text.WS2812_Refresh)
+    __arm_cp.4_0                             0x0800290c   Number         4  ws2812.o(.text.WS2812_Refresh)
+    [Anonymous Symbol]                       0x08002910   Section        0  ws2812.o(.text.WS2812_Set_Colour)
+    __arm_cp.1_0                             0x08002968   Number         4  ws2812.o(.text.WS2812_Set_Colour)
+    [Anonymous Symbol]                       0x0800296c   Section        0  task.o(.text.WS2812_Task)
+    __arm_cp.7_0                             0x08002a14   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_1                             0x08002a18   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_2                             0x08002a1c   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_3                             0x08002a20   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_4                             0x08002a24   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_5                             0x08002a28   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_6                             0x08002a2c   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_7                             0x08002a30   Number         4  task.o(.text.WS2812_Task)
+    __arm_cp.7_8                             0x08002a34   Number         4  task.o(.text.WS2812_Task)
+    [Anonymous Symbol]                       0x08002a38   Section        0  crc.o(.text.crc16)
+    __arm_cp.0_0                             0x08002a60   Number         4  crc.o(.text.crc16)
+    [Anonymous Symbol]                       0x08002a64   Section        0  main.o(.text.main)
+    __arm_cp.0_0                             0x08002ac4   Number         4  main.o(.text.main)
+    __arm_cp.0_1                             0x08002ac8   Number         4  main.o(.text.main)
+    .text_divfast                            0x08002acc   Section      502  aeabi_sdivfast.o(.text_divfast)
+    i._dgeq                                  0x08002cc2   Section        0  dcmp.o(i._dgeq)
+    i._dgr                                   0x08002cd8   Section        0  dcmp.o(i._dgr)
+    i._dleq                                  0x08002cee   Section        0  dcmp.o(i._dleq)
+    i._dls                                   0x08002d08   Section        0  dcmp.o(i._dls)
+    i._fgeq                                  0x08002d1e   Section        0  fcmp.o(i._fgeq)
+    i._fleq                                  0x08002d34   Section        0  fcmp.o(i._fleq)
+    i._fls                                   0x08002d4e   Section        0  fcmp.o(i._fls)
+    x$fpl$dgeqf                              0x08002d64   Section      100  dgef.o(x$fpl$dgeqf)
+    x$fpl$dleqf                              0x08002dc8   Section      100  dlef.o(x$fpl$dleqf)
+    x$fpl$fadd                               0x08002e2c   Section      140  faddsub.o(x$fpl$fadd)
+    _fadd1                                   0x08002e39   Thumb Code     0  faddsub.o(x$fpl$fadd)
+    x$fpl$fgeqf                              0x08002eb8   Section       84  fgef.o(x$fpl$fgeqf)
+    x$fpl$fleqf                              0x08002f0c   Section       84  flef.o(x$fpl$fleqf)
+    x$fpl$fmul                               0x08002f60   Section      176  fmul.o(x$fpl$fmul)
+    x$fpl$fsub                               0x08003010   Section      208  faddsub.o(x$fpl$fsub)
+    _fsub1                                   0x0800301d   Thumb Code     0  faddsub.o(x$fpl$fsub)
+    fdiv_tab                                 0x080030e0   Data          64  fdiv.o(.constdata)
+    .constdata                               0x080030e0   Section       64  fdiv.o(.constdata)
+    x$fpl$usenofp                            0x080030e0   Section        0  usenofp.o(x$fpl$usenofp)
+    [Anonymous Symbol]                       0x08003120   Section        0  task.o(.rodata..L__const.Apply_BatteryPowerFlag.battVoltages)
+    [Anonymous Symbol]                       0x08003370   Section        0  task.o(.rodata.str4.4)
     .bss                                     0x20000008   Section       96  libspace.o(.bss)
     ADC_Task.adc1_val_sum_ave                0x20000070   Data           2  task.o(.bss.ADC_Task.adc1_val_sum_ave)
     [Anonymous Symbol]                       0x20000070   Section        0  task.o(.bss.ADC_Task.adc1_val_sum_ave)
@@ -2254,47 +2254,47 @@ Image Symbol Table
     WS2812_0_Code                            0x080027a9   Thumb Code    16  io_ws2812.o(.text.WS2812_0_Code)
     WS2812_1_Code                            0x080027b9   Thumb Code    24  io_ws2812.o(.text.WS2812_1_Code)
     WS2812_Boot                              0x080027d5   Thumb Code    84  task.o(.text.WS2812_Boot)
-    WS2812_Charge                            0x08002831   Thumb Code   128  task.o(.text.WS2812_Charge)
-    WS2812_Init                              0x080028b9   Thumb Code    20  ws2812.o(.text.WS2812_Init)
-    WS2812_Refresh                           0x080028cd   Thumb Code    52  ws2812.o(.text.WS2812_Refresh)
-    WS2812_Set_Colour                        0x08002905   Thumb Code    88  ws2812.o(.text.WS2812_Set_Colour)
-    WS2812_Task                              0x08002961   Thumb Code   168  task.o(.text.WS2812_Task)
-    crc16                                    0x08002a2d   Thumb Code    40  crc.o(.text.crc16)
-    main                                     0x08002a59   Thumb Code    96  main.o(.text.main)
-    __aeabi_uidiv                            0x08002ac1   Thumb Code    68  aeabi_sdivfast.o(.text_divfast)
-    __aeabi_idiv                             0x08002b05   Thumb Code   434  aeabi_sdivfast.o(.text_divfast)
-    __aeabi_dcmpge                           0x08002cb7   Thumb Code     0  dcmp.o(i._dgeq)
-    _dgeq                                    0x08002cb7   Thumb Code    22  dcmp.o(i._dgeq)
-    __aeabi_dcmpgt                           0x08002ccd   Thumb Code     0  dcmp.o(i._dgr)
-    _dgr                                     0x08002ccd   Thumb Code    22  dcmp.o(i._dgr)
-    __aeabi_dcmple                           0x08002ce3   Thumb Code     0  dcmp.o(i._dleq)
-    _dleq                                    0x08002ce3   Thumb Code    26  dcmp.o(i._dleq)
-    __aeabi_dcmplt                           0x08002cfd   Thumb Code     0  dcmp.o(i._dls)
-    _dls                                     0x08002cfd   Thumb Code    22  dcmp.o(i._dls)
-    __aeabi_fcmpge                           0x08002d13   Thumb Code     0  fcmp.o(i._fgeq)
-    _fgeq                                    0x08002d13   Thumb Code    22  fcmp.o(i._fgeq)
-    __aeabi_fcmple                           0x08002d29   Thumb Code     0  fcmp.o(i._fleq)
-    _fleq                                    0x08002d29   Thumb Code    26  fcmp.o(i._fleq)
-    __aeabi_fcmplt                           0x08002d43   Thumb Code     0  fcmp.o(i._fls)
-    _fls                                     0x08002d43   Thumb Code    22  fcmp.o(i._fls)
-    _dcmpge                                  0x08002d59   Thumb Code    94  dgef.o(x$fpl$dgeqf)
-    __aeabi_cdcmple                          0x08002dbd   Thumb Code     0  dlef.o(x$fpl$dleqf)
-    _dcmple                                  0x08002dbd   Thumb Code    94  dlef.o(x$fpl$dleqf)
-    __aeabi_fadd                             0x08002e21   Thumb Code     0  faddsub.o(x$fpl$fadd)
-    _fadd                                    0x08002e21   Thumb Code   134  faddsub.o(x$fpl$fadd)
-    _fcmpge                                  0x08002ead   Thumb Code    78  fgef.o(x$fpl$fgeqf)
-    __aeabi_cfcmple                          0x08002f01   Thumb Code     0  flef.o(x$fpl$fleqf)
-    _fcmple                                  0x08002f01   Thumb Code    78  flef.o(x$fpl$fleqf)
-    __aeabi_fmul                             0x08002f55   Thumb Code     0  fmul.o(x$fpl$fmul)
-    _fmul                                    0x08002f55   Thumb Code   172  fmul.o(x$fpl$fmul)
-    __aeabi_fsub                             0x08003005   Thumb Code     0  faddsub.o(x$fpl$fsub)
-    _fsub                                    0x08003005   Thumb Code   204  faddsub.o(x$fpl$fsub)
-    __I$use$fp                               0x080030d4   Number         0  usenofp.o(x$fpl$usenofp)
-    AHBPrescTable                            0x0800313c   Data          32  hk32f030m_rcc.o(.rodata.AHBPrescTable)
-    APBPrescTable                            0x0800315c   Data           8  hk32f030m_rcc.o(.rodata.APBPrescTable)
-    crc16_tab                                0x08003164   Data         512  crc.o(.rodata.crc16_tab)
-    Region$$Table$$Base                      0x08003370   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08003390   Number         0  anon$$obj.o(Region$$Table)
+    WS2812_Charge                            0x08002831   Thumb Code   140  task.o(.text.WS2812_Charge)
+    WS2812_Init                              0x080028c5   Thumb Code    20  ws2812.o(.text.WS2812_Init)
+    WS2812_Refresh                           0x080028d9   Thumb Code    52  ws2812.o(.text.WS2812_Refresh)
+    WS2812_Set_Colour                        0x08002911   Thumb Code    88  ws2812.o(.text.WS2812_Set_Colour)
+    WS2812_Task                              0x0800296d   Thumb Code   168  task.o(.text.WS2812_Task)
+    crc16                                    0x08002a39   Thumb Code    40  crc.o(.text.crc16)
+    main                                     0x08002a65   Thumb Code    96  main.o(.text.main)
+    __aeabi_uidiv                            0x08002acd   Thumb Code    68  aeabi_sdivfast.o(.text_divfast)
+    __aeabi_idiv                             0x08002b11   Thumb Code   434  aeabi_sdivfast.o(.text_divfast)
+    __aeabi_dcmpge                           0x08002cc3   Thumb Code     0  dcmp.o(i._dgeq)
+    _dgeq                                    0x08002cc3   Thumb Code    22  dcmp.o(i._dgeq)
+    __aeabi_dcmpgt                           0x08002cd9   Thumb Code     0  dcmp.o(i._dgr)
+    _dgr                                     0x08002cd9   Thumb Code    22  dcmp.o(i._dgr)
+    __aeabi_dcmple                           0x08002cef   Thumb Code     0  dcmp.o(i._dleq)
+    _dleq                                    0x08002cef   Thumb Code    26  dcmp.o(i._dleq)
+    __aeabi_dcmplt                           0x08002d09   Thumb Code     0  dcmp.o(i._dls)
+    _dls                                     0x08002d09   Thumb Code    22  dcmp.o(i._dls)
+    __aeabi_fcmpge                           0x08002d1f   Thumb Code     0  fcmp.o(i._fgeq)
+    _fgeq                                    0x08002d1f   Thumb Code    22  fcmp.o(i._fgeq)
+    __aeabi_fcmple                           0x08002d35   Thumb Code     0  fcmp.o(i._fleq)
+    _fleq                                    0x08002d35   Thumb Code    26  fcmp.o(i._fleq)
+    __aeabi_fcmplt                           0x08002d4f   Thumb Code     0  fcmp.o(i._fls)
+    _fls                                     0x08002d4f   Thumb Code    22  fcmp.o(i._fls)
+    _dcmpge                                  0x08002d65   Thumb Code    94  dgef.o(x$fpl$dgeqf)
+    __aeabi_cdcmple                          0x08002dc9   Thumb Code     0  dlef.o(x$fpl$dleqf)
+    _dcmple                                  0x08002dc9   Thumb Code    94  dlef.o(x$fpl$dleqf)
+    __aeabi_fadd                             0x08002e2d   Thumb Code     0  faddsub.o(x$fpl$fadd)
+    _fadd                                    0x08002e2d   Thumb Code   134  faddsub.o(x$fpl$fadd)
+    _fcmpge                                  0x08002eb9   Thumb Code    78  fgef.o(x$fpl$fgeqf)
+    __aeabi_cfcmple                          0x08002f0d   Thumb Code     0  flef.o(x$fpl$fleqf)
+    _fcmple                                  0x08002f0d   Thumb Code    78  flef.o(x$fpl$fleqf)
+    __aeabi_fmul                             0x08002f61   Thumb Code     0  fmul.o(x$fpl$fmul)
+    _fmul                                    0x08002f61   Thumb Code   172  fmul.o(x$fpl$fmul)
+    __aeabi_fsub                             0x08003011   Thumb Code     0  faddsub.o(x$fpl$fsub)
+    _fsub                                    0x08003011   Thumb Code   204  faddsub.o(x$fpl$fsub)
+    __I$use$fp                               0x080030e0   Number         0  usenofp.o(x$fpl$usenofp)
+    AHBPrescTable                            0x08003148   Data          32  hk32f030m_rcc.o(.rodata.AHBPrescTable)
+    APBPrescTable                            0x08003168   Data           8  hk32f030m_rcc.o(.rodata.APBPrescTable)
+    crc16_tab                                0x08003170   Data         512  crc.o(.rodata.crc16_tab)
+    Region$$Table$$Base                      0x0800337c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0800339c   Number         0  anon$$obj.o(Region$$Table)
     V_I                                      0x20000000   Data           1  flag_bit.o(.data.V_I)
     brightness                               0x20000001   Data           1  task.o(.data.brightness)
     __libspace_start                         0x20000008   Data          96  libspace.o(.bss)
@@ -2347,9 +2347,9 @@ Memory Map of the image
 
   Image Entry point : 0x080000c1
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00003398, Max: 0x00004000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000033a8, Max: 0x00004000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00003390, Max: 0x00004000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000339c, Max: 0x00004000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2508,55 +2508,55 @@ Memory Map of the image
     0x080027a8   0x080027a8   0x00000010   Code   RO          349    .text.WS2812_0_Code  io_ws2812.o
     0x080027b8   0x080027b8   0x0000001c   Code   RO          351    .text.WS2812_1_Code  io_ws2812.o
     0x080027d4   0x080027d4   0x0000005c   Code   RO          154    .text.WS2812_Boot   task.o
-    0x08002830   0x08002830   0x00000088   Code   RO          158    .text.WS2812_Charge  task.o
-    0x080028b8   0x080028b8   0x00000014   Code   RO           55    .text.WS2812_Init   ws2812.o
-    0x080028cc   0x080028cc   0x00000038   Code   RO           63    .text.WS2812_Refresh  ws2812.o
-    0x08002904   0x08002904   0x0000005c   Code   RO           57    .text.WS2812_Set_Colour  ws2812.o
-    0x08002960   0x08002960   0x000000cc   Code   RO          160    .text.WS2812_Task   task.o
-    0x08002a2c   0x08002a2c   0x0000002c   Code   RO           75    .text.crc16         crc.o
-    0x08002a58   0x08002a58   0x00000068   Code   RO           11    .text.main          main.o
-    0x08002ac0   0x08002ac0   0x000001f6   Code   RO          939    .text_divfast       c_p.l(aeabi_sdivfast.o)
-    0x08002cb6   0x08002cb6   0x00000016   Code   RO          955    i._dgeq             fz_ps.l(dcmp.o)
-    0x08002ccc   0x08002ccc   0x00000016   Code   RO          956    i._dgr              fz_ps.l(dcmp.o)
-    0x08002ce2   0x08002ce2   0x0000001a   Code   RO          957    i._dleq             fz_ps.l(dcmp.o)
-    0x08002cfc   0x08002cfc   0x00000016   Code   RO          958    i._dls              fz_ps.l(dcmp.o)
-    0x08002d12   0x08002d12   0x00000016   Code   RO          981    i._fgeq             fz_ps.l(fcmp.o)
-    0x08002d28   0x08002d28   0x0000001a   Code   RO          983    i._fleq             fz_ps.l(fcmp.o)
-    0x08002d42   0x08002d42   0x00000016   Code   RO          984    i._fls              fz_ps.l(fcmp.o)
-    0x08002d58   0x08002d58   0x00000064   Code   RO         1010    x$fpl$dgeqf         fz_ps.l(dgef.o)
-    0x08002dbc   0x08002dbc   0x00000064   Code   RO         1012    x$fpl$dleqf         fz_ps.l(dlef.o)
-    0x08002e20   0x08002e20   0x0000008c   Code   RO          974    x$fpl$fadd          fz_ps.l(faddsub.o)
-    0x08002eac   0x08002eac   0x00000054   Code   RO         1016    x$fpl$fgeqf         fz_ps.l(fgef.o)
-    0x08002f00   0x08002f00   0x00000054   Code   RO         1018    x$fpl$fleqf         fz_ps.l(flef.o)
-    0x08002f54   0x08002f54   0x000000b0   Code   RO          999    x$fpl$fmul          fz_ps.l(fmul.o)
-    0x08003004   0x08003004   0x000000d0   Code   RO          976    x$fpl$fsub          fz_ps.l(faddsub.o)
-    0x080030d4   0x080030d4   0x00000000   Code   RO         1020    x$fpl$usenofp       fz_ps.l(usenofp.o)
-    0x080030d4   0x080030d4   0x00000040   Data   RO          993    .constdata          fz_ps.l(fdiv.o)
-    0x08003114   0x08003114   0x00000028   Data   RO          200    .rodata..L__const.Apply_BatteryPowerFlag.battVoltages  task.o
-    0x0800313c   0x0800313c   0x00000020   Data   RO          559    .rodata.AHBPrescTable  hk32f030m_rcc.o
-    0x0800315c   0x0800315c   0x00000008   Data   RO          560    .rodata.APBPrescTable  hk32f030m_rcc.o
-    0x08003164   0x08003164   0x00000200   Data   RO           77    .rodata.crc16_tab   crc.o
-    0x08003364   0x08003364   0x0000000c   Data   RO          202    .rodata.str4.4      task.o
-    0x08003370   0x08003370   0x00000020   Data   RO         1202    Region$$Table       anon$$obj.o
+    0x08002830   0x08002830   0x00000094   Code   RO          158    .text.WS2812_Charge  task.o
+    0x080028c4   0x080028c4   0x00000014   Code   RO           55    .text.WS2812_Init   ws2812.o
+    0x080028d8   0x080028d8   0x00000038   Code   RO           63    .text.WS2812_Refresh  ws2812.o
+    0x08002910   0x08002910   0x0000005c   Code   RO           57    .text.WS2812_Set_Colour  ws2812.o
+    0x0800296c   0x0800296c   0x000000cc   Code   RO          160    .text.WS2812_Task   task.o
+    0x08002a38   0x08002a38   0x0000002c   Code   RO           75    .text.crc16         crc.o
+    0x08002a64   0x08002a64   0x00000068   Code   RO           11    .text.main          main.o
+    0x08002acc   0x08002acc   0x000001f6   Code   RO          939    .text_divfast       c_p.l(aeabi_sdivfast.o)
+    0x08002cc2   0x08002cc2   0x00000016   Code   RO          955    i._dgeq             fz_ps.l(dcmp.o)
+    0x08002cd8   0x08002cd8   0x00000016   Code   RO          956    i._dgr              fz_ps.l(dcmp.o)
+    0x08002cee   0x08002cee   0x0000001a   Code   RO          957    i._dleq             fz_ps.l(dcmp.o)
+    0x08002d08   0x08002d08   0x00000016   Code   RO          958    i._dls              fz_ps.l(dcmp.o)
+    0x08002d1e   0x08002d1e   0x00000016   Code   RO          981    i._fgeq             fz_ps.l(fcmp.o)
+    0x08002d34   0x08002d34   0x0000001a   Code   RO          983    i._fleq             fz_ps.l(fcmp.o)
+    0x08002d4e   0x08002d4e   0x00000016   Code   RO          984    i._fls              fz_ps.l(fcmp.o)
+    0x08002d64   0x08002d64   0x00000064   Code   RO         1010    x$fpl$dgeqf         fz_ps.l(dgef.o)
+    0x08002dc8   0x08002dc8   0x00000064   Code   RO         1012    x$fpl$dleqf         fz_ps.l(dlef.o)
+    0x08002e2c   0x08002e2c   0x0000008c   Code   RO          974    x$fpl$fadd          fz_ps.l(faddsub.o)
+    0x08002eb8   0x08002eb8   0x00000054   Code   RO         1016    x$fpl$fgeqf         fz_ps.l(fgef.o)
+    0x08002f0c   0x08002f0c   0x00000054   Code   RO         1018    x$fpl$fleqf         fz_ps.l(flef.o)
+    0x08002f60   0x08002f60   0x000000b0   Code   RO          999    x$fpl$fmul          fz_ps.l(fmul.o)
+    0x08003010   0x08003010   0x000000d0   Code   RO          976    x$fpl$fsub          fz_ps.l(faddsub.o)
+    0x080030e0   0x080030e0   0x00000000   Code   RO         1020    x$fpl$usenofp       fz_ps.l(usenofp.o)
+    0x080030e0   0x080030e0   0x00000040   Data   RO          993    .constdata          fz_ps.l(fdiv.o)
+    0x08003120   0x08003120   0x00000028   Data   RO          200    .rodata..L__const.Apply_BatteryPowerFlag.battVoltages  task.o
+    0x08003148   0x08003148   0x00000020   Data   RO          559    .rodata.AHBPrescTable  hk32f030m_rcc.o
+    0x08003168   0x08003168   0x00000008   Data   RO          560    .rodata.APBPrescTable  hk32f030m_rcc.o
+    0x08003170   0x08003170   0x00000200   Data   RO           77    .rodata.crc16_tab   crc.o
+    0x08003370   0x08003370   0x0000000c   Data   RO          202    .rodata.str4.4      task.o
+    0x0800337c   0x0800337c   0x00000020   Data   RO         1202    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08003390, Size: 0x000007f0, Max: 0x00000800, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080033a0, Size: 0x000007f0, Max: 0x00000800, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08003390   0x00000001   Data   RW          237    .data.V_I           flag_bit.o
-    0x20000001   0x08003391   0x00000001   Data   RW          182    .data.brightness    task.o
-    0x20000002   0x08003392   0x00000006   PAD
+    0x20000000   0x080033a0   0x00000001   Data   RW          237    .data.V_I           flag_bit.o
+    0x20000001   0x080033a1   0x00000001   Data   RW          182    .data.brightness    task.o
+    0x20000002   0x080033a2   0x00000006   PAD
     0x20000008        -       0x00000060   Zero   RW         1064    .bss                c_p.l(libspace.o)
     0x20000068        -       0x00000004   Zero   RW          229    .bss.ADC1_Val       flag_bit.o
     0x2000006c        -       0x00000004   Zero   RW          230    .bss.ADC2_Val       flag_bit.o
     0x20000070        -       0x00000002   Zero   RW          199    .bss.ADC_Task.adc1_val_sum_ave  task.o
     0x20000072        -       0x00000002   Zero   RW          198    .bss.ADC_Task.adc_charge_sum_ave  task.o
     0x20000074        -       0x00000001   Zero   RW          197    .bss.ADC_Task.adc_step  task.o
-    0x20000075   0x08003392   0x00000001   PAD
+    0x20000075   0x080033a2   0x00000001   PAD
     0x20000076        -       0x00000002   Zero   RW          226    .bss.ADC_Time       flag_bit.o
     0x20000078        -       0x00000001   Zero   RW          214    .bss.Brightness_Flag  flag_bit.o
-    0x20000079   0x08003392   0x00000001   PAD
+    0x20000079   0x080033a2   0x00000001   PAD
     0x2000007a        -       0x00000002   Zero   RW          312    .bss.Buzzer_Counter  buzzer.o
     0x2000007c        -       0x00000001   Zero   RW          218    .bss.Buzzer_Flag    flag_bit.o
     0x2000007d        -       0x00000001   Zero   RW          234    .bss.Buzzer_Frequency  flag_bit.o
@@ -2566,14 +2566,14 @@ Memory Map of the image
     0x20000081        -       0x00000001   Zero   RW          194    .bss.Buzzer_Task.ring_frequency  task.o
     0x20000082        -       0x00000002   Zero   RW          195    .bss.Buzzer_Task.sound_frequency  task.o
     0x20000084        -       0x00000002   Zero   RW          221    .bss.Buzzer_Time    flag_bit.o
-    0x20000086   0x08003392   0x00000002   PAD
+    0x20000086   0x080033a2   0x00000002   PAD
     0x20000088        -       0x00000004   Zero   RW          236    .bss.Charge_Current  flag_bit.o
     0x2000008c        -       0x00000001   Zero   RW          212    .bss.Charge_Flag    flag_bit.o
     0x2000008d        -       0x00000001   Zero   RW          186    .bss.Charge_Task.charge_step  task.o
     0x2000008e        -       0x00000002   Zero   RW          222    .bss.Charge_Time    flag_bit.o
     0x20000090        -       0x00000004   Zero   RW          231    .bss.Charge_Voltage  flag_bit.o
     0x20000094        -       0x00000002   Zero   RW          239    .bss.Charger_Detection_1ms  flag_bit.o
-    0x20000096   0x08003392   0x00000002   PAD
+    0x20000096   0x080033a2   0x00000002   PAD
     0x20000098        -       0x00000004   Zero   RW          201    .bss.Conditional_Judgment.battery_voltage_last  task.o
     0x2000009c        -       0x00000001   Zero   RW          189    .bss.Flashlight_Bright.flashlight_bright_step  task.o
     0x2000009d        -       0x00000001   Zero   RW          191    .bss.Flashlight_Detection.gear_position_last  task.o
@@ -2594,7 +2594,7 @@ Memory Map of the image
     0x200000b2        -       0x00000001   Zero   RW          211    .bss.Power_Flag     flag_bit.o
     0x200000b3        -       0x00000001   Zero   RW          184    .bss.Power_Task.power_flag_last  task.o
     0x200000b4        -       0x00000001   Zero   RW          185    .bss.Power_Task.power_step  task.o
-    0x200000b5   0x08003392   0x00000001   PAD
+    0x200000b5   0x080033a2   0x00000001   PAD
     0x200000b6        -       0x00000002   Zero   RW          224    .bss.Power_Time     flag_bit.o
     0x200000b8        -       0x00000001   Zero   RW          238    .bss.Shutdown_Cnt   flag_bit.o
     0x200000b9        -       0x00000001   Zero   RW          228    .bss.Shutdown_Time_M  flag_bit.o
@@ -2602,23 +2602,23 @@ Memory Map of the image
     0x200000bc        -       0x00000001   Zero   RW           34    .bss.USART1_IRQHandler.count  hk32f030m_it.o
     0x200000bd        -       0x00000001   Zero   RW          219    .bss.Usart_Flag     flag_bit.o
     0x200000be        -       0x00000001   Zero   RW          196    .bss.Usart_Task.usart_step  task.o
-    0x200000bf   0x08003392   0x00000001   PAD
+    0x200000bf   0x080033a2   0x00000001   PAD
     0x200000c0        -       0x00000002   Zero   RW          225    .bss.Usart_Time     flag_bit.o
     0x200000c2        -       0x00000002   Zero   RW          220    .bss.VESC_Boot_Time  flag_bit.o
     0x200000c4        -       0x00000100   Zero   RW          106    .bss.VESC_RX_Buff   vesc_uasrt.o
     0x200001c4        -       0x00000001   Zero   RW          103    .bss.VESC_RX_Flag   vesc_uasrt.o
-    0x200001c5   0x08003392   0x00000003   PAD
+    0x200001c5   0x080033a2   0x00000003   PAD
     0x200001c8        -       0x000000f0   Zero   RW           66    .bss.WS2812_Buff    ws2812.o
     0x200002b8        -       0x00000001   Zero   RW          183    .bss.WS2812_Charge.cnt  task.o
-    0x200002b9   0x08003392   0x00000001   PAD
+    0x200002b9   0x080033a2   0x00000001   PAD
     0x200002ba        -       0x00000002   Zero   RW           65    .bss.WS2812_Counter  ws2812.o
     0x200002bc        -       0x00000001   Zero   RW          233    .bss.WS2812_Measure  flag_bit.o
-    0x200002bd   0x08003392   0x00000003   PAD
+    0x200002bd   0x080033a2   0x00000003   PAD
     0x200002c0        -       0x0000002c   Zero   RW          105    .bss.data           vesc_uasrt.o
     0x200002ec        -       0x00000001   Zero   RW          188    .bss.flashlight_flag_last_2  task.o
     0x200002ed        -       0x00000100   Zero   RW          104    .bss.protocol_buff  vesc_uasrt.o
     0x200003ed        -       0x00000001   Zero   RW          187    .bss.val            task.o
-    0x200003ee   0x08003392   0x00000002   PAD
+    0x200003ee   0x080033a2   0x00000002   PAD
     0x200003f0        -       0x00000200   Zero   RW            2    HEAP                keil_startup_hk32f030m.o
     0x200005f0        -       0x00000200   Zero   RW            1    STACK               keil_startup_hk32f030m.o
 
@@ -2649,14 +2649,14 @@ Image component sizes
        104          8          0          0          0       1001   main.o
         68          4          0          0          0       1910   power.o
        240         20          0          0          0       2865   system_hk32f030m.o
-      3616        556         52          1         24      12227   task.o
+      3628        556         52          1         24      12293   task.o
         80          8          0          0          0       2224   time.o
        196         16          0          0          0       3709   usart.o
        464         24          0          0        557       9649   vesc_uasrt.o
        168          8          0          0        242       2505   ws2812.o
 
     ----------------------------------------------------------------------
-      7592        932        828          4       1932     121993   Object Totals
+      7604        932        828          4       1932     122059   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         16          0          0          2         21          0   (incl. Padding)
 
@@ -2733,15 +2733,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     12308       1072        892          4       2028     123125   Grand Totals
-     12308       1072        892          4       2028     123125   ELF Image Totals
-     12308       1072        892          4          0          0   ROM Totals
+     12320       1072        892          4       2028     123191   Grand Totals
+     12320       1072        892          4       2028     123191   ELF Image Totals
+     12320       1072        892          4          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                13200 (  12.89kB)
+    Total RO  Size (Code + RO Data)                13212 (  12.90kB)
     Total RW  Size (RW Data + ZI Data)              2032 (   1.98kB)
-    Total ROM Size (Code + RO Data + RW Data)      13204 (  12.89kB)
+    Total ROM Size (Code + RO Data + RW Data)      13216 (  12.91kB)
 
 ==============================================================================
 

@@ -11,20 +11,21 @@
 #define   BATTERY_STRING      		20    		//��ش���
 #define   SHUTDOWN_TIME		  		30   		//�ػ�ʱ�� ��λ����
 #define   VESC_RPM            		250  		//ת��
-#define   VESC_BOOT_TIME      		6000 		//VESC����ʱ�� ��λms
+#define   VESC_BOOT_TIME      		6000 		// VESC boot time ms
 #define   DUTY_CYCLE          		0.7  		//ռ�ձȴ��ڴ�ֵ �����ٵ���
 #define   VOLTAGE_RECEIPT     		0.02 		//��ѹ��ִ ��λV
 #define   ADC_THRESHOLD             2.0         // Threshold value for footpad activation detection
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200 		//ת���ڡ�100֮�䲻��ǰ����л� ����ǰ��׵ƺ�����
-#define   LIGHTBAR_BRIGHTNESS_1 	204			// High brightness value (0-255)
-#define   LIGHTBAR_BRIGHTNESS_2 	128			// Medium brightness value (0-255)
-#define   LIGHTBAR_BRIGHTNESS_3 	30			// Low brightness value (0-255)
+#define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
+#define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
+#define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
 #define   CHARGE_CURRENT			0.3         //������ ��λA
 #define   CHARGE_CURRENT_L			0.1         //������ ��λA
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
 #define   DETECTION_SWITCH_TIME     500         //����л�ʱ�� ��λms
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
+#define   BOOT_ANIMATION		    1           // 1 = stock, 2 = rainbow
 
 void LED_Task(void);
 void KEY1_Task(void);

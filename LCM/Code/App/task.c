@@ -80,7 +80,7 @@ void KEY1_Task(void)
 void Power_Display(void)
 {
 	uint8_t i;
-	uint8_t num = 10 - Power_Display_Flag - 1;
+	uint8_t num = 10 - (Power_Display_Flag - 1);
 
 	for (i=0;i<10;i++) {
 		if (i <= num) {
@@ -159,12 +159,21 @@ void Sensor_Activation_Diplay(void)
 void WS2812_Boot(void) {
 	uint8_t i;
 	uint8_t num = floor(Power_Time / 500) + 1;
+	uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
 
 	if (num > 10) {
 		num = 10;
 	}
 	for (i=0;i<num;i++) {
-		WS2812_Set_Colour(i,0,255,255);
+		switch (BOOT_ANIMATION) {
+			case 1:
+				WS2812_Set_Colour(i,255,0,0);
+			break;
+			
+			case 2:
+				WS2812_Set_Colour(i,rgbMap[i][0],rgbMap[i][1],rgbMap[i][2]);
+			break;
+		}
 	}
 
 	for (i = num; i < 10; i++) {
@@ -267,16 +276,21 @@ uint8_t WS2812_Cal_Bri(uint8_t cnt)
 void WS2812_Charge(void)
 {
 	uint8_t i;
-	uint8_t num = 10 - Power_Display_Flag - 1;
+	uint8_t num = 10 - (Power_Display_Flag - 1);
 	static uint8_t cnt = 0;
 	uint8_t brightness = 0;
 	
 	brightness = WS2812_Cal_Bri(cnt);
 	for (i=0;i<10; i++) {
 		if (i <= num) {
-			if (num <= 2) {
+			if (num >= 10) {
+				// Full charged
+				WS2812_Set_Colour(i,0,brightness,0);
+			} else if (num <= 2) {
+				// Low battery
 				WS2812_Set_Colour(i,brightness,0,0);
 			} else {
+				// Normal charging
 				WS2812_Set_Colour(i,brightness,brightness,brightness);
 			}
 		} else {
@@ -350,6 +364,7 @@ void WS2812_Task(void)
 	
 	switch(Gear_Position)
 	{
+		// Inversely set the brightness of the lightbar to the brightness of the main lights
 		case 1: //1��
 			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
 		break;
