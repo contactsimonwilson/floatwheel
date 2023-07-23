@@ -25,7 +25,7 @@
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
 #define   DETECTION_SWITCH_TIME     500         //����л�ʱ�� ��λms
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
-#define   BOOT_ANIMATION		    1           // 1 = stock, 2 = rainbow
+#define   BOOT_ANIMATION		    1           // 0 = none, 1 = stock, 2 = rainbow
 
 void LED_Task(void);
 void KEY1_Task(void);
