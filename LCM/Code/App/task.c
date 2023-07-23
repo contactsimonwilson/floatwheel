@@ -167,7 +167,7 @@ void WS2812_Boot(void) {
 	for (i=0;i<num;i++) {
 		switch (BOOT_ANIMATION) {
 			case 1:
-				WS2812_Set_Colour(i,255,0,0);
+				WS2812_Set_Colour(i,0,255,255);
 			break;
 			
 			case 2:
