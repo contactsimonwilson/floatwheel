@@ -1,56 +1,57 @@
 #include "vesc_uasrt.h"
+#include "task.h"
 
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
 dataPackage data;
 
-uint8_t protocol_buff[256]; //·¢ËÍ»º³åÇø
+uint8_t protocol_buff[256]; //ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
 /**************************************************
  * @brie   :Send_Pack_Data()
- * @note   :·¢ËÍÒ»°üÊý¾Ý
- * @param  :payload Òª·¢ËÍÊý¾Ý°üµÄÆðÊ¼µØÖ·
- *          len Êý¾Ý°ü³¤¶È
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  :payload Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
+ *          len ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Send_Pack_Data(uint8_t *payload,uint16_t len) 
 {
-//	uint8_t protocol_buff[256]; //·¢ËÍ»º³åÇø
+//	uint8_t protocol_buff[256]; //ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
 	uint8_t count = 0;
-	uint16_t crcpayload = crc16(payload, len);  //¼ÆËãÐ£Ñé 
+	uint16_t crcpayload = crc16(payload, len);  //ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ 
 	
 	/*
-		Ð­Òé¸ñÊ½
+		Ð­ï¿½ï¿½ï¿½Ê½
 	
-		ÆðÊ¼×Ö½Ú£¨Ò»¸ö×Ö½Ú£© + Êý¾Ý°ü³¤¶È£¨Ò»¸ö»òÁ½¸ö×Ö½Ú£© + Êý¾Ý°ü£¨N¸ö×Ö½Ú£© + Ð£Ñé£¨Á½¸ö×Ö½Ú£© + Í£Ö¹×Ö½Ú£¨Ò»¸ö×Ö½Ú£©
+		ï¿½ï¿½Ê¼ï¿½Ö½Ú£ï¿½Ò»ï¿½ï¿½ï¿½Ö½Ú£ï¿½ + ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½È£ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú£ï¿½ + ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Ö½Ú£ï¿½ + Ð£ï¿½é£¨ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú£ï¿½ + Í£Ö¹ï¿½Ö½Ú£ï¿½Ò»ï¿½ï¿½ï¿½Ö½Ú£ï¿½
 	
-		ÆðÊ¼×Ö½Ú:	0x02Êý¾Ý°ü³¤¶È1-256¸ö×Ö½Ú
-					0x03Êý¾Ý°ü³¤¶È³¬¹ý256¸ö×Ö½Ú
+		ï¿½ï¿½Ê¼ï¿½Ö½ï¿½:	0x02ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½1-256ï¿½ï¿½ï¿½Ö½ï¿½
+					0x03ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½È³ï¿½ï¿½ï¿½256ï¿½ï¿½ï¿½Ö½ï¿½
 	
-		Êý¾Ý°ü³¤¶È: ÆðÊ¼×Ö½Ú0x02 Êý¾Ý°üÕ¼Ò»¸ö×Ö½Ú
-	                ÆðÊ¼×Ö½Ú0x03 Êý¾Ý°üÕ¼Á½¸ö×Ö½Ú
+		ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½Ê¼ï¿½Ö½ï¿½0x02 ï¿½ï¿½ï¿½Ý°ï¿½Õ¼Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+	                ï¿½ï¿½Ê¼ï¿½Ö½ï¿½0x03 ï¿½ï¿½ï¿½Ý°ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½
 	
-		Êý¾Ý°ü:  	Êý¾Ý°üµÚÒ»¸ö×Ö½ÚÎªÊý¾Ý°üID
+		ï¿½ï¿½ï¿½Ý°ï¿½:  	ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ï¿½Îªï¿½ï¿½ï¿½Ý°ï¿½ID
 	
-		Ð£Ñé:		CRCÐ£Ñé Á½¸ö×Ö½Ú 
+		Ð£ï¿½ï¿½:		CRCÐ£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ 
 	    
-		Í£Ö¹×Ö½Ú:   ¹Ì¶¨0x03
+		Í£Ö¹ï¿½Ö½ï¿½:   ï¿½Ì¶ï¿½0x03
 	
 	*/
 	
-	if (len <= 256) //Êý¾Ý°ü³¤¶È²»´óÓÚ256¸ö×Ö½Ú
+	if (len <= 256) //ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½256ï¿½ï¿½ï¿½Ö½ï¿½
 	{
 		protocol_buff[count++] = 2;
 		protocol_buff[count++] = len;
 	}
-	else //Êý¾Ý°ü³¤¶È´óÓÚ256¸ö×Ö½Ú
+	else //ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½256ï¿½ï¿½ï¿½Ö½ï¿½
 	{
 		protocol_buff[count++] = 3;
 		protocol_buff[count++] = (uint8_t)(len >> 8);
 		protocol_buff[count++] = (uint8_t)(len & 0xFF);
 	}
 
-	memcpy(&protocol_buff[count], payload, len);  //°ÑÊý¾Ý°ü¸´ÖÆµ½Ð­ÒéÀï
+	memcpy(&protocol_buff[count], payload, len);  //ï¿½ï¿½ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½Æµï¿½Ð­ï¿½ï¿½ï¿½ï¿½
 
 	count += len;
 	protocol_buff[count++] = (uint8_t)(crcpayload >> 8);
@@ -62,9 +63,9 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
 
 /**************************************************
  * @brie   :Get_Vesc_Pack_Data()
- * @note   :»ñÈ¡Ò»°üÊý¾Ý
- * @param  :id Êý¾Ý°üid
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  :id ï¿½ï¿½ï¿½Ý°ï¿½id
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
@@ -77,9 +78,9 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 
 /**************************************************
  * @brie   :buffer_get_int16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öint16_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½int16_t
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 	int16_t res =	((uint16_t) buffer[*index]) << 8 |
@@ -89,9 +90,9 @@ int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öuint16_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½uint16_t
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 	uint16_t res = 	((uint16_t) buffer[*index]) << 8 |
@@ -101,9 +102,9 @@ uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_int32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öint32_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½int32_t
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 	int32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -115,9 +116,9 @@ int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öuint32_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½uint32_t
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 	uint32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -129,18 +130,18 @@ uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_float16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öfloat
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ  scale·ÖÄ¸
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½float
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½  scaleï¿½ï¿½Ä¸
+ * @retval :ï¿½ï¿½
  **************************************************/
 float buffer_get_float16(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int16(buffer, index) / scale;
 }
 /**************************************************
  * @brie   :buffer_get_float32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öfloat
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ	scale·ÖÄ¸
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ö½ï¿½Æ´Ò»ï¿½ï¿½float
+ * @param  :bufferï¿½ï¿½Ö·  indexï¿½ï¿½Ö·Æ«ï¿½ï¿½	scaleï¿½ï¿½Ä¸
+ * @retval :ï¿½ï¿½
  **************************************************/
 float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int32(buffer, index) / scale;
@@ -148,9 +149,9 @@ float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
 
 /**************************************************
  * @brie   :Protocol_Parse()
- * @note   :Ð­Òé½âÎö
- * @param  :message ½ÓÊÕµ½Êý¾ÝµÄÆðÊ¼µØÖ·
- * @retval :0 ½âÎö³É¹¦ 1½âÎöÊ§°Ü
+ * @note   :Ð­ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  :message ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
+ * @retval :0 ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ 1ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
  **************************************************/
 uint8_t Protocol_Parse(uint8_t * message)
 {
@@ -161,6 +162,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 	uint16_t crcpayload;
 	uint8_t id;
 	int32_t ind = 0;
+	uint8_t command = 0;
 	
 	start = message[counter++];
 	
@@ -181,7 +183,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 	if(crcpayload != (((uint16_t)message[counter+len])<<8|
 		             ((uint16_t)message[counter+len+1])))
 	{
-		return 1; //crc²»¶Ô
+		return 1; //crcï¿½ï¿½ï¿½ï¿½
 	}
 	
 	id = message[counter++];
@@ -195,16 +197,59 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.tempMotor          = buffer_get_float16(pdata, 10.0, &ind);
 			data.avgMotorCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
 			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
-			ind += 8; // Ìø¹ý8¸ö×Ö½Ú
+			ind += 8; // ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½Ö½ï¿½
 			data.dutyCycleNow 		= buffer_get_float16(pdata, 1000.0, &ind);
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
 			data.ampHours 			= buffer_get_float32(pdata, 10000.0, &ind);
 			data.ampHoursCharged 	= buffer_get_float32(pdata, 10000.0, &ind);
-			ind += 8; // Ìø¹ý8¸ö×Ö½Ú
+			ind += 8; // ï¿½ï¿½ï¿½ï¿½8ï¿½ï¿½ï¿½Ö½ï¿½
 			data.tachometer 		= buffer_get_int32(pdata, &ind);
 			data.tachometerAbs 		= buffer_get_int32(pdata, &ind);
+		break;
+				/*
+		Receive custom data + magic number (102)
+		command 0 = Change the brightness of the front and rear light 	(uint8_t brightness)
+		command 1 = Change the brightness of the lightbar (footpad sensor) (uint8_t brightness)
+		
+		
+		// Possible other commands 
+		command 2 = Change buzzer -> (uint8_t ON_OFF, uint8_t VOLUME, uint8_t target) 
+		target -> duty cycle, faults, current, motor current, temp, or combination
+		toggle with bits (1 == ON, 0 == OFF)
+		target bits:
+			bit 1 = currently unused
+			bit 2 = currently unused
+			bit 3 = temperature motor
+			bit 4 = temperature mosfet
+			bit 5 = current motor
+			bit 6 = current
+			bit 7 = faults
+			bit 8 = duty cycle
 
+		command 3 = Dim lightbar on speed -> (uint8_t ON_OFF) //or integrate with command 1
+		command 4 = Brakelight -> (uint8_t ON_OFF) //keep brightness at (70%) set brightness until braking (hard) occurs -> then scale to 100%
+		
+		*/
+		case COMM_CUSTOM_APP_DATA: 
+			if(message[counter++] == 102) //Magic number specificly for the Floatwheel light control module (Float package uses 101 - dont interfere with the float package)
+			{
+				command = message[counter++];
+				switch(command){
+					case 0: 
+						Gear_Position++; 
+						if(Gear_Position == 4)
+						{
+							Gear_Position = 1;
+						}
+					case 1: 
+						WS2812_Measure = message[counter++];
+						
+						
+				}
+			} else {
+				return 0; 
+			}		
 		break;
 	}
 	

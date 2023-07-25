@@ -46,7 +46,10 @@ void KEY1_Task(void)
 				{
 					Gear_Position = 1;
 				}
-				
+
+				// //write 
+				// EEPROM_ProgramByte(0x0C0001BF, Gear_Position);
+				//EEPROM_EraseByte(0x12345678);			
 			}
 		break;
 		
@@ -444,6 +447,19 @@ void Power_Task(void)
 						Gear_Position = 1; //������Ĭ����1��
 						Buzzer_Flag = 2;    //����Ĭ�Ϸ�������
 						power_step = 0;
+
+						// // Read from eeprom
+						// int* memoryPtr;
+						// unsigned int address = 0x0C0001BF;
+						// // Assign the memory address to the pointer
+						// memoryPtr = (int*)address;
+						// // Read the data at the memory address using the pointer
+						// int data = *memoryPtr;
+
+						// if (data > 0) {
+						// 	Gear_Position = data;
+						// }
+
 					}
 				break;
 			}

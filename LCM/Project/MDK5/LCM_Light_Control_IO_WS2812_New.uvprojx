@@ -17,7 +17,7 @@
         <TargetCommonOption>
           <Device>HK32F030MF4P6</Device>
           <Vendor>HK_MicroChip</Vendor>
-          <PackID>HKMicroChip.HK32F030Mxx_DFP.1.0.6</PackID>
+          <PackID>HKMicroChip.HK32F030xMxx_DFP.1.0.17</PackID>
           <PackURL>http://www.hsxp-hk.com/companyfile/2/</PackURL>
           <Cpu>IRAM(0x20000000,0x800) IROM(0x08000000,0x4000) CPUTYPE("Cortex-M0") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -549,6 +549,11 @@
               <FileName>hk32f030m_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Library\HK32F030Mxx_Library_V1.1.6\HK32F030M\HK32F030M_Lib\src\hk32f030m_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>hk32f030m_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Library\HK32F030Mxx_Library_V1.1.6\HK32F030M\HK32F030M_Lib\src\hk32f030m_flash.c</FilePath>
             </File>
           </Files>
         </Group>
