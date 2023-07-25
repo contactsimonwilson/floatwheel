@@ -14,7 +14,8 @@
 #define   VESC_BOOT_TIME      		6000 		// VESC boot time ms
 #define   DUTY_CYCLE          		0.7  		//ռ�ձȴ��ڴ�ֵ �����ٵ���
 #define   VOLTAGE_RECEIPT     		0.02 		//��ѹ��ִ ��λV
-#define   ADC_THRESHOLD             2.0         // Threshold value for footpad activation detection
+#define   ADC_THRESHOLD_LOWER       2.5         // Threshold value for footpad activation detection
+#define   ADC_THRESHOLD_UPPER       2.9         // Threshold value for footpad activation detection
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200 		//ת���ڡ�100֮�䲻��ǰ����л� ����ǰ��׵ƺ�����
 #define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
