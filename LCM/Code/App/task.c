@@ -1083,7 +1083,12 @@ void ADC_Task(void)
  * @note Apply the corresponding battery level based on current voltage
  **************************************************/
 void Apply_BatteryPowerFlag(float battery_voltage) {
-	float battVoltages[] = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};
+	float battVoltages[] =  {4.054, 4.01, 3.908, 3.827, 3.74, 3.651, 3.571, 3.485, 3.38, 3.0}; // P42A
+
+	if (CELL_TYPE == 1) {
+		// DG40
+		battVoltages = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};
+	}
 	
 	for (int i=0;i<10;i++) {
 		if (battery_voltage > battVoltages[i]) {
