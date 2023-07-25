@@ -1087,7 +1087,11 @@ void Apply_BatteryPowerFlag(float battery_voltage) {
 
 	if (CELL_TYPE == 1) {
 		// DG40
-		battVoltages = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};
+		float dg40BattVoltages[10] = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};
+
+		for (int i=0;i<10;i++) {
+			battVoltages[i] = dg40BattVoltages[i];
+		}
 	}
 	
 	for (int i=0;i<10;i++) {
