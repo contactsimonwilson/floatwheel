@@ -7,5 +7,3 @@ void EEPROM_WriteByte(uint32_t address, uint8_t data_in);
 void EEPROM_ReadByte(uint32_t address, uint8_t *data_out);
 
 #endif
-
-
