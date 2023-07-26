@@ -500,6 +500,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\Code\Drive\io_ws2812.c</FilePath>
             </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Code\Drive\eeprom.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
