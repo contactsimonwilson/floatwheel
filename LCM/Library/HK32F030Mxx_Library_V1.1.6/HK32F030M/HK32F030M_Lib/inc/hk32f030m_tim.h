@@ -951,15 +951,6 @@ void TIM_EncoderInterfaceConfig(TIM_TypeDef* TIMx, uint16_t TIM_EncoderMode,
                                 uint16_t TIM_IC1Polarity, uint16_t TIM_IC2Polarity);
 void TIM_SelectHallSensor(TIM_TypeDef* TIMx, FunctionalState NewState);
 
-static void TI1_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_ICSelection,
-                       uint16_t TIM_ICFilter);
-static void TI2_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_ICSelection,
-                       uint16_t TIM_ICFilter);
-static void TI3_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_ICSelection,
-                       uint16_t TIM_ICFilter);
-static void TI4_Config(TIM_TypeDef* TIMx, uint16_t TIM_ICPolarity, uint16_t TIM_ICSelection,
-                       uint16_t TIM_ICFilter);
-
 
 #ifdef __cplusplus
 }
