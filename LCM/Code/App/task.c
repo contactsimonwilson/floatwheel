@@ -1,4 +1,5 @@
 #include "task.h"
+#include "eeprom.h"
 #include <math.h>
 
 /**************************************************
@@ -46,10 +47,9 @@ void KEY1_Task(void)
 				{
 					Gear_Position = 1;
 				}
-
-				// //write 
-				// EEPROM_ProgramByte(0x0C0001BF, Gear_Position);
-				//EEPROM_EraseByte(0x12345678);			
+				
+				// Persist current setting to eeprom
+				EEPROM_WriteByte(0, Gear_Position);			
 			}
 		break;
 		
@@ -86,14 +86,19 @@ void Power_Display(void)
 	uint8_t num = 10 - (Power_Display_Flag - 1);
 
 	for (i=0;i<10;i++) {
-		if (i <= num) {
-			if (num <= 2) {
-				WS2812_Set_Colour(i,WS2812_Measure,0,0);
-			} else {
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
+		if (Power_Display_Flag == 10) {
+			// Something is wrong
+			WS2812_Set_Colour(i,WS2812_Measure,0,0);
 		} else {
-			WS2812_Set_Colour(i,0,0,0);
+			if (i < num) {
+				if (num <= 2) {
+					WS2812_Set_Colour(i,WS2812_Measure,0,0);
+				} else {
+					WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
+				}
+			} else {
+				WS2812_Set_Colour(i,0,0,0);
+			}
 		}
 	}
 	
@@ -441,24 +446,20 @@ void Power_Task(void)
 				break;
 				
 				case 1:
-					if(Power_Time > VESC_BOOT_TIME)
+					if (Power_Time > VESC_BOOT_TIME)
 					{
 						Power_Flag = 2; //�������
 						Gear_Position = 1; //������Ĭ����1��
 						Buzzer_Flag = 2;    //����Ĭ�Ϸ�������
 						power_step = 0;
 
-						// // Read from eeprom
-						// int* memoryPtr;
-						// unsigned int address = 0x0C0001BF;
-						// // Assign the memory address to the pointer
-						// memoryPtr = (int*)address;
-						// // Read the data at the memory address using the pointer
-						// int data = *memoryPtr;
+						// Read saved value from EEPROM
+						uint8_t data = Gear_Position;
+						EEPROM_ReadByte(0, &data);
 
-						// if (data > 0) {
-						// 	Gear_Position = data;
-						// }
+						if (data > 0 && data < 4) {
+							Gear_Position = data;
+						}
 
 					}
 				break;
@@ -1114,6 +1115,10 @@ void Apply_BatteryPowerFlag(float battery_voltage) {
 		if (battery_voltage > battVoltages[i]) {
 			Power_Display_Flag = i + 1;
 			break;
+		}
+		// Between zero and min voltage
+		if (i == 9) {
+			Power_Display_Flag = 10;
 		}
 	}
 }

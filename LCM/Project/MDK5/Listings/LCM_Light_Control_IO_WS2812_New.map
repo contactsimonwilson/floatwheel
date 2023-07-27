@@ -408,12 +408,12 @@ Section Cross References
     io_ws2812.o(.ARM.exidx.text.IO_WS2812_Init) refers to io_ws2812.o(.text.IO_WS2812_Init) for [Anonymous Symbol]
     io_ws2812.o(.ARM.exidx.text.WS2812_0_Code) refers to io_ws2812.o(.text.WS2812_0_Code) for [Anonymous Symbol]
     io_ws2812.o(.ARM.exidx.text.WS2812_1_Code) refers to io_ws2812.o(.text.WS2812_1_Code) for [Anonymous Symbol]
-    eeprom.o(.text.EEP_WriteByte) refers to hk32f030m_flash.o(.text.FLASH_Unlock) for FLASH_Unlock
-    eeprom.o(.text.EEP_WriteByte) refers to hk32f030m_flash.o(.text.EEPROM_EraseByte) for EEPROM_EraseByte
-    eeprom.o(.text.EEP_WriteByte) refers to hk32f030m_flash.o(.text.EEPROM_ProgramByte) for EEPROM_ProgramByte
-    eeprom.o(.text.EEP_WriteByte) refers to hk32f030m_flash.o(.text.FLASH_Lock) for FLASH_Lock
-    eeprom.o(.ARM.exidx.text.EEP_WriteByte) refers to eeprom.o(.text.EEP_WriteByte) for [Anonymous Symbol]
-    eeprom.o(.ARM.exidx.text.EPEP_ReadByte) refers to eeprom.o(.text.EPEP_ReadByte) for [Anonymous Symbol]
+    eeprom.o(.text.EEPROM_WriteByte) refers to hk32f030m_flash.o(.text.FLASH_Unlock) for FLASH_Unlock
+    eeprom.o(.text.EEPROM_WriteByte) refers to hk32f030m_flash.o(.text.EEPROM_EraseByte) for EEPROM_EraseByte
+    eeprom.o(.text.EEPROM_WriteByte) refers to hk32f030m_flash.o(.text.EEPROM_ProgramByte) for EEPROM_ProgramByte
+    eeprom.o(.text.EEPROM_WriteByte) refers to hk32f030m_flash.o(.text.FLASH_Lock) for FLASH_Lock
+    eeprom.o(.ARM.exidx.text.EEPROM_WriteByte) refers to eeprom.o(.text.EEPROM_WriteByte) for [Anonymous Symbol]
+    eeprom.o(.ARM.exidx.text.EEPROM_ReadByte) refers to eeprom.o(.text.EEPROM_ReadByte) for [Anonymous Symbol]
     hk32f030m_adc.o(.text.ADC_DeInit) refers to hk32f030m_rcc.o(.text.RCC_APB2PeriphResetCmd) for RCC_APB2PeriphResetCmd
     hk32f030m_adc.o(.ARM.exidx.text.ADC_DeInit) refers to hk32f030m_adc.o(.text.ADC_DeInit) for [Anonymous Symbol]
     hk32f030m_adc.o(.ARM.exidx.text.ADC_Init) refers to hk32f030m_adc.o(.text.ADC_Init) for [Anonymous Symbol]
@@ -1018,10 +1018,10 @@ Removing Unused input sections from the image.
     Removing io_ws2812.o(.ARM.exidx.text.WS2812_0_Code), (8 bytes).
     Removing io_ws2812.o(.ARM.exidx.text.WS2812_1_Code), (8 bytes).
     Removing eeprom.o(.text), (0 bytes).
-    Removing eeprom.o(.text.EEP_WriteByte), (36 bytes).
-    Removing eeprom.o(.ARM.exidx.text.EEP_WriteByte), (8 bytes).
-    Removing eeprom.o(.text.EPEP_ReadByte), (10 bytes).
-    Removing eeprom.o(.ARM.exidx.text.EPEP_ReadByte), (8 bytes).
+    Removing eeprom.o(.text.EEPROM_WriteByte), (36 bytes).
+    Removing eeprom.o(.ARM.exidx.text.EEPROM_WriteByte), (8 bytes).
+    Removing eeprom.o(.text.EEPROM_ReadByte), (10 bytes).
+    Removing eeprom.o(.ARM.exidx.text.EEPROM_ReadByte), (8 bytes).
     Removing hk32f030m_adc.o(.text), (0 bytes).
     Removing hk32f030m_adc.o(.ARM.exidx.text.ADC_DeInit), (8 bytes).
     Removing hk32f030m_adc.o(.ARM.exidx.text.ADC_Init), (8 bytes).

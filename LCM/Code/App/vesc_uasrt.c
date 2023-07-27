@@ -236,15 +236,33 @@ uint8_t Protocol_Parse(uint8_t * message)
 			{
 				command = message[counter++];
 				switch(command){
-					case 0: 
+					// Light commands
+					case 0: // TODO - enum
+						// Change light brightness
 						Gear_Position++; 
 						if(Gear_Position == 4)
 						{
 							Gear_Position = 1;
 						}
-					case 1: 
-						WS2812_Measure = message[counter++];
-						
+						EEPROM_WriteByte(0, Gear_Position); // TODO - remove duplicated code from task.c
+						break;
+
+					// Buzzer commands
+					case 100:
+						// Buzzer on
+						BUZZER_ON;
+						break;
+					case 101:
+						// Buzzer off
+						BUZZER_OFF;
+						break;
+
+					// EEPROM commands
+					case 200:
+						// Save settings
+						EEPROM_WriteByte(0, Gear_Position);// TODO - implement more
+
+					
 						
 				}
 			} else {
