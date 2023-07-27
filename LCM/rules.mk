@@ -10,7 +10,6 @@ CC			= $(PREFIX)gcc
 AS			= $(PREFIX)as
 LD			= $(PREFIX)ld
 OBJCOPY		= $(PREFIX)objcopy
-SIZE		= $(PREFIX)size
 # `$(shell pwd)` or `.`, both works
 TOP			= .
 BDIR		= $(TOP)/$(BUILD_DIR)
@@ -39,9 +38,9 @@ ARCH_FLAGS	:= -mthumb -mcpu=cortex-m0 -fno-common
 DEBUG_FLAGS ?= -gdwarf-3
 
 # c flags
-OPT			?= -Oz
+OPT			?= -Os
 CSTD		?= -std=c99
-TGT_CFLAGS 	+= $(ARCH_FLAGS) $(DEBUG_FLAGS) $(OPT) $(CSTD) $(addprefix -D, $(LIB_FLAGS)) -Wall -ffunction-sections -fdata-sections -ffreestanding -flto -Wunused-function
+TGT_CFLAGS 	+= $(ARCH_FLAGS) $(DEBUG_FLAGS) $(OPT) $(CSTD) $(addprefix -D, $(LIB_FLAGS)) -Wall -ffunction-sections -fdata-sections -ffreestanding -flto
 
 # asm flags
 TGT_ASFLAGS += $(ARCH_FLAGS) $(DEBUG_FLAGS) $(OPT) -Wa,--warn
@@ -51,8 +50,7 @@ TGT_LDFLAGS += $(ARCH_FLAGS) -specs=nano.specs -specs=nosys.specs -static -lc -l
 				-Wl,-Map=$(BDIR)/$(PROJECT).map \
 				-Wl,--gc-sections \
 				-Wl,--print-memory-usage \
-				-Wl,--no-warn-rwx-segments \
-				-Wl,--cref
+				-Wl,--no-warn-rwx-segments
 # Exclude standard initialization actions, when __libc_init_array exists, this should be omit, \
    otherwise it will generate "undefined reference to `_init'" error. \
    **Remove** `bl __libc_init_array` from startup.s if you want to enable this.
