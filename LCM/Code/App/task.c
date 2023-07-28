@@ -29,7 +29,7 @@ void Change_Light_Profile(bool persist) {
 		Light_Profile = 1;
 	}
 	if (persist) {
-		EEPROM_WriteByte(0, Light_Profile); // TODO - remove duplicated code from task.c
+		EEPROM_WriteByte(0, Light_Profile);
 	}
 }
 
@@ -184,10 +184,10 @@ void WS2812_Boot(void) {
 
 	for (i=0;i<num;i++) {
 		switch (BOOT_ANIMATION) {
-			case 1:
+			case NORMAL:
 				WS2812_Set_Colour(i,0,255,255);
 			break;
-			case 2:
+			case RAINBOW:
 				WS2812_Set_Colour(i,rgbMap[i][0],rgbMap[i][1],rgbMap[i][2]);
 			break;
 		}
@@ -1111,7 +1111,7 @@ void ADC_Task(void)
 void Apply_BatteryPowerFlag(float battery_voltage) {
 	float battVoltages[10] =  {4.054, 4.01, 3.908, 3.827, 3.74, 3.651, 3.571, 3.485, 3.38, 3.0}; // P42A
 
-	if (CELL_TYPE == 1) {
+	if (CELL_TYPE == DG40) {
 		// DG40
 		float dg40BattVoltages[10] = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};
 

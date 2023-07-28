@@ -7,6 +7,18 @@
 #include "flag_bit.h"
 #include "vesc_uasrt.h"
 
+typedef enum
+{
+	NORMAL,
+	RAINBOW
+} BOOT_ANIMATION;
+
+typedef enum
+{
+	P42A,
+	DG40
+} CELL_TYPE;
+
 #define	  CHARGING_VOLTAGE	  		40   		//����ѹ��� ���ڴ�ֵ��Ϊ���������
 #define   BATTERY_STRING      		20    		//��ش���
 #define   SHUTDOWN_TIME		  		30   		//�ػ�ʱ�� ��λ����
@@ -26,8 +38,8 @@
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
 #define   DETECTION_SWITCH_TIME     500         //����л�ʱ�� ��λms
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
-#define   BOOT_ANIMATION		    1           // 0 = none, 1 = stock, 2 = rainbow
-#define   CELL_TYPE                 0           // 0 = P42a, 1 = DG40
+#define   BOOT_ANIMATION		    NORMAL      // Boot animation
+#define   CELL_TYPE                 P42A        // Cell configuration to use for voltage display
 
 void LED_Task(void);
 void KEY1_Task(void);
