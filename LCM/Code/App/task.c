@@ -18,6 +18,22 @@ void LED_Task(void)
 }
 
 /**************************************************
+ * @note   Cycles through the available lighting profiles
+ * @param  persist (bool): whether to save the current profile to EEPROM
+ **************************************************/
+void Change_Light_Profile(bool persist) {
+	// Change light profile
+	Light_Profile++; 
+	if(Light_Profile == 4)
+	{
+		Light_Profile = 1;
+	}
+	if (persist) {
+		EEPROM_WriteByte(0, Light_Profile); // TODO - remove duplicated code from task.c
+	}
+}
+
+/**************************************************
  * @brie   :KEY1_Task()
  * @note   :KEY1����
  * @param  :��
@@ -41,15 +57,8 @@ void KEY1_Task(void)
 		
 		case 2:		//˫��	
 			if(Power_Flag == 2) //�������
-			{
-				Gear_Position++;
-				if(Gear_Position == 4)
-				{
-					Gear_Position = 1;
-				}
-				
-				// Persist current setting to eeprom
-				EEPROM_WriteByte(0, Gear_Position);			
+			{	
+				Change_Light_Profile(true);			
 			}
 		break;
 		
@@ -370,7 +379,7 @@ void WS2812_Task(void)
 		return;
 	}
 	
-	switch(Gear_Position)
+	switch(Light_Profile)
 	{
 		// Inversely set the brightness of the lightbar to the brightness of the main lights
 		case 1: //1��
@@ -449,16 +458,16 @@ void Power_Task(void)
 					if (Power_Time > VESC_BOOT_TIME)
 					{
 						Power_Flag = 2; //�������
-						Gear_Position = 1; //������Ĭ����1��
+						Light_Profile = 1; //������Ĭ����1��
 						Buzzer_Flag = 2;    //����Ĭ�Ϸ�������
 						power_step = 0;
 
 						// Read saved value from EEPROM
-						uint8_t data = Gear_Position;
+						uint8_t data = Light_Profile;
 						EEPROM_ReadByte(0, &data);
 
 						if (data > 0 && data < 4) {
-							Gear_Position = data;
+							Light_Profile = data;
 						}
 
 					}
@@ -627,7 +636,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 		
 			if(Flashlight_Time%2 == 0)
 			{
-				switch(Gear_Position)
+				switch(Light_Profile)
 				{
 					case 1:
 						brightness = (Flashlight_Time*1)+1000;
@@ -653,7 +662,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 			if(Flashlight_Time >= 2000)
 			{
-				switch(Gear_Position)
+				switch(Light_Profile)
 				{
 					case 1:
 						TIM_SetCompare2(TIM1,7000);
@@ -741,20 +750,20 @@ void Flashlight_Task(void)
 
 void Flashlight_Detection(void)
 {
-	static uint8_t gear_position_last = 0;
+	static uint8_t Light_Profile_last = 0;
 		
-	if(gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100)
+	if(Light_Profile_last == Light_Profile && Flashlight_Detection_Time >= 3100)
 	{
 		Flashlight_Detection_Time = 3100;
 		return;
 	}
 	else
 	{
-		if(gear_position_last != Gear_Position)
+		if(Light_Profile_last != Light_Profile)
 		{
 			if(ADC1_Val < ADC_THRESHOLD_LOWER && ADC2_Val < ADC_THRESHOLD_LOWER)
 			{
-				switch(Gear_Position)
+				switch(Light_Profile)
 				{
 					case 1:
 						TIM_SetCompare2(TIM1,7000);
@@ -776,7 +785,7 @@ void Flashlight_Detection(void)
 			}
 			else
 			{
-				switch(Gear_Position)
+				switch(Light_Profile)
 				{
 					case 1:
 						TIM_SetCompare2(TIM1,7000);
@@ -796,7 +805,7 @@ void Flashlight_Detection(void)
 				}
 				Flashlight_Detection_Time = 3100;
 			}
-			gear_position_last = Gear_Position;
+			Light_Profile_last = Light_Profile;
 		}
 		else
 		{
@@ -818,7 +827,7 @@ void Flashlight_Detection(void)
 void Buzzer_Task(void)
 {
 	static uint8_t buzzer_step = 0;
-	static uint8_t gear_position_last = 0; //��һ�εĵ�λ
+	static uint8_t Light_Profile_last = 0; //��һ�εĵ�λ
 	static uint8_t ring_frequency = 0;
 	static uint16_t sound_frequency = 0;
 	
@@ -829,7 +838,7 @@ void Buzzer_Task(void)
 		return;
 	}
 	
-	if(Buzzer_Frequency == 0 && gear_position_last == Gear_Position) //���������Ƶ��Ϊ0����һ�εĵ�λ������εĵ�λ
+	if(Buzzer_Frequency == 0 && Light_Profile_last == Light_Profile) //���������Ƶ��Ϊ0����һ�εĵ�λ������εĵ�λ
 	{
 		BUZZER_OFF;
 		buzzer_step = 0;
@@ -882,10 +891,10 @@ void Buzzer_Task(void)
 				{	
 					ring_frequency++;
 					buzzer_step = 0;
-					if(ring_frequency == Gear_Position)
+					if(ring_frequency == Light_Profile)
 					{
 						ring_frequency = 0;
-						gear_position_last = Gear_Position;
+						Light_Profile_last = Light_Profile;
 					}
 					
 				}

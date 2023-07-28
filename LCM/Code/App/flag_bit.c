@@ -140,12 +140,12 @@ float ADC2_Val = 0;
 */
 float Charge_Voltage = 0;
 /*
-	Gear_Position = 0 �տ���
-	Gear_Position = 1 ���� WS2812���� ��������һ��
-	Gear_Position = 2 ����е� WS2812�е� ������������
-	Gear_Position = 3 ������� WS2812� ������������
+	Light_Profile = 0 �տ���
+	Light_Profile = 1 ���� WS2812���� ��������һ��
+	Light_Profile = 2 ����е� WS2812�е� ������������
+	Light_Profile = 3 ������� WS2812� ������������
 */
-uint8_t Gear_Position = 0;
+uint8_t Light_Profile = 0;
 /*
 	WS2812����
 */

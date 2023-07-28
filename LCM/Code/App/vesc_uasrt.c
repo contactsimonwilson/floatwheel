@@ -229,48 +229,52 @@ uint8_t Protocol_Parse(uint8_t * message)
 
 		command 3 = Dim lightbar on speed -> (uint8_t ON_OFF) //or integrate with command 1
 		command 4 = Brakelight -> (uint8_t ON_OFF) //keep brightness at (70%) set brightness until braking (hard) occurs -> then scale to 100%
-		
-		*/
-		case COMM_CUSTOM_APP_DATA: 
-			if(message[counter++] == 102) //Magic number specificly for the Floatwheel light control module (Float package uses 101 - dont interfere with the float package)
-			{
-				command = message[counter++];
-				switch(command){
-					// Light commands
-					case 0: // TODO - enum
-						// Change light brightness
-						Gear_Position++; 
-						if(Gear_Position == 4)
-						{
-							Gear_Position = 1;
-						}
-						EEPROM_WriteByte(0, Gear_Position); // TODO - remove duplicated code from task.c
-						break;
 
-					// Buzzer commands
-					case 100:
-						// Buzzer on
-						BUZZER_ON;
-						break;
-					case 101:
-						// Buzzer off
-						BUZZER_OFF;
-						break;
+*/
+    case COMM_CUSTOM_APP_DATA:
+      if (message[counter++] ==
+          102)  // Magic number specificly for the Floatwheel light control
+                // module (Float package uses 101 - dont interfere with the
+                // float package)
+      {
+        command = message[counter++];
+        switch (command) {
+          // Light commands
+          case CHANGE_LIGHT_PROFILE:
+            // Change light profile
+            Change_Light_Profile(true);
+            break;
+          // case 1:// lights on
+          // case 2: //lights off
+          // case 10: // change headlight brightness
+          // case 20: // change lightbar colour
+          // case 20: // change lightbar colour
+          // case 21: // change lightbar brightness
+          // case 22: // change boot animation
 
-					// EEPROM commands
-					case 200:
-						// Save settings
-						EEPROM_WriteByte(0, Gear_Position);// TODO - implement more
+          // Buzzer commands
+          case 100:
+            // Buzzer on
+            BUZZER_ON;
+            break;
+          case 101:
+            // Buzzer off
+            BUZZER_OFF;
+            break;
+            // case 102: // set buzzer value
 
-					
-						
-				}
-			} else {
-				return 0; 
-			}		
-		break;
-	}
-	
-	return 0;
+            // EEPROM and system commands
+            // case 200:
+            // 	// Save settings
+            // 	EEPROM_WriteByte(0, Light_Profile);
+            // case 201: // change cell type
+            // case 202: // change ADC thresholds
+        }
+      } else {
+        return 0;
+      }
+      break;
+  }
+
+  return 0;
 }
-

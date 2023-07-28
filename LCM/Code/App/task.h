@@ -40,6 +40,7 @@ void Usart_Task(void);
 void ADC_Task(void);
 void Conditional_Judgment(void);
 void Flashlight_Detection(void);
+void Change_Light_Profile(bool persist);
 
 #endif
 
