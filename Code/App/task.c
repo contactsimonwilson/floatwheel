@@ -2,9 +2,9 @@
 
 /**************************************************
  * @brie   :LED_Task()
- * @note   :LEDÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :LEDï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void LED_Task(void)
 {
@@ -17,28 +17,28 @@ void LED_Task(void)
 
 /**************************************************
  * @brie   :KEY1_Task()
- * @note   :KEY1ÈÎÎñ
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :KEY1ï¿½ï¿½ï¿½ï¿½
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void KEY1_Task(void)
 {
-	if(KEY1_State == 0 || Power_Flag == 3)  //³äµçÆ÷¹©µç°´¼ü²»Æð×÷ÓÃ
+	if(KEY1_State == 0 || Power_Flag == 3)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç°´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		return;
 	}
 	
 	switch(KEY1_State)
 	{
-		case 1:  	//µ¥»÷
+		case 1:  	//ï¿½ï¿½ï¿½ï¿½
 			if(Power_Flag != 2)
 			{
-				Power_Flag = 1;  //VESC¿ª»ú
+				Power_Flag = 1;  //VESCï¿½ï¿½ï¿½ï¿½
 			}	
 		break;
 		
-		case 2:		//Ë«»÷	
-			if(Power_Flag == 2) //¿ª»úÍê³É
+		case 2:		//Ë«ï¿½ï¿½	
+			if(Power_Flag == 2) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				Gear_Position++;
 				if(Gear_Position == 4)
@@ -49,14 +49,14 @@ void KEY1_Task(void)
 			}
 		break;
 		
-		case 3:		//³¤°´
-			Power_Flag = 3;  //VESC¹Ø»ú
+		case 3:		//ï¿½ï¿½ï¿½ï¿½
+			Power_Flag = 3;  //VESCï¿½Ø»ï¿½
 			Flashlight_Flag = 0;
 			WS2812_Display_Flag =0;
 		break;
 		
-		case 4:		//Èý°´
-			if(Power_Flag == 2) //¿ª»úÍê³É
+		case 4:		//ï¿½ï¿½ï¿½ï¿½
+			if(Power_Flag == 2) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				if(Buzzer_Flag == 2)
 				{
@@ -75,9 +75,9 @@ void KEY1_Task(void)
 
 /**************************************************
  * @brie   :Power_Display()
- * @note   :µçÁ¿ÏÔÊ¾
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Power_Display(void)
 {
@@ -86,7 +86,7 @@ void Power_Display(void)
 	
 	switch(Power_Display_Flag)
 	{
-		case 1://4.08V~4.2V 	10¸ö°×µÆ
+		case 1://4.08V~4.2V 	10ï¿½ï¿½ï¿½×µï¿½
 			num = 10;
 			for(i=0;i<num;i++)
 			{
@@ -94,7 +94,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 2://4.05V~4.08V 9¸ö°×µÆ
+		case 2://4.05V~4.08V 9ï¿½ï¿½ï¿½×µï¿½
 			num = 9;
 			for(i=0;i<num;i++)
 			{
@@ -106,7 +106,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 3://3.96V~4.05V 8¸ö°×µÆ
+		case 3://3.96V~4.05V 8ï¿½ï¿½ï¿½×µï¿½
 			num = 8;
 			for(i=0;i<num;i++)
 			{
@@ -118,7 +118,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 4://3.87V~3.96V 7¸ö°×µÆ
+		case 4://3.87V~3.96V 7ï¿½ï¿½ï¿½×µï¿½
 			num = 7;
 			for(i=0;i<num;i++)
 			{
@@ -130,7 +130,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 5://3.78V~3.87V 6¸ö°×µÆ
+		case 5://3.78V~3.87V 6ï¿½ï¿½ï¿½×µï¿½
 			num = 6;
 			for(i=0;i<num;i++)
 			{
@@ -142,7 +142,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 6://3.70V~3.78V 5¸ö°×µÆ
+		case 6://3.70V~3.78V 5ï¿½ï¿½ï¿½×µï¿½
 			num = 5;
 			for(i=0;i<num;i++)
 			{
@@ -154,7 +154,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 7://3.62V~3.70V 4¸ö°×µÆ
+		case 7://3.62V~3.70V 4ï¿½ï¿½ï¿½×µï¿½
 			num = 4;
 			for(i=0;i<num;i++)
 			{
@@ -166,7 +166,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 8://3.50V~3.62V 3¸ö°×µÆ
+		case 8://3.50V~3.62V 3ï¿½ï¿½ï¿½×µï¿½
 			num = 3;
 			for(i=0;i<num;i++)
 			{
@@ -178,7 +178,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 9://3.35V~3.50V 2¸öºìµÆ
+		case 9://3.35V~3.50V 2ï¿½ï¿½ï¿½ï¿½ï¿½
 			num = 2;
 			for(i=0;i<num;i++)
 			{
@@ -190,7 +190,7 @@ void Power_Display(void)
 			}
 		break;
 		
-		case 10://2.80V~3.35V 1¸öºìµÆ
+		case 10://2.80V~3.35V 1ï¿½ï¿½ï¿½ï¿½ï¿½
 			num = 1;
 			for(i=0;i<num;i++)
 			{
@@ -210,14 +210,14 @@ void Power_Display(void)
 		break;
 		
 	}
-	WS2812_Refresh();//Ë¢ÐÂÏÔÊ¾
+	WS2812_Refresh();//Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾
 }
 
 /**************************************************
  * @brie   :WS2812()
- * @note   :²»ÏÔÊ¾µçÁ¿WS2812
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½WS2812
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812(void)
 {
@@ -225,7 +225,7 @@ void WS2812(void)
 	
 	switch(WS2812_Flag)
 	{
-		case 1://×ó²à5¸öÀ¶µÆ     ÓÒ²à5¸öµÆ²»·¢¹â   adc1>2.5V  adc2<2.5V
+		case 1://ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     ï¿½Ò²ï¿½5ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½   adc1>2.5V  adc2<2.5V
 			for(i=0;i<5;i++)
 			{
 				WS2812_Set_Colour(i,0,0,WS2812_Measure);
@@ -236,7 +236,7 @@ void WS2812(void)
 			}
 		break;
 		
-		case 2://×ó²à5¸öµÆ²»·¢¹â ÓÒ²à5¸öÀ¶µÆ       adc1<2.5V  adc2>2.5V
+		case 2://ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò²ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       adc1<2.5V  adc2>2.5V
 			for(i=0;i<5;i++)
 			{
 				WS2812_Set_Colour(i,0,0,0);
@@ -247,14 +247,14 @@ void WS2812(void)
 			}
 		break;
 		
-		case 3://10¸öµÆ¶¼Á¿À¶µÆ                    adc1>2.5V  adc2>2.5V
+		case 3://10ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½                    adc1>2.5V  adc2>2.5V
 			for(i=0;i<10;i++)
 			{
 				WS2812_Set_Colour(i,0,0,WS2812_Measure);
 			}
 		break;
 			
-		case 4://¹Ø±Õ10¸öµÆ 
+		case 4://ï¿½Ø±ï¿½10ï¿½ï¿½ï¿½ï¿½ 
 			for(i=0;i<10;i++)
 			{
 				WS2812_Set_Colour(i,0,0,0);
@@ -268,15 +268,15 @@ void WS2812(void)
 			}
 		break;
 	}
-	WS2812_Refresh();//Ë¢ÐÂÏÔÊ¾
+	WS2812_Refresh();//Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾
 }
 
 
 /**************************************************
  * @brie   :WS2812_Boot()
- * @note   :ÏÔÊ¾¿ª»ú
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Boot(void)
 {
@@ -403,7 +403,7 @@ void WS2812_Boot(void)
 			WS2812_Set_Colour(i,0,0,0);
 		}
 	}
-	WS2812_Refresh();//Ë¢ÐÂÏÔÊ¾
+	WS2812_Refresh();//Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾
 }
 
 
@@ -412,9 +412,9 @@ void WS2812_Boot(void)
 uint8_t brightness = 1;
 /**************************************************
  * @brie   :WS2812_Cal_Bri()
- * @note   :¼ÆËãÁÁ¶È
- * @param  :´ÎÊý 1´Î±íÊ¾200ms
- * @retval :ÁÁ¶È
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  :ï¿½ï¿½ï¿½ï¿½ 1ï¿½Î±ï¿½Ê¾200ms
+ * @retval :ï¿½ï¿½ï¿½ï¿½
  **************************************************/
 uint8_t WS2812_Cal_Bri(uint8_t cnt)
 {
@@ -500,9 +500,9 @@ uint8_t WS2812_Cal_Bri(uint8_t cnt)
 
 /**************************************************
  * @brie   :WS2812_Charge()
- * @note   :ÏÔÊ¾³äµç
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Charge(void)
 {
@@ -514,7 +514,7 @@ void WS2812_Charge(void)
 	brightness = WS2812_Cal_Bri(cnt);
 	switch(Power_Display_Flag)
 	{
-		case 1://4.08V~4.2V 	10¸ö°×µÆ
+		case 1://4.08V~4.2V 	10ï¿½ï¿½ï¿½×µï¿½
 			
 			num = 10;
 			for(i=0;i<num;i++)
@@ -523,7 +523,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 2://4.05V~4.08V 9¸ö°×µÆ
+		case 2://4.05V~4.08V 9ï¿½ï¿½ï¿½×µï¿½
 			num = 9;
 			for(i=0;i<num;i++)
 			{
@@ -535,7 +535,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 3://3.96V~4.05V 8¸ö°×µÆ
+		case 3://3.96V~4.05V 8ï¿½ï¿½ï¿½×µï¿½
 			num = 8;
 			for(i=0;i<num;i++)
 			{
@@ -547,7 +547,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 4://3.87V~3.96V 7¸ö°×µÆ
+		case 4://3.87V~3.96V 7ï¿½ï¿½ï¿½×µï¿½
 			num = 7;
 			for(i=0;i<num;i++)
 			{
@@ -559,7 +559,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 5://3.78V~3.87V 6¸ö°×µÆ
+		case 5://3.78V~3.87V 6ï¿½ï¿½ï¿½×µï¿½
 			num = 6;
 			for(i=0;i<num;i++)
 			{
@@ -571,7 +571,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 6://3.70V~3.78V 5¸ö°×µÆ
+		case 6://3.70V~3.78V 5ï¿½ï¿½ï¿½×µï¿½
 			num = 5;
 			for(i=0;i<num;i++)
 			{
@@ -583,7 +583,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 7://3.62V~3.70V 4¸ö°×µÆ
+		case 7://3.62V~3.70V 4ï¿½ï¿½ï¿½×µï¿½
 			num = 4;
 			for(i=0;i<num;i++)
 			{
@@ -595,7 +595,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 8://3.50V~3.62V 3¸ö°×µÆ
+		case 8://3.50V~3.62V 3ï¿½ï¿½ï¿½×µï¿½
 			num = 3;
 			for(i=0;i<num;i++)
 			{
@@ -607,7 +607,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 9://3.35V~3.50V 2¸öºìµÆ
+		case 9://3.35V~3.50V 2ï¿½ï¿½ï¿½ï¿½ï¿½
 			num = 2;
 			for(i=0;i<num;i++)
 			{
@@ -619,7 +619,7 @@ void WS2812_Charge(void)
 			}
 		break;
 		
-		case 10://2.80V~3.35V 1¸öºìµÆ
+		case 10://2.80V~3.35V 1ï¿½ï¿½ï¿½ï¿½ï¿½
 			num = 1;
 			for(i=0;i<num;i++)
 			{
@@ -647,22 +647,22 @@ void WS2812_Charge(void)
 		cnt = 0;
 	}
 	
-	WS2812_Refresh();//Ë¢ÐÂÏÔÊ¾
+	WS2812_Refresh();//Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾
 }	
 
 /**************************************************
  * @brie   :WS2812_Task()
- * @note   :WS2812ÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :WS2812ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Task(void)
 {
-//	static uint8_t ws2812_flag_last = 0; //ÉÏÒ»´ÎµÄ×´Ì¬
-//	static uint8_t power_display_flag_last = 0; //ÉÏÒ»´ÎµÄ×´Ì¬
+//	static uint8_t ws2812_flag_last = 0; //ï¿½ï¿½Ò»ï¿½Îµï¿½×´Ì¬
+//	static uint8_t power_display_flag_last = 0; //ï¿½ï¿½Ò»ï¿½Îµï¿½×´Ì¬
 	uint8_t i;
 
-	if(WS2812_Counter < 20) //20msË¢ÐÂÒ»´Î
+	if(WS2812_Counter < 20) //20msË¢ï¿½ï¿½Ò»ï¿½ï¿½
 	{
 		return;
 	}
@@ -674,7 +674,7 @@ void WS2812_Task(void)
 			{
 				WS2812_Set_Colour(i,0,0,0);
 			}
-			WS2812_Refresh();//Ë¢ÐÂÏÔÊ¾
+			WS2812_Refresh();//Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾
 			
 			WS2812_Display_Flag = 0;
 			WS2812_Flag = 0;
@@ -685,11 +685,11 @@ void WS2812_Task(void)
 	
 	if(Power_Flag == 1)
 	{
-		WS2812_Boot();  //¿ª»úÆô¶¯
+		WS2812_Boot();  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return;
 	}
 	
-	if(Charge_Flag == 3) //µç³Øµç³äÂúÁË
+	if(Charge_Flag == 3) //ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		for(i=0;i<10;i++)
 		{
@@ -698,7 +698,7 @@ void WS2812_Task(void)
 		return;
 	}
 	
-	if(Charge_Flag == 2) //³äµçºôÎüÏÔÊ¾
+	if(Charge_Flag == 2) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 	{
 		WS2812_Charge();
 		return;
@@ -706,15 +706,15 @@ void WS2812_Task(void)
 	
 	switch(Gear_Position)
 	{
-		case 1: //1µ²
+		case 1: //1ï¿½ï¿½
 			WS2812_Measure = WS2812_1_BRIGHTNESS;
 		break;
 		
-		case 2:	//2µ²
+		case 2:	//2ï¿½ï¿½
 			WS2812_Measure = WS2812_2_BRIGHTNESS;
 		break;
 		
-		case 3: //3µ²
+		case 3: //3ï¿½ï¿½
 			WS2812_Measure = WS2812_3_BRIGHTNESS;
 		break;
 		
@@ -723,44 +723,44 @@ void WS2812_Task(void)
 		break;
 	}
 	
-	if(WS2812_Display_Flag == 1)  //ÏÔÊ¾µçÁ¿
+	if(WS2812_Display_Flag == 1)  //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 	{
-//		if(Power_Display_Flag == power_display_flag_last) //ÕâÒ»´ÎºÍÉÏÒ»´ÎÒ»ÑùÖ±½ÓÍË³ö
+//		if(Power_Display_Flag == power_display_flag_last) //ï¿½ï¿½Ò»ï¿½Îºï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ò»ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½
 //		{
 //			return;
 //		}
 //		else
 //		{
 //			power_display_flag_last = Power_Display_Flag;
-//			Power_Display();// µçÁ¿ÏÔÊ¾
+//			Power_Display();// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 //		}
-		Power_Display();// µçÁ¿ÏÔÊ¾
+		Power_Display();// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
 	}
-	else //²»ÏÔÊ¾µçÁ¿
+	else //ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 	{
-//		if(ws2812_flag_last == WS2812_Flag) //ÕâÒ»´ÎºÍÉÏÒ»´ÎÒ»ÑùÖ±½ÓÍË³ö
+//		if(ws2812_flag_last == WS2812_Flag) //ï¿½ï¿½Ò»ï¿½Îºï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ò»ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½
 //		{
 //			return;
 //		}
 //		else
 //		{
 //			ws2812_flag_last = WS2812_Flag;
-//			WS2812();//²»ÏÔÊ¾µçÁ¿WS2812
+//			WS2812();//ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½WS2812
 //		}
-		WS2812();//²»ÏÔÊ¾µçÁ¿WS2812
+		WS2812();//ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½WS2812
 	}
 	
 }
 
 /**************************************************
  * @brie   :Power_Task()
- * @note   :µçÔ´ÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Power_Task(void)
 {
-	static uint8_t power_flag_last = 0; //ÉÏÒ»´ÎµÄ×´Ì¬
+	static uint8_t power_flag_last = 0; //ï¿½ï¿½Ò»ï¿½Îµï¿½×´Ì¬
 	static uint8_t power_step = 0;
 	
 	if(power_flag_last == Power_Flag && Power_Flag != 1)
@@ -771,7 +771,7 @@ void Power_Task(void)
 	
 	switch(Power_Flag)
 	{
-		case 1://VESC¿ª»ú
+		case 1://VESCï¿½ï¿½ï¿½ï¿½
 			PWR_ON;
 			Flashlight_Flag = 1;
 			switch(power_step)
@@ -784,9 +784,9 @@ void Power_Task(void)
 				case 1:
 					if(Power_Time > VESC_BOOT_TIME)
 					{
-						Power_Flag = 2; //¿ª»úÍê³É
-						Gear_Position = 1; //¿ª»úºóÄ¬ÈÏÊÇ1µ²
-						Buzzer_Flag = 2;    //¿ª»úÄ¬ÈÏ·äÃùÆ÷Ïì
+						Power_Flag = 2; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+						Gear_Position = 1; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½
+						Buzzer_Flag = 2;    //ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						power_step = 0;
 					}
 				break;
@@ -794,10 +794,10 @@ void Power_Task(void)
 			
 		break;	
 		
-		case 3://VESC¹Ø»ú£¬³äµçÆ÷¸ø°å×Ó¹©µç
+		case 3://VESCï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½
 			PWR_OFF;
 			//LED1_Filp_Time(1000);	
-			//Charge_Flag = 1; //×¼±¸³äµç
+			//Charge_Flag = 1; //×¼ï¿½ï¿½ï¿½ï¿½ï¿½
 		break;
 		
 		default:
@@ -808,9 +808,9 @@ void Power_Task(void)
 
 /**************************************************
  * @brie   :Charge_Task()
- * @note   :³äµçÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Charge_Task(void)
 {
@@ -829,14 +829,14 @@ void Charge_Task(void)
 		break;
 		
 		case 1:
-			if(Charge_Time > 1000)  //ÑÓÊ±1S
+			if(Charge_Time > 1000)  //ï¿½ï¿½Ê±1S
 			{
 				charge_step = 2;
 			}
 		break;
 		
 		case 2:
-			CHARGE_ON;  //´ò¿ª³äµçÆ÷
+			CHARGE_ON;  //ï¿½ò¿ª³ï¿½ï¿½ï¿½ï¿½
 			Charge_Flag = 2;
 		    charge_step = 3;
 		break;
@@ -851,7 +851,7 @@ void Charge_Task(void)
 			{
 				V_I = 1;
 				Charge_Time = 0;
-				LED1_ON; //²É¼¯³äµçµçÑ¹
+				LED1_ON; //ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¹
 				charge_step = 5;
 			}
 		break;
@@ -861,7 +861,7 @@ void Charge_Task(void)
 			{
 				V_I = 0;
 				Charge_Time = 0;
-				LED1_OFF; //²É¼¯³äµçÁ÷
+				LED1_OFF; //ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				charge_step = 4;
 			}		
 		break;
@@ -878,12 +878,12 @@ uint8_t val = 0;
 uint8_t flashlight_flag_last_2 = 0;
 /**************************************************
  * @brie   :Flashlight_Bright()
- * @note   :ÕÕÃ÷µÆÁÁ¶È
- * @param  :red_white = 1 Ç°ÕÕÃ÷µÆ°× ºóÕÕÃ÷µÆºì
- *          red_white = 2 Ç°ÕÕÃ÷µÆºì ºóÕÕÃ÷µÆ°×
- *          bright = 1    ÁÁ¶È´Ó0% -10% 2Ãë
- *          bright = 2    ÁÁ¶È´Ó10%-100% 2Ãë
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param  :red_white = 1 Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Æ°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æºï¿½
+ *          red_white = 2 Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Æºï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ°ï¿½
+ *          bright = 1    ï¿½ï¿½ï¿½È´ï¿½0% -10% 2ï¿½ï¿½
+ *          bright = 2    ï¿½ï¿½ï¿½È´ï¿½10%-100% 2ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 {
@@ -899,7 +899,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 	
 	if(Flashlight_Flag == 4)
 	{
-		TIM_SetCompare2(TIM1,9000);//´Ó10%¿ªÊ¼
+		TIM_SetCompare2(TIM1,9000);//ï¿½ï¿½10%ï¿½ï¿½Ê¼
 		return;
 	}
 	
@@ -929,17 +929,17 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 		case 2:
 			if(bright == 1)
 			{
-				TIM_SetCompare2(TIM1,9999); //´Ó0%¿ªÊ¼
+				TIM_SetCompare2(TIM1,9999); //ï¿½ï¿½0%ï¿½ï¿½Ê¼
 				flashlight_bright_step = 3;
 			}
 			else
 			{
-				TIM_SetCompare2(TIM1,9000);//´Ó10%¿ªÊ¼
+				TIM_SetCompare2(TIM1,9000);//ï¿½ï¿½10%ï¿½ï¿½Ê¼
 				flashlight_bright_step = 4;
 			}
 		break;
 		
-		case 3://ÁÁ¶È´Ó0% -10% 2Ãë
+		case 3://ï¿½ï¿½ï¿½È´ï¿½0% -10% 2ï¿½ï¿½
 			if(Flashlight_Time%2 == 0)
 			{
 				brightness = Flashlight_Time/2;
@@ -953,24 +953,24 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 		break;
 		
-		case 4://ÁÁ¶È´Ó10%-100% 2Ãë
+		case 4://ï¿½ï¿½ï¿½È´ï¿½10%-100% 2ï¿½ï¿½
 		
 			if(Flashlight_Time%2 == 0)
 			{
 				switch(Gear_Position)
 				{
 					case 1:
-						brightness = (Flashlight_Time*1)+1000;
+						brightness = (Flashlight_Time*1.0F)+1000;
 						brightness = 9999-brightness+1;
 					break;
 					
 					case 2:
-						brightness = ((Flashlight_Time*2.5)+1000);
+						brightness = (Flashlight_Time*2.5F)+1000;
 						brightness = 9999-brightness+1;
 					break;
 					
 					case 3:
-						brightness = (Flashlight_Time*4.5)+1000;
+						brightness = (Flashlight_Time*4.5F)+1000;
 						brightness = 9999-brightness+1;
 					break;
 					
@@ -1006,7 +1006,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 		break;
 		
-		case 5://ÁÁ¶Èµ÷ÕûÍê
+		case 5://ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½
 			Brightness_Flag = 2;
 			flashlight_bright_step = 0;
 		break;
@@ -1020,15 +1020,15 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 	
 /**************************************************
  * @brie   :Flashlight_Task()
- * @note   :ÕÕÃ÷µÆÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Flashlight_Task(void)
 {
 	static uint8_t flashlight_flag_last = 0;
 	
-	if(Power_Flag == 3 || Power_Flag == 0) //VESC¶ÏµçÕÕÃ÷µÆ¹Ø±Õ
+	if(Power_Flag == 3 || Power_Flag == 0) //VESCï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¹Ø±ï¿½
 	{
 		LED_B_OFF;
 		LED_F_OFF;
@@ -1036,7 +1036,7 @@ void Flashlight_Task(void)
 		return;
 	}
 	
-	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //ÁÁ¶ÈÒÑ¾­µ÷ÕûºÃ
+	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		return;
 	}
@@ -1048,19 +1048,19 @@ void Flashlight_Task(void)
 	
 	switch(Flashlight_Flag)
 	{
-		case 1://VESC¸ÕÉÏµçÇ°ºóÕÕÃ÷µÆÁ¿¶È´Ó0%¾­¹ý2Ãë´ïµ½10%
+		case 1://VESCï¿½ï¿½ï¿½Ïµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½0%ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ïµ½10%
 			Flashlight_Bright(1,1);
 		break; 
 		
-		case 2://VESCÇ°Ãæ°×µÆºóÃæºìµÆ(Õý×ª)
+		case 2://VESCÇ°ï¿½ï¿½×µÆºï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½×ª)
 			Flashlight_Bright(1,2);
 		break;
 		
-		case 3://VESCÇ°ÃæºìµÆºóÃæ°×µÆ(·´×ª)
+		case 3://VESCÇ°ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½×µï¿½(ï¿½ï¿½×ª)
 			Flashlight_Bright(2,2);
 		break;
 		
-		case 4://VESCÇ°ÃæºìµÆºóÃæ°×µÆ(·´×ª)
+		case 4://VESCÇ°ï¿½ï¿½ï¿½Æºï¿½ï¿½ï¿½×µï¿½(ï¿½ï¿½×ª)
 			Flashlight_Bright(2,2);
 			Brightness_Flag = 2;
 			val = 3;
@@ -1085,7 +1085,7 @@ void Flashlight_Detection(void)
 	{
 		if(gear_position_last != Gear_Position)
 		{
-			if(ADC1_Val < 2.5 && ADC2_Val < 2.5)
+			if(ADC1_Val < 2.5F && ADC2_Val < 2.5F)
 			{
 				switch(Gear_Position)
 				{
@@ -1144,25 +1144,25 @@ void Flashlight_Detection(void)
 }
 /**************************************************
  * @brie   :Buzzer_Task()
- * @note   :·äÃùÆ÷ÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Buzzer_Task(void)
 {
 	static uint8_t buzzer_step = 0;
-	static uint8_t gear_position_last = 0; //ÉÏÒ»´ÎµÄµµÎ»
+	static uint8_t gear_position_last = 0; //ï¿½ï¿½Ò»ï¿½ÎµÄµï¿½Î»
 	static uint8_t ring_frequency = 0;
 	static uint16_t sound_frequency = 0;
 	
-	if(Power_Flag != 2 || Buzzer_Flag == 1) //VESC¶Ïµç»ò·äÃùÆ÷¹Ø±Õ 
+	if(Power_Flag != 2 || Buzzer_Flag == 1) //VESCï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ 
 	{
 		BUZZER_OFF;
 		buzzer_step = 0;
 		return;
 	}
 	
-	if(Buzzer_Frequency == 0 && gear_position_last == Gear_Position) //·äÃùÆ÷ÏìµÄÆµÂÊÎª0»òÉÏÒ»´ÎµÄµµÎ»µÈÓÚÕâ´ÎµÄµµÎ»
+	if(Buzzer_Frequency == 0 && gear_position_last == Gear_Position) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½Îª0ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ÎµÄµï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎµÄµï¿½Î»
 	{
 		BUZZER_OFF;
 		buzzer_step = 0;
@@ -1174,7 +1174,7 @@ void Buzzer_Task(void)
 		switch(buzzer_step)
 		{
 			case 0:
-				sound_frequency = (uint16_t)(-2.78*Buzzer_Frequency+666);
+				sound_frequency = (uint16_t)(-2.78F*Buzzer_Frequency+666);
 				Buzzer_Time = 0;
 				buzzer_step = 1;
 			break;
@@ -1233,9 +1233,9 @@ void Buzzer_Task(void)
 
 /**************************************************
  * @brie   :Usart_Task()
- * @note   :´®¿ÚÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Usart_Task(void)
 {
@@ -1265,16 +1265,16 @@ void Usart_Task(void)
 				VESC_RX_Flag = 0;
 				result = Protocol_Parse(VESC_RX_Buff);
 				
-				if(result == 0) //½âÎö³É¹¦
+				if(result == 0) //ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½
 				{
 						//LED1_Filp_Time(500);				
 						Usart_Flag = 1;
-//						Battery_Voltage = data.inpVoltage; //µç³ØµçÑ¹
-//						VESC_Rpm = data.rpm;            //×ªËÙ
-//						AvgInputCurrent = data.avgInputCurrent;  //Ä¸ÏßµçÁ÷
-//						DutyCycleNow = data.dutyCycleNow;   //Õ¼¿Õ±È
+//						Battery_Voltage = data.inpVoltage; //ï¿½ï¿½Øµï¿½Ñ¹
+//						VESC_Rpm = data.rpm;            //×ªï¿½ï¿½
+//						AvgInputCurrent = data.avgInputCurrent;  //Ä¸ï¿½ßµï¿½ï¿½ï¿½
+//						DutyCycleNow = data.dutyCycleNow;   //Õ¼ï¿½Õ±ï¿½
 				}
-				else	//½âÎöÊ§°Ü
+				else	//ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 				{
 						//LED1_Filp_Time(100);
 						Usart_Flag = 2;
@@ -1317,9 +1317,9 @@ void Usart_Task(void)
 //float k = 0.15;
 /**************************************************
  * @brie   :ADC_Task()
- * @note   :ADCÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ADCï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void ADC_Task(void)
 {
@@ -1356,8 +1356,8 @@ void ADC_Task(void)
 				adc1_val_sum_ave  = Read_ADC_Value(1);
 				adc2_val_sum_ave  = Read_ADC_Value(2);
 				
-				ADC1_Val = (float)(adc1_val_sum_ave*0.0012890625);
-				ADC2_Val = (float)(adc2_val_sum_ave*0.0012890625);
+				ADC1_Val = (float)(adc1_val_sum_ave*0.0012890625F);
+				ADC2_Val = (float)(adc2_val_sum_ave*0.0012890625F);
 				
 //				if(Charge_Flag == 3)
 //				{
@@ -1366,7 +1366,7 @@ void ADC_Task(void)
 //						V_I = 0;
 //						Charge_Time = 0;
 //						Sampling_Completion = 0;
-//						LED1_OFF; //²É¼¯³äµçÁ÷
+//						LED1_OFF; //ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //						Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125);
 //					
 //					}
@@ -1379,7 +1379,7 @@ void ADC_Task(void)
 //							
 //							if(i == 10)
 //							{
-//								LED1_ON; //²É¼¯³äµçÑ¹
+//								LED1_ON; //ï¿½É¼ï¿½ï¿½ï¿½ï¿½Ñ¹
 //								Charge_Time = 0;
 //								Sampling_Completion = 1;
 //								V_I = 1;
@@ -1397,7 +1397,7 @@ void ADC_Task(void)
 				{
 					if(Charge_Time>100)
 					{
-						Charge_Current = (float)(-0.008056640625*adc_charge_sum_ave+16.5);
+						Charge_Current = (float)(-0.008056640625F*adc_charge_sum_ave+16.5F);
 						//Charge_Current = Charge_Current*k + old_charge_current*(1-k);
 						//old_charge_current = Charge_Current;
 					}
@@ -1406,7 +1406,7 @@ void ADC_Task(void)
 				{
 					if(Charge_Time>100)
 					{
-						Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125);
+						Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125F);
 					}
 				}
 			}
@@ -1438,9 +1438,9 @@ void ADC_Task(void)
 
 /**************************************************
  * @brie   :Conditional_Judgment()
- * @note   :Ìõ¼þÅÐ¶Ï
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Conditional_Judgment(void)
 {
@@ -1449,7 +1449,7 @@ void Conditional_Judgment(void)
 			
 	switch(Power_Flag)
 	{
-		case 1: //¿ª»ú
+		case 1: //ï¿½ï¿½ï¿½ï¿½
 			 if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
 				Power_Flag = 3;
@@ -1457,17 +1457,17 @@ void Conditional_Judgment(void)
 			 }
 		break;
 		
-		case 2: //¿ª»úÍê³É
+		case 2: //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if(Usart_Flag == 1)
 			{
 				Usart_Flag = 2;
 				
-				//DutyCycleNow = 0.9;//²âÊÔÐèÒª×¢ÊÍ
+				//DutyCycleNow = 0.9;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½
 				if(data.dutyCycleNow < 0)
 				{
 					data.dutyCycleNow = -data.dutyCycleNow;
 				}
-				/*duty cycle > DUTY_CYCLE ·äÃùÆ÷¡°ßÙ¡±¡°ßÙ¡±µÄÏì*/
+				/*duty cycle > DUTY_CYCLE ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½Ù¡ï¿½ï¿½ï¿½ï¿½ï¿½*/
 				if(data.dutyCycleNow >= DUTY_CYCLE)
 				{
 					Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow*100))*4)-220);
@@ -1477,9 +1477,9 @@ void Conditional_Judgment(void)
 					Buzzer_Frequency = 0;
 				}
 				
-				//VESC_Rpm = -10;//²âÊÔÐèÒª×¢ÊÍ
+				//VESC_Rpm = -10;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½
 				
-				if(ADC1_Val>2.9 || ADC2_Val > 2.9)
+				if(ADC1_Val>2.9F || ADC2_Val > 2.9F)
 				{
 					if(data.rpm > VESC_RPM_WIDTH)
 					{
@@ -1500,49 +1500,49 @@ void Conditional_Judgment(void)
 					data.rpm = -data.rpm;
 				}
 				
-				//Battery_Voltage = 82;//²âÊÔÐèÒª×¢ÊÍ
+				//Battery_Voltage = 82;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½
 				
-				battery_voltage = (data.inpVoltage+1)/BATTERY_STRING;//+1ÎªÐÞÕýÖµ
+				battery_voltage = (data.inpVoltage+1)/BATTERY_STRING;//+1Îªï¿½ï¿½ï¿½ï¿½Öµ
 				
 				if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
 				{
-					if(battery_voltage>4.07)
+					if(battery_voltage>4.07F)
 					{
 						Power_Display_Flag = 1;
 					}
-					else if(battery_voltage>4.025)
+					else if(battery_voltage>4.025F)
 					{
 						Power_Display_Flag = 2;
 					}
-					else if(battery_voltage>3.91)
+					else if(battery_voltage>3.91F)
 					{
 						Power_Display_Flag = 3;
 					}
-					else if(battery_voltage>3.834)
+					else if(battery_voltage>3.834F)
 					{
 						Power_Display_Flag = 4;
 					}
-					else if(battery_voltage>3.746)
+					else if(battery_voltage>3.746F)
 					{
 						Power_Display_Flag = 5;
 					}
-					else if(battery_voltage>3.607)
+					else if(battery_voltage>3.607F)
 					{
 						Power_Display_Flag = 6;
 					}
-					else if(battery_voltage>3.49)
+					else if(battery_voltage>3.49F)
 					{
 						Power_Display_Flag = 7;
 					}
-					else if(battery_voltage>3.351)
+					else if(battery_voltage>3.351F)
 					{
 						Power_Display_Flag = 8;
 					}
-					else if(battery_voltage>3.168)
+					else if(battery_voltage>3.168F)
 					{
 						Power_Display_Flag = 9;
 					}
-					else if(battery_voltage>2.81)
+					else if(battery_voltage>2.81F)
 					{
 						Power_Display_Flag = 10;
 					}
@@ -1555,44 +1555,44 @@ void Conditional_Judgment(void)
 				{
 					data.avgInputCurrent = -data.avgInputCurrent;
 				}
-				//AvgInputCurrent = 1.0;//²âÊÔÐèÒª×¢ÊÍ
+				//AvgInputCurrent = 1.0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òª×¢ï¿½ï¿½
 				
 				if(data.rpm<VESC_RPM)
 				{
-					if(ADC1_Val < 2.9 && ADC2_Val <2.9)
+					if(ADC1_Val < 2.9F && ADC2_Val <2.9F)
 					{
-						WS2812_Display_Flag = 1;  //ÏÔÊ¾µçÁ¿
+						WS2812_Display_Flag = 1;  //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 					}
-					else if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
+					else if(ADC1_Val > 2.9F && ADC2_Val > 2.9F)
 					{
-						WS2812_Display_Flag = 2;  //²»ÏÔÊ¾µçÁ¿
-						WS2812_Flag = 3;  //10¸öµÆ¶¼Á¿À¶µÆ
+						WS2812_Display_Flag = 2;  //ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+						WS2812_Flag = 3;  //10ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					}
-					else if(ADC1_Val >2.9)
+					else if(ADC1_Val >2.9F)
 					{
-						WS2812_Display_Flag = 2;//²»ÏÔÊ¾µçÁ¿
-						WS2812_Flag = 1;  //×ó²à5¸öÀ¶µÆ     ÓÒ²à5¸öµÆ²»·¢¹â
+						WS2812_Display_Flag = 2;//ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+						WS2812_Flag = 1;  //ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     ï¿½Ò²ï¿½5ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½
 					}
 					else
 					{
-						WS2812_Display_Flag = 2;//²»ÏÔÊ¾µçÁ¿
-						WS2812_Flag = 2;  //×ó²à5¸öµÆ²»·¢¹â ÓÒ²à5¸öÀ¶µÆ
+						WS2812_Display_Flag = 2;//ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+						WS2812_Flag = 2;  //ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò²ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					}
 				}
 				else
 				{
-					if(data.avgInputCurrent < 0.8 && data.rpm < 6000)
+					if(data.avgInputCurrent < 0.8F && data.rpm < 6000)
 					{
-						WS2812_Display_Flag = 1; //ÏÔÊ¾µçÁ¿
+						WS2812_Display_Flag = 1; //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 					}
 					else
 					{
-						WS2812_Display_Flag = 2; //²»ÏÔÊ¾µçÁ¿
-						WS2812_Flag = 4; //¹Ø10¸öµÆ
+						WS2812_Display_Flag = 2; //ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+						WS2812_Flag = 4; //ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½
 					}
 				}
 				
-				if((Charge_Voltage > CHARGING_VOLTAGE) && (data.avgInputCurrent<0.8))
+				if((Charge_Voltage > CHARGING_VOLTAGE) && (data.avgInputCurrent<0.8F))
 				{
 					if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
 					{
@@ -1608,10 +1608,10 @@ void Conditional_Judgment(void)
 					Charger_Detection_1ms = 0;
 				}
 				/*
-					½ÅÌ¤°å²ÈÏÂ»ò×ªËÙ´óÓÚ1000¶¨Ê±ÇåÁã
-					¼´²»²È½ÅÌ¤°å×ªËÙµÍÓÚ1000¿ªÊ¼¼ÆÊ±£¬³¬¹ý¹Ø»úÊ±¼ä¹Ø»ú
+					ï¿½ï¿½Ì¤ï¿½ï¿½ï¿½ï¿½Â»ï¿½×ªï¿½Ù´ï¿½ï¿½ï¿½1000ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+					ï¿½ï¿½ï¿½ï¿½ï¿½È½ï¿½Ì¤ï¿½ï¿½×ªï¿½Ùµï¿½ï¿½ï¿½1000ï¿½ï¿½Ê¼ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø»ï¿½Ê±ï¿½ï¿½Ø»ï¿½
 				*/
-				if(ADC1_Val > 2.9 || ADC2_Val > 2.9 || data.rpm > 1000)
+				if(ADC1_Val > 2.9F || ADC2_Val > 2.9F || data.rpm > 1000)
 				{
 					Shutdown_Time_S = 0;
 					Shutdown_Time_M = 0;
@@ -1630,7 +1630,7 @@ void Conditional_Judgment(void)
 			}
 		break;
 		
-		case 3: //VESC¹Ø»ú£¬³äµçÆ÷¸ø°å×Ó¹©µç
+		case 3: //VESCï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½
 			if(V_I == 0 && Charge_Time > 150)
 			{
 				if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
@@ -1641,7 +1641,7 @@ void Conditional_Judgment(void)
 					{
 //						Charge_Flag = 3;
 						Shutdown_Cnt = 0;
-						CHARGE_OFF;  //¹Ø±Õ³äµçÆ÷
+						CHARGE_OFF;  //ï¿½Ø±Õ³ï¿½ï¿½ï¿½ï¿½
 					}
 				}
 				else
@@ -1651,48 +1651,48 @@ void Conditional_Judgment(void)
 			}
 			else if(Charge_Time > 150)
 			{
-				battery_voltage = (Charge_Voltage+1)/BATTERY_STRING;//+1ÎªÐÞÕýÖµ
+				battery_voltage = (Charge_Voltage+1)/BATTERY_STRING;//+1Îªï¿½ï¿½ï¿½ï¿½Öµ
 				if(Charge_Flag == 2)
 				{
 					if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
 					{
-						if(battery_voltage>4.07)
+						if(battery_voltage>4.07F)
 						{
 							Power_Display_Flag = 1;
 						}
-						else if(battery_voltage>4.025)
+						else if(battery_voltage>4.025F)
 						{
 							Power_Display_Flag = 2;
 						}
-						else if(battery_voltage>3.91)
+						else if(battery_voltage>3.91F)
 						{
 							Power_Display_Flag = 3;
 						}
-						else if(battery_voltage>3.834)
+						else if(battery_voltage>3.834F)
 						{
 							Power_Display_Flag = 4;
 						}
-						else if(battery_voltage>3.746)
+						else if(battery_voltage>3.746F)
 						{
 							Power_Display_Flag = 5;
 						}
-						else if(battery_voltage>3.607)
+						else if(battery_voltage>3.607F)
 						{
 							Power_Display_Flag = 6;
 						}
-						else if(battery_voltage>3.49)
+						else if(battery_voltage>3.49F)
 						{
 							Power_Display_Flag = 7;
 						}
-						else if(battery_voltage>3.351)
+						else if(battery_voltage>3.351F)
 						{
 							Power_Display_Flag = 8;
 						}
-						else if(battery_voltage>3.168)
+						else if(battery_voltage>3.168F)
 						{
 							Power_Display_Flag = 9;
 						}
-						else if(battery_voltage>2.81)
+						else if(battery_voltage>2.81F)
 						{
 							Power_Display_Flag = 10;
 						}
