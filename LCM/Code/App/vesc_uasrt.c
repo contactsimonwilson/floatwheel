@@ -253,11 +253,11 @@ uint8_t Protocol_Parse(uint8_t * message)
           // case 22: // change boot animation
 
           // Buzzer commands
-          case 100:
+          case SET_BUZZER_ON:
             // Buzzer on
             BUZZER_ON;
             break;
-          case 101:
+          case SET_BUZZER_OFF:
             // Buzzer off
             BUZZER_OFF;
             break;

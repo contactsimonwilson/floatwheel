@@ -1417,8 +1417,8 @@ typedef struct __attribute__((packed))
 typedef enum
 {
 	CHANGE_LIGHT_PROFILE = 0,
-	BUZZER_ON = 100,
-	BUZZER_OFF = 101,
+	SET_BUZZER_ON = 100,
+	SET_BUZZER_OFF = 101,
 } LCM_COMMANDS;
 
 #endif /* DATATYPES_H_ */
