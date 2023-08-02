@@ -27,6 +27,7 @@ extern uint8_t VESC_RX_Flag;
 extern dataPackage data;
 
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id);
+void Get_Vesc_Adc_Data(COMM_PACKET_ID id);
 uint8_t Protocol_Parse(uint8_t * message);
 
 #endif

@@ -76,6 +76,12 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 	Send_Pack_Data(command,1);
 }
 
+void Get_Vesc_Adc_Data(COMM_PACKET_ID id)
+{
+	uint8_t message[3] = {id, 102, GET_VESC_ADC}; //Custom data, magic number, get vesc adc
+	Send_Pack_Data(message, 3);
+}
+
 /**************************************************
  * @brie   :buffer_get_int16()
  * @note   :�����������ֽ�ƴһ��int16_t
@@ -231,7 +237,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 		command 4 = Brakelight -> (uint8_t ON_OFF) //keep brightness at (70%) set brightness until braking (hard) occurs -> then scale to 100%
 
 */
-    case COMM_CUSTOM_APP_DATA:
+   case COMM_CUSTOM_APP_DATA:
       if (message[counter++] ==
           102)  // Magic number specificly for the Floatwheel light control
                 // module (Float package uses 101 - dont interfere with the
@@ -246,29 +252,40 @@ uint8_t Protocol_Parse(uint8_t * message)
             break;
           // case 1:// lights on
           // case 2: //lights off
+		case CHANGE_BOOT_ANIMATION:
+			Change_Boot_Animation(message[counter++]);
+			break;
+		case CHANGE_CELL_TYPE:
+			Change_Cell_Type(message[counter++]);
+			break;
           // case 10: // change headlight brightness
-          // case 20: // change lightbar colour
           // case 20: // change lightbar colour
           // case 21: // change lightbar brightness
           // case 22: // change boot animation
 
           // Buzzer commands
-          case SET_BUZZER_ON:
+        case SET_BUZZER_ON: //Might change this to an unused vesc command -> message will still be build correct but shorter.
             // Buzzer on
             BUZZER_ON;
             break;
-          case SET_BUZZER_OFF:
+        case SET_BUZZER_OFF: //Might change this to an unused vesc command -> message will still be build correct but shorter.
             // Buzzer off
             BUZZER_OFF;
             break;
-            // case 102: // set buzzer value
-
+        case SET_BUZZER_STATE: //TODO -> Change lightbar color based on the state
+			break; 
+			
             // EEPROM and system commands
             // case 200:
             // 	// Save settings
             // 	EEPROM_WriteByte(0, Light_Profile);
             // case 201: // change cell type
             // case 202: // change ADC thresholds
+		case GET_VESC_ADC:
+		//Todo - change the values of the LCM and perhaps set in eeprom
+			uint8_t adc1 = message[counter++]; 
+			uint8_t adc2 = message[counter++];
+			break;
         }
       } else {
         return 0;

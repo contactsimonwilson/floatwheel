@@ -53,7 +53,10 @@ void ADC_Task(void);
 void Conditional_Judgment(void);
 void Flashlight_Detection(void);
 void Change_Light_Profile(bool persist);
-
+void Change_Boot_Animation(uint8_t animation);
+void Change_Cell_Type(uint8_t type);
+//void Change_Cell_Type(uint8_t type, bool get);
+//void Change_Boot_Animation(uint8_t animation,bool get); 
 #endif
 
 

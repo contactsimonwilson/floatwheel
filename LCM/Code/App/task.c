@@ -2,6 +2,14 @@
 #include "eeprom.h"
 #include <math.h>
 
+
+///Colors
+//These are warnings displayed on the lightbar -> use full brightness
+uint8_t purple[3] = {0x80, 0x00, 0x80};		//Tiltback - high, low, duty
+uint8_t red[3] = {0xff, 0x00, 0x00};		//Error
+uint8_t orange[3] = {0xff, 0x5a, 0x00};		//Temp
+uint8_t yellow[3] = {0xff, 0xff, 0x00};		//Current
+
 /**************************************************
  * @brie   :LED_Task()
  * @note   :LED���� 
@@ -32,6 +40,35 @@ void Change_Light_Profile(bool persist) {
 		EEPROM_WriteByte(0, Light_Profile);
 	}
 }
+
+void Change_Cell_Type(uint8_t type) {
+	if (type == DG40 || type == P42A) {
+		EEPROM_WriteByte(CHANGE_CELL_TYPE, type);
+	}
+}
+
+void Change_Boot_Animation(uint8_t animation) {
+	if (animation == RAINBOW || animation == NORMAL) {
+		EEPROM_WriteByte(CHANGE_BOOT_ANIMATION, animation);
+	} 
+}
+
+/*
+void Change_Cell_Type(uint8_t type, bool get) {
+	if ((type == DG40 || type == P42A) & get) {
+		EEPROM_WriteByte(CHANGE_CELL_TYPE, type);
+	} else {
+		EEPROM_ReadByte(CHANGE_CELL_TYPE, type);
+	}
+}
+
+void Change_Boot_Animation(uint8_t animation,bool get) {
+	if ((animation == RAINBOW || animation == NORMAL) & get) {
+		EEPROM_WriteByte(CHANGE_BOOT_ANIMATION, animation);
+	} else {
+		EEPROM_ReadByte(CHANGE_BOOT_ANIMATION, animation);
+	}
+}*/
 
 /**************************************************
  * @brie   :KEY1_Task()
