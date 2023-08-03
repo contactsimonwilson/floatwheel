@@ -498,14 +498,19 @@ void Power_Task(void)
 						Light_Profile = 1; //������Ĭ����1��
 						Buzzer_Flag = 2;    //����Ĭ�Ϸ�������
 						power_step = 0;
-
+						
 						// Read saved value from EEPROM
 						uint8_t data = Light_Profile;
 						EEPROM_ReadByte(0, &data);
-
+						
 						if (data > 0 && data < 4) {
 							Light_Profile = data;
 						}
+
+						//TODO:
+						//Read cell type		(p42a or dg40)
+						//Read boot animation (rainbow or normal)
+						//Read buzzer config (vesc, normal or off)
 
 					}
 				break;

@@ -76,12 +76,17 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 	Send_Pack_Data(command,1);
 }
 
-void Get_Vesc_Adc_Data(COMM_PACKET_ID id)
+void Get_Vesc_Adc_Data()
 {
-	uint8_t message[3] = {id, 102, GET_VESC_ADC}; //Custom data, magic number, get vesc adc
+	uint8_t message[3] = {COMM_CUSTOM_APP_DATA, 102, GET_VESC_ADC}; //Custom data, magic number, get vesc adc
 	Send_Pack_Data(message, 3);
 }
 
+void Get_Eeprom_Data(LCM_COMMANDS command) //Retrieve data stored in eeprom 
+{
+	uint8_t message[4] = {COMM_CUSTOM_APP_DATA, 103, command, Get_Eeprom_Data(command)};
+	Send_Pack_Data(message, 4);
+}
 /**************************************************
  * @brie   :buffer_get_int16()
  * @note   :�����������ֽ�ƴһ��int16_t
@@ -265,11 +270,13 @@ uint8_t Protocol_Parse(uint8_t * message)
 
           // Buzzer commands
         case SET_BUZZER_ON: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            // Buzzer on
+            //If buzzer is set to vesc else return
+			// Buzzer on
             BUZZER_ON;
             break;
         case SET_BUZZER_OFF: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            // Buzzer off
+            //If buzzer is set to vesc else return
+			// Buzzer off
             BUZZER_OFF;
             break;
         case SET_BUZZER_STATE: //TODO -> Change lightbar color based on the state

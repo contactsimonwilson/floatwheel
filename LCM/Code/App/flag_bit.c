@@ -149,6 +149,9 @@ uint8_t Light_Profile = 0;
 /*
 	WS2812����
 */
+
+//Implement the Cell_Type and Boot_Animation
+
 uint8_t WS2812_Measure = 0;
 /*
 	������ bpm 60-180 ��Ӧռ�ձ� 70-100

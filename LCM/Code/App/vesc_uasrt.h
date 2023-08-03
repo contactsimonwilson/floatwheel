@@ -26,9 +26,10 @@ extern uint8_t VESC_RX_Buff[256];
 extern uint8_t VESC_RX_Flag;
 extern dataPackage data;
 
-void Get_Vesc_Pack_Data(COMM_PACKET_ID id);
-void Get_Vesc_Adc_Data(COMM_PACKET_ID id);
-uint8_t Protocol_Parse(uint8_t * message);
+void Get_Vesc_Pack_Data(COMM_PACKET_ID id);  //Get the normal values from the vesc
+void Get_Vesc_Adc_Data();					 //Get footsensor config from vesc (store in eeprom?)
+void Get_Eeprom_Data(LCM_COMMANDS command); //Get eeprom data and send back over bluetooth - TODO implement + implement in vesc pkg
+uint8_t Protocol_Parse(uint8_t * message);	
 
 #endif
 
