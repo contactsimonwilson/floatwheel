@@ -251,54 +251,67 @@ uint8_t Protocol_Parse(uint8_t * message)
                 // float package)
       {
         command = message[counter++];
-        switch (command) {
+        switch (command) 
+		{
           // Light commands
-          case CHANGE_LIGHT_PROFILE:
+          	case CHANGE_LIGHT_PROFILE:
             // Change light profile
-            Change_Light_Profile(true);
-            break;
-          // case 1:// lights on
-          // case 2: //lights off
-		case CHANGE_BOOT_ANIMATION:
-			Change_Boot_Animation(message[counter++]);
-			break;
-		case CHANGE_CELL_TYPE:
-			Change_Cell_Type(message[counter++]);
-			break;
-          // case 10: // change headlight brightness
-          // case 20: // change lightbar colour
-          // case 21: // change lightbar brightness
-          // case 22: // change boot animation
+            	Change_Light_Profile(true);
+            	break;
 
-          // Buzzer commands
-        case SET_BUZZER_ON: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            if (Config_Buzzer == VESC) {
-				// Buzzer on
-				BUZZER_ON;
-			}
-            break;
-        case SET_BUZZER_OFF: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            if (Config_Buzzer == VESC) {
-				// Buzzer off
-				BUZZER_OFF;
-			}
-            break;
-        case SET_BUZZER_STATE: //TODO -> Change lightbar color based on the state
-			break; 
-		case CHANGE_BUZZER_TYPE:
-			Change_Buzzer_Type(message[counter++]);
-			break;
-            // EEPROM and system commands
-            // case 200:
-            // 	// Save settings
-            // 	EEPROM_WriteByte(0, Light_Profile);
-            // case 201: // change cell type
-            // case 202: // change ADC thresholds
-		case GET_VESC_ADC:
-		//Todo - change the values of the LCM and perhaps set in eeprom
-			uint8_t adc1 = message[counter++]; 
-			uint8_t adc2 = message[counter++];
-			break;
+			case CHANGE_LIGHT_BRIGHTNESS:
+				break;
+
+			case CHANGE_LIGHTBAR_BRIGHTNESS:
+				break; 
+			// case 1:// lights on
+			// case 2: //lights off
+			case CHANGE_BOOT_ANIMATION:
+				Change_Boot_Animation(message[counter++]);
+				break;
+
+			case CHANGE_CELL_TYPE:
+				Change_Cell_Type(message[counter++]);
+				break;
+
+
+			// case 10: // change headlight brightness
+			// case 20: // change lightbar colour
+			// case 21: // change lightbar brightness
+			// case 22: // change boot animation
+
+        	// Buzzer commands
+
+			case SET_BUZZER_ON: //Might change this to an unused vesc command -> message will still be build correct but shorter.
+				if (Config_Buzzer == VESC) {
+					// Buzzer on
+					BUZZER_ON;
+				}
+				break;
+
+			case SET_BUZZER_OFF: //Might change this to an unused vesc command -> message will still be build correct but shorter.
+				if (Config_Buzzer == VESC) {
+					// Buzzer off
+					BUZZER_OFF;
+				}
+				break;
+			case SET_BUZZER_STATE: //TODO -> Change lightbar color based on the state
+				break; 
+
+			case CHANGE_BUZZER_TYPE:
+				Change_Buzzer_Type(message[counter++]);
+				break;
+				// EEPROM and system commands
+				// case 200:
+				// 	// Save settings
+				// 	EEPROM_WriteByte(0, Light_Profile);
+				// case 201: // change cell type
+				// case 202: // change ADC thresholds
+			case GET_VESC_ADC:
+			//Todo - change the values of the LCM and perhaps set in eeprom
+				uint8_t adc1 = message[counter++]; 
+				uint8_t adc2 = message[counter++];
+				break;
         }
       } else {
         return 0;

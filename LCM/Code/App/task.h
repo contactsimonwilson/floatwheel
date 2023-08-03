@@ -40,6 +40,9 @@ typedef enum
 #define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
+#define   MAIN_BRIGHTNESS_1			9600		// Low brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_2			7200		// Medium brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_3			4500		// High brightness value (0-9999)
 #define   CHARGE_CURRENT			0.3         //������ ��λA
 #define   CHARGE_CURRENT_L			0.1         //������ ��λA
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA

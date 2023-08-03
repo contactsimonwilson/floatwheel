@@ -428,14 +428,17 @@ void WS2812_Task(void)
 		// Inversely set the brightness of the lightbar to the brightness of the main lights
 		case 1: //1��
 			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
+			Main_Brightness = MAIN_BRIGHTNESS_1;
 		break;
 		
 		case 2:	//2��
 			WS2812_Measure = LIGHTBAR_BRIGHTNESS_2;
+			Main_Brightness = MAIN_BRIGHTNESS_2;
 		break;
 		
 		case 3: //3��
 			WS2812_Measure = LIGHTBAR_BRIGHTNESS_3;
+			Main_Brightness = MAIN_BRIGHTNESS_3;
 		break;
 		
 		default:
@@ -891,7 +894,13 @@ void Buzzer_Task(void)
 	static uint8_t Light_Profile_last = 0; //��һ�εĵ�λ
 	static uint8_t ring_frequency = 0;
 	static uint16_t sound_frequency = 0;
-	
+	if (Config_Buzzer == OFF) {
+		BUZZER_OFF; //Make sure the buzzer is really off
+		return;
+	} 
+	if (Config_Buzzer == VESC) {
+		return; //Do nothing with the buzzer, let the vesc handle everything -> when changed to vesc make sure to initialy set buzzer off
+	}
 	if(Power_Flag != 2 || Buzzer_Flag == 1) //VESC�ϵ��������ر� 
 	{
 		BUZZER_OFF;
