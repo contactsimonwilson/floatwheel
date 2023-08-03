@@ -37,4 +37,10 @@ extern float Charge_Current;
 extern uint8_t V_I;
 extern uint8_t Shutdown_Cnt;
 extern uint16_t Charger_Detection_1ms;
+
+//Config
+
+extern uint8_t Config_Cell_Type;          
+extern uint8_t Config_Boot_Animation;
+extern uint8_t Config_Buzzer;
 #endif

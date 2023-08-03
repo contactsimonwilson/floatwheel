@@ -150,7 +150,14 @@ uint8_t Light_Profile = 0;
 	WS2812����
 */
 
-//Implement the Cell_Type and Boot_Animation
+///Configured cell type (gets read from EEPROM)
+uint8_t Config_Cell_Type = 0;
+
+///Configured boot animation (gets read from EEPROM)
+uint8_t Config_Boot_Animation = 0;
+
+///Configured buzzer (gets read from EEPROM)
+uint8_t Config_Buzzer = 0;
 
 uint8_t WS2812_Measure = 0;
 /*

@@ -53,6 +53,11 @@ void Change_Boot_Animation(uint8_t animation) {
 	} 
 }
 
+void Change_Buzzer_Type(uint8_t type) {
+	if (type == LCM || type == VESC || type == OFF) {
+		EEPROM_WriteByte(CHANGE_BUZZER_TYPE, type);
+	}
+}
 /*
 void Change_Cell_Type(uint8_t type, bool get) {
 	if ((type == DG40 || type == P42A) & get) {
@@ -220,6 +225,8 @@ void WS2812_Boot(void) {
 	}
 
 	for (i=0;i<num;i++) {
+		//switch (Config_Boot_Animation) {  Not sure what would happen if no bytes are stored (set to 0xFF?)
+		//Then this switch can be implemented
 		switch (BOOT_ANIMATION) {
 			case NORMAL:
 				WS2812_Set_Colour(i,0,255,255);
@@ -498,7 +505,9 @@ void Power_Task(void)
 						Light_Profile = 1; //������Ĭ����1��
 						Buzzer_Flag = 2;    //����Ĭ�Ϸ�������
 						power_step = 0;
-						
+						Config_Cell_Type = CELL_TYPE; //Set to the define
+						Config_Boot_Animation = BOOT_ANIMATION; //Set to the define
+						Config_Buzzer = BUZZER_TYPE;
 						// Read saved value from EEPROM
 						uint8_t data = Light_Profile;
 						EEPROM_ReadByte(0, &data);
@@ -506,11 +515,21 @@ void Power_Task(void)
 						if (data > 0 && data < 4) {
 							Light_Profile = data;
 						}
-
-						//TODO:
-						//Read cell type		(p42a or dg40)
-						//Read boot animation (rainbow or normal)
-						//Read buzzer config (vesc, normal or off)
+						data = Config_Cell_Type;
+						EEPROM_ReadByte(CHANGE_CELL_TYPE, &data);
+						if (data == DG40 || data = P42A) {
+							Config_Cell_Type = data;
+						}
+						data = Config_Boot_Animation;
+						EEPROM_ReadByte(CHANGE_BOOT_ANIMATION, &data);
+						if (data == NORMAL || data = RAINBOW) {
+							Config_Boot_Animation = data;
+						}
+						data = Config_Buzzer;
+						EEPROM_ReadByte(CHANGE_BUZZER_TYPE, &data);
+						if (data == LCM || data == VESC || data == OFF) {
+							Config_Buzzer = data;
+						}
 
 					}
 				break;
@@ -1153,6 +1172,8 @@ void ADC_Task(void)
 void Apply_BatteryPowerFlag(float battery_voltage) {
 	float battVoltages[10] =  {4.054, 4.01, 3.908, 3.827, 3.74, 3.651, 3.571, 3.485, 3.38, 3.0}; // P42A
 
+	//if (Config_Cell_Type == DG40) - Can be implemented if this works even when nothing is stored in EEPROM
+	//Does it return 0XFF when empty / not set?
 	if (CELL_TYPE == DG40) {
 		// DG40
 		float dg40BattVoltages[10] = {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81};

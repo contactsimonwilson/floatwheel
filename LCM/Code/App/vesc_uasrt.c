@@ -270,18 +270,22 @@ uint8_t Protocol_Parse(uint8_t * message)
 
           // Buzzer commands
         case SET_BUZZER_ON: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            //If buzzer is set to vesc else return
-			// Buzzer on
-            BUZZER_ON;
+            if (Config_Buzzer == VESC) {
+				// Buzzer on
+				BUZZER_ON;
+			}
             break;
         case SET_BUZZER_OFF: //Might change this to an unused vesc command -> message will still be build correct but shorter.
-            //If buzzer is set to vesc else return
-			// Buzzer off
-            BUZZER_OFF;
+            if (Config_Buzzer == VESC) {
+				// Buzzer off
+				BUZZER_OFF;
+			}
             break;
         case SET_BUZZER_STATE: //TODO -> Change lightbar color based on the state
 			break; 
-			
+		case CHANGE_BUZZER_TYPE:
+			Change_Buzzer_Type(message[counter++]);
+			break;
             // EEPROM and system commands
             // case 200:
             // 	// Save settings
