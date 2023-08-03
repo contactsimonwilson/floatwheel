@@ -84,9 +84,12 @@ void Get_Vesc_Adc_Data()
 
 void Get_Eeprom_Data(LCM_COMMANDS command) //Retrieve data stored in eeprom 
 {
-	uint8_t message[4] = {COMM_CUSTOM_APP_DATA, 103, command, Get_Eeprom_Data(command)};
+	uint8_t data;
+	EEPROM_ReadByte(command, &data);
+	uint8_t message[4] = {COMM_CUSTOM_APP_DATA, 103, command, data};
 	Send_Pack_Data(message, 4);
 }
+void 
 /**************************************************
  * @brie   :buffer_get_int16()
  * @note   :�����������ֽ�ƴһ��int16_t
