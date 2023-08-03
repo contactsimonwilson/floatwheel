@@ -1416,9 +1416,19 @@ typedef struct __attribute__((packed))
 
 typedef enum
 {
-	CHANGE_LIGHT_PROFILE = 0,
-	SET_BUZZER_ON = 100,
-	SET_BUZZER_OFF = 101,
+	CHANGE_LIGHT_PROFILE = 0,	//Adds functionality to change light profile
+	CHANGE_LIGHT_BRIGHTNESS = 1,	//Don't save to eeprom - runtime
+	CHANGE_LIGHTBAR_BRIGHTNESS = 2, //Don't save to eeprom - runtime
+	SAVE_LIGHT_PROFILE = 3,
+
+	CHANGE_BOOT_ANIMATION = 10,
+	CHANGE_CELL_TYPE = 11,
+
+	SET_BUZZER_ON = 100,	//Adds functionality to turn on of buzzer remotely
+	SET_BUZZER_OFF = 101,	//Adds functionality to turn on of buzzer remotely
+	SET_BUZZER_STATE = 102, //Change lightbar color to appropriate reason given by vesc (error, tiltback etc)
+	
+	GET_VESC_ADC = 255,
 } LCM_COMMANDS;
 
 #endif /* DATATYPES_H_ */

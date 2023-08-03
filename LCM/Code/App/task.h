@@ -19,6 +19,13 @@ typedef enum
 	DG40
 } CELL_TYPE;
 
+typedef enum
+{
+	NORMAL,
+	VESC,
+	OFF
+} BUZZER_TYPE;
+
 #define	  CHARGING_VOLTAGE	  		40   		//����ѹ��� ���ڴ�ֵ��Ϊ���������
 #define   BATTERY_STRING      		20    		//��ش���
 #define   SHUTDOWN_TIME		  		30   		//�ػ�ʱ�� ��λ����
@@ -40,7 +47,7 @@ typedef enum
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
 #define   BOOT_ANIMATION		    NORMAL      // Boot animation
 #define   CELL_TYPE                 P42A        // Cell configuration to use for voltage display
-
+#define	  BUZZER_TYPE				NORMAL		// Change control of buzzer - TODO implement the different options in code
 void LED_Task(void);
 void KEY1_Task(void);
 void WS2812_Task(void);
@@ -53,7 +60,10 @@ void ADC_Task(void);
 void Conditional_Judgment(void);
 void Flashlight_Detection(void);
 void Change_Light_Profile(bool persist);
-
+void Change_Boot_Animation(uint8_t animation);
+void Change_Cell_Type(uint8_t type);
+//void Change_Cell_Type(uint8_t type, bool get);
+//void Change_Boot_Animation(uint8_t animation,bool get); 
 #endif
 
 
