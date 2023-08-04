@@ -1416,19 +1416,25 @@ typedef struct __attribute__((packed))
 
 typedef enum
 {
+	///Lights:
 	CHANGE_LIGHT_PROFILE = 0,	//Adds functionality to change light profile
-	CHANGE_LIGHT_BRIGHTNESS = 1,	//Don't save to eeprom - runtime
-	CHANGE_LIGHTBAR_BRIGHTNESS = 2, //Don't save to eeprom - runtime
+	CHANGE_LIGHT_BRIGHTNESS = 1,	//Main lights - Don't save to eeprom - runtime
+	CHANGE_LIGHTBAR_BRIGHTNESS = 2, //Lightbar lights - Don't save to eeprom - runtime
 	SAVE_LIGHT_PROFILE = 3,
 
+
+	///Settings:
 	CHANGE_BOOT_ANIMATION = 10,
 	CHANGE_CELL_TYPE = 11,
 
+	///Buzzer
 	SET_BUZZER_ON = 100,	//Adds functionality to turn on of buzzer remotely
 	SET_BUZZER_OFF = 101,	//Adds functionality to turn on of buzzer remotely
-	SET_BUZZER_STATE = 102, //Change lightbar color to appropriate reason given by vesc (error, tiltback etc)
-	
+	SET_BUZZER_STATE = 102, //Change lightbar color to appropriate reason given by vesc (error, tiltback etc) - TODO
+	CHANGE_BUZZER_TYPE = 103, //Change if the vesc or the LCM controls the buzzer
+	///Vesc comm
 	GET_VESC_ADC = 255,
-} LCM_COMMANDS;
+} LCM_COMMANDS; //Also used as the EEPROM adress
+
 
 #endif /* DATATYPES_H_ */

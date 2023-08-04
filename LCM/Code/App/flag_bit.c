@@ -150,9 +150,18 @@ uint8_t Light_Profile = 0;
 	WS2812����
 */
 
-//Implement the Cell_Type and Boot_Animation
+///Configured cell type (gets read from EEPROM)
+uint8_t Config_Cell_Type = 0;
 
-uint8_t WS2812_Measure = 0;
+///Configured boot animation (gets read from EEPROM)
+uint8_t Config_Boot_Animation = 0;
+
+///Configured buzzer (gets read from EEPROM)
+uint8_t Config_Buzzer = 0;
+
+uint8_t WS2812_Measure = 0;		//Lightbar runtime brightness setting (0-255)
+
+uint16_t Main_Brightness = 0;  //Main lights runtime brightness setting (0-9999) -> 9999 = 0% brightness and 0 = 100% brightness
 /*
 	������ bpm 60-180 ��Ӧռ�ձ� 70-100
 */

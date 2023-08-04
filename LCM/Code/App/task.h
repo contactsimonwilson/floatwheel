@@ -21,7 +21,7 @@ typedef enum
 
 typedef enum
 {
-	NORMAL,
+	LCM,
 	VESC,
 	OFF
 } BUZZER_TYPE;
@@ -40,6 +40,9 @@ typedef enum
 #define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
+#define   MAIN_BRIGHTNESS_1			9600		// Low brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_2			7200		// Medium brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_3			4500		// High brightness value (0-9999)
 #define   CHARGE_CURRENT			0.3         //������ ��λA
 #define   CHARGE_CURRENT_L			0.1         //������ ��λA
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
@@ -47,7 +50,7 @@ typedef enum
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
 #define   BOOT_ANIMATION		    NORMAL      // Boot animation
 #define   CELL_TYPE                 P42A        // Cell configuration to use for voltage display
-#define	  BUZZER_TYPE				NORMAL		// Change control of buzzer - TODO implement the different options in code
+#define	  BUZZER_TYPE				LCM		// Change control of buzzer - TODO implement the different options in code
 void LED_Task(void);
 void KEY1_Task(void);
 void WS2812_Task(void);
@@ -62,6 +65,7 @@ void Flashlight_Detection(void);
 void Change_Light_Profile(bool persist);
 void Change_Boot_Animation(uint8_t animation);
 void Change_Cell_Type(uint8_t type);
+void Change_Buzzer_Type(uint8_t type);
 //void Change_Cell_Type(uint8_t type, bool get);
 //void Change_Boot_Animation(uint8_t animation,bool get); 
 #endif
