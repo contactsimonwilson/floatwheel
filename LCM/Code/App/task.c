@@ -39,8 +39,38 @@ void Change_Light_Profile(bool persist) {
 	if (persist) {
 		EEPROM_WriteByte(0, Light_Profile);
 	}
+	Set_Light_Brightness;
 }
 
+
+/// Only call the when the Light_Profile is changed (either via button or bluetooth) or after first eeprom read
+/// Allows runtime bluetooth changes on WS2812_Measure and Main_Brightness
+
+void Set_Light_Brightness() {
+	switch(Light_Profile)
+	{
+		// Inversely set the brightness of the lightbar to the brightness of the main lights
+		case 1: //1��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
+			Main_Brightness = MAIN_BRIGHTNESS_1;
+		break;
+		
+		case 2:	//2��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_2;
+			Main_Brightness = MAIN_BRIGHTNESS_2;
+		break;
+		
+		case 3: //3��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_3;
+			Main_Brightness = MAIN_BRIGHTNESS_3;
+		break;
+		
+		default:
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
+			Main_Brightness = MAIN_BRIGHTNESS_1;
+		break;
+	}
+}
 void Change_Cell_Type(uint8_t type) {
 	if (type == DG40 || type == P42A) {
 		EEPROM_WriteByte(CHANGE_CELL_TYPE, type);
@@ -422,7 +452,9 @@ void WS2812_Task(void)
 		WS2812_Charge();
 		return;
 	}
-	
+
+	/* 
+	//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 	switch(Light_Profile)
 	{
 		// Inversely set the brightness of the lightbar to the brightness of the main lights
@@ -444,7 +476,7 @@ void WS2812_Task(void)
 		default:
 			
 		break;
-	}
+	}*/
 	
 	if(Lightbar_Mode_Flag == 1)  //��ʾ����
 	{
@@ -533,7 +565,7 @@ void Power_Task(void)
 						if (data == LCM || data == VESC || data == OFF) {
 							Config_Buzzer = data;
 						}
-
+						Set_Light_Brightness();
 					}
 				break;
 			}
@@ -726,6 +758,10 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 			if(Flashlight_Time >= 2000)
 			{
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				
+				/*switch(Light_Profile)
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 				switch(Light_Profile)
 				{
 					case 1:
@@ -743,7 +779,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 					default:
 						
 					break;
-				}
+				}*/
 				
 				flashlight_bright_step = 5;
 			}
@@ -782,6 +818,9 @@ void Flashlight_Task(void)
 	///If count lower than 500 (loops / ms) -> count++
 	///If the count is lower than 500 it will return and not change the direction
 	///When the Flashlight_Flag changes set count to 0 again
+
+	//Improvement would be to only add the delay when the flag
+	//is switching between flag 2 and 3
 	if (count == 501) {
 		return;
 	}
@@ -843,7 +882,11 @@ void Flashlight_Detection(void)
 		if(Light_Profile_last != Light_Profile)
 		{
 			if(ADC1_Val < ADC_THRESHOLD_LOWER && ADC2_Val < ADC_THRESHOLD_LOWER)
-			{
+			{	
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				/*
+				switch(Light_Profile)
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 				switch(Light_Profile)
 				{
 					case 1:
@@ -861,11 +904,15 @@ void Flashlight_Detection(void)
 					default:
 						
 					break;	
-				}
+				}*/
 				Flashlight_Detection_Time = 0;
 			}
 			else
-			{
+			{	
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				/*
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
+				switch(Light_Profile)
 				switch(Light_Profile)
 				{
 					case 1:
@@ -883,7 +930,7 @@ void Flashlight_Detection(void)
 					default:
 						
 					break;	
-				}
+				}*/
 				Flashlight_Detection_Time = 3100;
 			}
 			Light_Profile_last = Light_Profile;

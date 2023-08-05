@@ -260,9 +260,12 @@ uint8_t Protocol_Parse(uint8_t * message)
             	break;
 
 			case CHANGE_LIGHT_BRIGHTNESS:
+				//Should be changed to uint16 instead of uint8
+				Main_Brightness =  message[counter++];  //For runtime light changes (Main light) 
 				break;
 
 			case CHANGE_LIGHTBAR_BRIGHTNESS:
+				WS2812_Measure = message[counter++];  //For runtime light changes (Lightbar)
 				break; 
 			// case 1:// lights on
 			// case 2: //lights off

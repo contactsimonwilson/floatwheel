@@ -40,9 +40,9 @@ typedef enum
 #define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
-#define   MAIN_BRIGHTNESS_1			9600		// Low brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_2			7200		// Medium brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_3			4500		// High brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_1			7000		// Low brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_2			4000		// Medium brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_3			0		// High brightness value (0-9999)
 #define   CHARGE_CURRENT			0.3         //������ ��λA
 #define   CHARGE_CURRENT_L			0.1         //������ ��λA
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
@@ -68,6 +68,7 @@ void Change_Light_Profile(bool persist);
 void Change_Boot_Animation(uint8_t animation);
 void Change_Cell_Type(uint8_t type);
 void Change_Buzzer_Type(uint8_t type);
+void Set_Light_Brightness();
 //void Change_Cell_Type(uint8_t type, bool get);
 //void Change_Boot_Animation(uint8_t animation,bool get); 
 #endif
