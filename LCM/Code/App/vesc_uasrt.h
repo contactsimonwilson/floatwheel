@@ -6,6 +6,7 @@
 #include "crc.h"
 #include "usart.h"
 #include "datatypes.h"
+#include "eeprom.h"
 
 
 typedef struct {

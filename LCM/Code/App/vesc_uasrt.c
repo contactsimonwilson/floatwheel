@@ -309,8 +309,8 @@ uint8_t Protocol_Parse(uint8_t * message)
 				// case 202: // change ADC thresholds
 			case GET_VESC_ADC:
 			//Todo - change the values of the LCM and perhaps set in eeprom
-				uint8_t adc1 = message[counter++]; 
-				uint8_t adc2 = message[counter++];
+				//uint8_t adc1 = message[counter++]; 
+				//uint8_t adc2 = message[counter++];
 				break;
         }
       } else {

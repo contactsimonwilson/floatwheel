@@ -48,9 +48,11 @@ typedef enum
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
 #define   DETECTION_SWITCH_TIME     500         //����л�ʱ�� ��λms
 #define   CHARGER_DETECTION_DELAY	1000        //����������ʱ ��λms
-#define   BOOT_ANIMATION		    NORMAL      // Boot animation
+#define   BOOT_ANIMATION		    RAINBOW     // Boot animation
 #define   CELL_TYPE                 P42A        // Cell configuration to use for voltage display
-#define	  BUZZER_TYPE				LCM		// Change control of buzzer - TODO implement the different options in code
+#define	  BUZZER_TYPE				LCM			// Change control of buzzer - TODO implement the different options in code
+#define	  ENABLE_POWER_WHILE_CHARGE	true		// Enable power while charging
+
 void LED_Task(void);
 void KEY1_Task(void);
 void WS2812_Task(void);

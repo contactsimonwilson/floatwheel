@@ -83,7 +83,7 @@ void Change_Boot_Animation(uint8_t animation,bool get) {
  **************************************************/
 void KEY1_Task(void)
 {
-	if(KEY1_State == 0 || Power_Flag == 3)  //��������簴����������
+	if(KEY1_State == 0 || (!ENABLE_POWER_WHILE_CHARGE && Power_Flag == 3))  //��������簴����������
 	{
 		return;
 	}
@@ -137,8 +137,8 @@ void Power_Display(void)
 	uint8_t num = 10 - (Power_Display_Flag - 1);
 
 	for (i=0;i<10;i++) {
-		if (Power_Display_Flag == 10) {
-			// Something is wrong
+		if (Power_Display_Flag == 0) {
+			// Something is wrong - set all LEDs to red
 			WS2812_Set_Colour(i,WS2812_Measure,0,0);
 		} else {
 			if (i < num) {
@@ -520,12 +520,12 @@ void Power_Task(void)
 						}
 						data = Config_Cell_Type;
 						EEPROM_ReadByte(CHANGE_CELL_TYPE, &data);
-						if (data == DG40 || data = P42A) {
+						if (data == DG40 || data == P42A) {
 							Config_Cell_Type = data;
 						}
 						data = Config_Boot_Animation;
 						EEPROM_ReadByte(CHANGE_BOOT_ANIMATION, &data);
-						if (data == NORMAL || data = RAINBOW) {
+						if (data == NORMAL || data == RAINBOW) {
 							Config_Boot_Animation = data;
 						}
 						data = Config_Buzzer;
@@ -1320,10 +1320,12 @@ void Conditional_Judgment(void)
 				{
 					if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
 					{
-						Power_Flag = 3;
+						if (!ENABLE_POWER_WHILE_CHARGE) {
+							Power_Flag = 3;
+							Flashlight_Flag = 0;
+							Lightbar_Mode_Flag =0;
+						}
 						Charge_Flag = 1;
-						Flashlight_Flag = 0;
-						Lightbar_Mode_Flag =0;
 					}
 					
 				}
