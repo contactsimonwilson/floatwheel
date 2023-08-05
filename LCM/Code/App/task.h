@@ -53,6 +53,7 @@ typedef enum
 #define	  BUZZER_TYPE				LCM			// Change control of buzzer - TODO implement the different options in code
 #define	  ENABLE_POWER_WHILE_CHARGE	true		// Enable power while charging
 
+#define   LIGHT_DELAY				500 		//500ms delay for switching lights, same time is used for the fade length
 void LED_Task(void);
 void KEY1_Task(void);
 void WS2812_Task(void);

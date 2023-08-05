@@ -806,7 +806,9 @@ void Flashlight_Task(void)
 	
 	///Add a delay for switching light direction
 	static uint16_t count = 0; 
-
+	static float multiplier = 1;
+	static bool fading = false;
+	//static bool dimming = true;
 	if(Power_Flag == 3 || Power_Flag == 0) //VESC�ϵ������ƹر�
 	{
 		LED_B_OFF;
@@ -815,24 +817,75 @@ void Flashlight_Task(void)
 		return;
 	}
 	
+	if (multiplier <= -1) {  ///Full transition happend -> 100% to 0% to 100%
+
+		fading = false; ///Set the fade to false 
+		multiplier = 1; ///Reset multiplier (to 100% of the brightness)
+		TIM_SetCompare2(TIM1,Main_Brightness); ///Set the brightness to 100% again
+	} 
+	else if (multiplier == 0.0F) {  //Midway point of fade -> change color direction  note - will it be 0 
+		Brightness_Flag = 1; 
+		switch(Flashlight_Flag)
+		{
+			case 1://VESC���ϵ�ǰ�����������ȴ�0%����2��ﵽ10%
+				Flashlight_Bright(1,1);
+			break; 
+			
+			case 2://VESCǰ��׵ƺ�����(��ת)
+				Flashlight_Bright(1,2);
+			break;
+			
+			case 3://VESCǰ���ƺ���׵�(��ת)
+				Flashlight_Bright(2,2);
+			break;
+			
+			case 4://VESCǰ���ƺ���׵�(��ת)
+				Flashlight_Bright(2,2);
+				Brightness_Flag = 2;
+				val = 3;
+			break;
+			
+			default:
+				
+			break;
+		}
+	}
+	if (fading) {
+		multiplier = multiplier - 0.004; ///Move from 1 to  -1 in increments of 0.004 (1 / (LIGHT_DELAY / 2))
+
+		///Because brightness is 0% at 9999 and 100% at 0 we need to do some simple math
+		///Example 10000 = off, 0 = on (full)  -- 10000 because it is a bit easier to calculate with
+		///Set brightness = 2000 (80% brightness)
+		///Multiplier of 25% should give 25% of the set brightness -> 20% brightness = 8000
+
+		/// 10000 - 2000 = 8000           <-- coincedence that this value is also 8000
+		/// 0.25 * 8000 = 2000 -> 10000 - 2000 = 8000
+
+
+
+		TIM_SetCompare2(TIM1,9999 - (9999 - Main_Brightness) * abs(multiplier)); 
+		//dont know if this will work as there are 2 loops that controll the lights, the other loop may overwrite this	
+	}
+
 	///If count lower than 500 (loops / ms) -> count++
 	///If the count is lower than 500 it will return and not change the direction
 	///When the Flashlight_Flag changes set count to 0 again
 
 	//Improvement would be to only add the delay when the flag
 	//is switching between flag 2 and 3
-	if (count == 501) {
-		return;
-	}
-	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count < 500) //�����Ѿ�������
+	
+	
+	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count < LIGHT_DELAY) //�����Ѿ�������
 	{
 		count++;
 		return;
-	} else if (flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count == 500) {
-		Brightness_Flag = 1; ///This situation is the 500ms delay after the Flashlight_Flag changes
-		///Dont return -> move into the switch statement - this will change the lights
+	} else if (flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count == LIGHT_DELAY) {
 
-		count++; ///Make sure this code doesnt move into the switch every loop - 501 returns
+		
+		fading = true; ///start fade 
+		///Fade is done in 500ms so fades will never overlap with the set delay
+
+		count++; ///Make sure this code doesnt get executed every loop -> set LIGHT_DELAY to 501
 	}
 	else if(flashlight_flag_last != Flashlight_Flag)
 	{
@@ -842,30 +895,7 @@ void Flashlight_Task(void)
 		//Brightness_Flag = 1;
 	}
 	
-	switch(Flashlight_Flag)
-	{
-		case 1://VESC���ϵ�ǰ�����������ȴ�0%����2��ﵽ10%
-			Flashlight_Bright(1,1);
-		break; 
-		
-		case 2://VESCǰ��׵ƺ�����(��ת)
-			Flashlight_Bright(1,2);
-		break;
-		
-		case 3://VESCǰ���ƺ���׵�(��ת)
-			Flashlight_Bright(2,2);
-		break;
-		
-		case 4://VESCǰ���ƺ���׵�(��ת)
-			Flashlight_Bright(2,2);
-			Brightness_Flag = 2;
-			val = 3;
-		break;
-		
-		default:
-			
-		break;
-	}
+	
 }
 
 void Flashlight_Detection(void)
