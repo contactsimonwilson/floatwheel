@@ -768,6 +768,9 @@ void Flashlight_Task(void)
 {
 	static uint8_t flashlight_flag_last = 0;
 	
+	///Add a delay for switching light direction
+	static uint16_t count = 0; 
+
 	if(Power_Flag == 3 || Power_Flag == 0) //VESC�ϵ������ƹر�
 	{
 		LED_B_OFF;
@@ -776,14 +779,28 @@ void Flashlight_Task(void)
 		return;
 	}
 	
-	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //�����Ѿ�������
-	{
+	///If count lower than 500 (loops / ms) -> count++
+	///If the count is lower than 500 it will return and not change the direction
+	///When the Flashlight_Flag changes set count to 0 again
+	if (count == 501) {
 		return;
+	}
+	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count < 500) //�����Ѿ�������
+	{
+		count++;
+		return;
+	} else if (flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2 && count == 500) {
+		Brightness_Flag = 1; ///This situation is the 500ms delay after the Flashlight_Flag changes
+		///Dont return -> move into the switch statement - this will change the lights
+
+		count++; ///Make sure this code doesnt move into the switch every loop - 501 returns
 	}
 	else if(flashlight_flag_last != Flashlight_Flag)
 	{
 		flashlight_flag_last = Flashlight_Flag;
-		Brightness_Flag = 1;
+		count = 0; ///<-- reset count/timer when flag changes
+		return; //Return -> dont move into the switch statement - this will change the lights
+		//Brightness_Flag = 1;
 	}
 	
 	switch(Flashlight_Flag)
