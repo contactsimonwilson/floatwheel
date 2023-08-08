@@ -39,8 +39,38 @@ void Change_Light_Profile(bool persist) {
 	if (persist) {
 		EEPROM_WriteByte(0, Light_Profile);
 	}
+	Set_Light_Brightness;
 }
 
+
+/// Only call the when the Light_Profile is changed (either via button or bluetooth) or after first eeprom read
+/// Allows runtime bluetooth changes on WS2812_Measure and Main_Brightness
+
+void Set_Light_Brightness() {
+	switch(Light_Profile)
+	{
+		// Inversely set the brightness of the lightbar to the brightness of the main lights
+		case 1: //1��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
+			Main_Brightness = MAIN_BRIGHTNESS_1;
+		break;
+		
+		case 2:	//2��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_2;
+			Main_Brightness = MAIN_BRIGHTNESS_2;
+		break;
+		
+		case 3: //3��
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_3;
+			Main_Brightness = MAIN_BRIGHTNESS_3;
+		break;
+		
+		default:
+			WS2812_Measure = LIGHTBAR_BRIGHTNESS_1;
+			Main_Brightness = MAIN_BRIGHTNESS_1;
+		break;
+	}
+}
 void Change_Cell_Type(uint8_t type) {
 	if (type == DG40 || type == P42A) {
 		EEPROM_WriteByte(CHANGE_CELL_TYPE, type);
@@ -422,7 +452,9 @@ void WS2812_Task(void)
 		WS2812_Charge();
 		return;
 	}
-	
+
+	/* 
+	//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 	switch(Light_Profile)
 	{
 		// Inversely set the brightness of the lightbar to the brightness of the main lights
@@ -444,7 +476,7 @@ void WS2812_Task(void)
 		default:
 			
 		break;
-	}
+	}*/
 	
 	if(Lightbar_Mode_Flag == 1)  //��ʾ����
 	{
@@ -533,7 +565,7 @@ void Power_Task(void)
 						if (data == LCM || data == VESC || data == OFF) {
 							Config_Buzzer = data;
 						}
-
+						Set_Light_Brightness();
 					}
 				break;
 			}
@@ -620,13 +652,13 @@ void Charge_Task(void)
 uint8_t val = 0;
 uint8_t flashlight_flag_last_2 = 0;
 /**************************************************
- * @brie   :Flashlight_Bright()
- * @note   :����������
- * @param  :red_white = 1 ǰ�����ư� �������ƺ�
- *          red_white = 2 ǰ�����ƺ� �������ư�
- *          bright = 1    ���ȴ�0% -10% 2��
- *          bright = 2    ���ȴ�10%-100% 2��
- * @retval :��
+ * @brie   : Flashlight_Bright()
+ * @note   : Flashlight brightness control
+ * @param  : red_white = 1 -> Front light: white, Rear light: red
+ *           red_white = 2 -> Front light: red, Rear light: white
+ *           bright = 1    -> Brightness transition from 0% to 10% over 2 seconds
+ *           bright = 2    -> Brightness transition from 10% to 100% over 2 seconds
+ * @retval : None
  **************************************************/
 void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 {
@@ -636,26 +668,26 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 	
 	if(flashlight_flag_last_2 != Flashlight_Flag)
 	{
-		flashlight_bright_step = 0;
+		flashlight_bright_step = 0; 
 		flashlight_flag_last_2 = Flashlight_Flag;
 	}
 	
-	if(Flashlight_Flag == 4)
+	if(Flashlight_Flag == 4) //Set brightness to 10%
 	{
-		TIM_SetCompare2(TIM1,9000);//��10%��ʼ
+		TIM_SetCompare2(TIM1,9000);//Brightness set to 10%
 		return;
 	}
 	
 	switch(flashlight_bright_step)
 	{
 		case 0:
-				if(red_white == 1)
+				if(red_white == 1) //Direction forward
 				{
 					LED_F_OFF;
 					LED_B_ON;
 					val = 1;
 				}
-				else
+				else			//Direction backward
 				{
 					LED_B_OFF;
 					LED_F_ON;
@@ -682,7 +714,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 		break;
 		
-		case 3://���ȴ�0% -10% 2��
+		case 3://Transition 0% -> 10%
 			if(Flashlight_Time%2 == 0)
 			{
 				brightness = Flashlight_Time/2;
@@ -696,7 +728,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 		break;
 		
-		case 4://���ȴ�10%-100% 2��
+		case 4://Transition 10% -> 100% -> direction switch
 		
 			if(Flashlight_Time%2 == 0)
 			{
@@ -725,7 +757,12 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 				TIM_SetCompare2(TIM1,brightness);
 			}
 			if(Flashlight_Time >= 2000)
-			{
+			{	
+				Set_Light_Brightness(); // <-- might not be necessary if Change_Light_Profile gets called when button state changes
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				
+				/*switch(Light_Profile)
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 				switch(Light_Profile)
 				{
 					case 1:
@@ -743,7 +780,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 					default:
 						
 					break;
-				}
+				}*/
 				
 				flashlight_bright_step = 5;
 			}
@@ -768,7 +805,10 @@ void Flashlight_Task(void)
 {
 	static uint8_t flashlight_flag_last = 0;
 	
-	if(Power_Flag == 3 || Power_Flag == 0) //VESC�ϵ������ƹر�
+	///Add a delay for switching light direction
+	static uint16_t count = 0; 
+	static uint8_t transition_state = 0;
+	if(Power_Flag == 3 || Power_Flag == 0) //When just booting or vesc is off turn lights off
 	{
 		LED_B_OFF;
 		LED_F_OFF;
@@ -776,31 +816,47 @@ void Flashlight_Task(void)
 		return;
 	}
 	
-	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //�����Ѿ�������
+	if (count < LIGHT_DELAY && count != 0) {  //Delay isnt reached yet
+		count++;   	
+	} else if (count == LIGHT_DELAY) { //500ms delay is reached
+		//Keep track of the state that was set during the 500ms delay
+		//This need to be the same for every transition
+		transition_state = Flashlight_Flag; 
+		
+		count++; //make sure that this line is only executed once after the delay
+
+		Brightness_Flag = 1;  //start the transition off 500ms - TODO
+		
+	}
+	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //Transition is done and direction isnt changed
 	{
-		return;
+		return; ///Dont do anything -> state didnt change and transition is done
 	}
 	else if(flashlight_flag_last != Flashlight_Flag)
 	{
 		flashlight_flag_last = Flashlight_Flag;
-		Brightness_Flag = 1;
+		///Brightness_Flag = 1;  dont start the transition yet <-- wait 500ms
+		count = 1;  ///<-- set the delay to 0
+		
 	}
-	
-	switch(Flashlight_Flag)
+	if (Brightness_Flag != 1) {
+		return;  //<-- don't move into the switch if we arent fading
+	}
+	switch(transition_state)
 	{
-		case 1://VESC���ϵ�ǰ�����������ȴ�0%����2��ﵽ10%
+		case 1://VESC booting -> 0% -> 10% in 2 sec
 			Flashlight_Bright(1,1);
 		break; 
-		
-		case 2://VESCǰ��׵ƺ�����(��ת)
+			
+		case 2:
 			Flashlight_Bright(1,2);
 		break;
-		
+			
 		case 3://VESCǰ���ƺ���׵�(��ת)
 			Flashlight_Bright(2,2);
 		break;
-		
-		case 4://VESCǰ���ƺ���׵�(��ת)
+			
+		case 4://Set lights at 10%
 			Flashlight_Bright(2,2);
 			Brightness_Flag = 2;
 			val = 3;
@@ -826,7 +882,12 @@ void Flashlight_Detection(void)
 		if(Light_Profile_last != Light_Profile)
 		{
 			if(ADC1_Val < ADC_THRESHOLD_LOWER && ADC2_Val < ADC_THRESHOLD_LOWER)
-			{
+			{	
+				Set_Light_Brightness(); // <-- might not be necessary if Change_Light_Profile gets called when button state changes
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				/*
+				switch(Light_Profile)
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
 				switch(Light_Profile)
 				{
 					case 1:
@@ -844,11 +905,16 @@ void Flashlight_Detection(void)
 					default:
 						
 					break;	
-				}
+				}*/
 				Flashlight_Detection_Time = 0;
 			}
 			else
-			{
+			{	
+				Set_Light_Brightness();  // <-- might not be necessary if Change_Light_Profile gets called when button state changes
+				TIM_SetCompare2(TIM1,Main_Brightness);
+				/*
+				//Should be redundant after the new switch statement implemented in the Change_Light_Profile code
+				switch(Light_Profile)
 				switch(Light_Profile)
 				{
 					case 1:
@@ -866,7 +932,7 @@ void Flashlight_Detection(void)
 					default:
 						
 					break;	
-				}
+				}*/
 				Flashlight_Detection_Time = 3100;
 			}
 			Light_Profile_last = Light_Profile;
@@ -1248,11 +1314,11 @@ void Conditional_Judgment(void)
 				{
 					if(data.rpm > VESC_RPM_WIDTH)
 					{
-						Flashlight_Flag = 2;
+						Flashlight_Flag = 2; //Forward
 					}
 					else
 					{
-						Flashlight_Flag = 3;
+						Flashlight_Flag = 3; //Backward
 					}
 				}
 				else

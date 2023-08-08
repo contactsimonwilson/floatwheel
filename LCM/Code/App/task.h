@@ -40,9 +40,9 @@ typedef enum
 #define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
 #define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
-#define   MAIN_BRIGHTNESS_1			9600		// Low brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_2			7200		// Medium brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_3			4500		// High brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_1			7000		// Low brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_2			4000		// Medium brightness value (0-9999)
+#define   MAIN_BRIGHTNESS_3			0		// High brightness value (0-9999)
 #define   CHARGE_CURRENT			0.3         //������ ��λA
 #define   CHARGE_CURRENT_L			0.1         //������ ��λA
 #define   CHARGE_CURRENT_H			0.24        //������ ��λA
@@ -53,6 +53,7 @@ typedef enum
 #define	  BUZZER_TYPE				LCM			// Change control of buzzer - TODO implement the different options in code
 #define	  ENABLE_POWER_WHILE_CHARGE	true		// Enable power while charging
 
+#define   LIGHT_DELAY				500 		//500ms delay for switching lights, same time is used for the fade length
 void LED_Task(void);
 void KEY1_Task(void);
 void WS2812_Task(void);
@@ -68,6 +69,7 @@ void Change_Light_Profile(bool persist);
 void Change_Boot_Animation(uint8_t animation);
 void Change_Cell_Type(uint8_t type);
 void Change_Buzzer_Type(uint8_t type);
+void Set_Light_Brightness();
 //void Change_Cell_Type(uint8_t type, bool get);
 //void Change_Boot_Animation(uint8_t animation,bool get); 
 #endif
