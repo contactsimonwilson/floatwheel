@@ -39,7 +39,7 @@ void Change_Light_Profile(bool persist) {
 	if (persist) {
 		EEPROM_WriteByte(0, Light_Profile);
 	}
-	Set_Light_Brightness;
+	Set_Light_Brightness();
 }
 
 
