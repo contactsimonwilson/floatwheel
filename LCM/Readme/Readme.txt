@@ -18,3 +18,12 @@ Download Keil μVision from here
 https://www.keil.com/demo/eval/arm.htm
 LCM (stock) code:
 https://github.com/contactsimonwilson/floatwheel
+
+Flashing the LCM code:
+
+1: Install python 3.7 or later
+2: Install pyOCD
+3: Run flash.bat from the LCM directory
+
+Download pyOCD from here
+https://pyocd.io/docs/installing
