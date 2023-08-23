@@ -1,4 +1,5 @@
 #include "task.h"
+#include "math.h"
 
 /**************************************************
  * @brie   :LED_Task()
@@ -274,136 +275,26 @@ void WS2812(void)
 
 /**************************************************
  * @brie   :WS2812_Boot()
- * @note   :显示开机
- * @param  :无
- * @retval :无
+ * @note   :Boot Animation
  **************************************************/
 void WS2812_Boot(void)
 {
 	uint8_t i;
-	uint8_t num;
-	
-	if(Power_Time <= 500)
-	{
-		num = 1;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 1000)
-	{
-		num = 2;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}	
-	}
-	else if(Power_Time <= 1500)
-	{
-		num = 3;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 2000)
-	{
-		num = 4;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 2500)
-	{
-		num = 5;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 3000)
-	{
-		num = 6;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 3500)
-	{
-		num = 7;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 4000)
-	{
-		num = 8;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else if(Power_Time <= 4500)
-	{
-		num = 9;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
-	}
-	else 
-	{
+	uint8_t num = floor(Power_Time / 500) + 1;
+	uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
+
+	if (num > 10) {
 		num = 10;
-		for(i=0;i<num;i++)
-		{
-			WS2812_Set_Colour(i,255,0,255);
-		}
-		for(i=num;i<10;i++)
-		{
-			WS2812_Set_Colour(i,0,0,0);
-		}
 	}
-	WS2812_Refresh();//刷新显示
+	for (i=0;i<num;i++) {
+		WS2812_Set_Colour(i,rgbMap[i][0],rgbMap[i][1],rgbMap[i][2]);
+	}
+
+	for (i = num; i < 10; i++) {
+		WS2812_Set_Colour(i,0,0,0);
+	}
+
+	WS2812_Refresh();
 }
 
 
