@@ -1241,6 +1241,9 @@ void Usart_Task(void)
 {
 	static uint8_t usart_step = 0;
 	uint8_t result;
+
+  if(Charge_Flag)
+		return;
 	
 	if(Power_Flag != 2)
 	{
@@ -1452,7 +1455,7 @@ void Conditional_Judgment(void)
 		case 1: //¿ª»ú
 			 if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
-				Power_Flag = 3;
+				//Power_Flag = 3;
 				Charge_Flag = 1;
 			 }
 		break;
@@ -1596,7 +1599,7 @@ void Conditional_Judgment(void)
 				{
 					if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
 					{
-						Power_Flag = 3;
+						//Power_Flag = 3;
 						Charge_Flag = 1;
 						Flashlight_Flag = 0;
 						WS2812_Display_Flag =0;
@@ -1710,8 +1713,11 @@ void Conditional_Judgment(void)
 		default:
 			if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
-				Power_Flag = 3;
+				//Power_Flag = 3;
 				Charge_Flag = 1;
+			 }
+			 else {
+				 Charge_Flag = 0;
 			 }
 		break;
 			
