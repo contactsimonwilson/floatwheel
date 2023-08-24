@@ -5,9 +5,9 @@ uint8_t WS2812_Buff[WS2812_N][24];
 
 /**************************************************
  * @brie   :WS2812_Init()
- * @note   :WS2812��ʼ�� 
- * @param  :��
- * @retval :��
+ * @note   :WS2812 initialization
+ * @param  : none
+ * @retval : none
  **************************************************/
 void WS2812_Init(void)
 {
@@ -27,12 +27,12 @@ void WS2812_Init(void)
 
 /**************************************************
  * @brie   :WS2812_Set_Colour()
- * @note   :WS2812������ɫ 
- * @param  :num 	�ڼ�����
+ * @note   :WS2812 set color
+ * @param  :num 	number of lights
  *          red 	0-255
  *          green	0-255
  *          blue    0-255
- * @retval :��
+ * @retval : none
  **************************************************/
 void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 {
@@ -40,7 +40,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 	
 	for(i=0; i<24; i++)
 	{
-		if(i<8)   //���
+		if(i<8)   // red light
 		{
 			if(green&0x80)
 			{
@@ -52,7 +52,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 			}
 			green <<= 1;
 		}
-		else if(i<16)  //�̵�
+		else if(i<16)  // green light
 		{
 			if(red&0x80)
 			{
@@ -64,7 +64,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 			}
 			red <<= 1;		
 		}
-		else if(i<24)  //����
+		else if(i<24)  // blue light
 		{
 			if(blue&0x80)
 			{
@@ -145,9 +145,9 @@ void WS2812_Refresh(void)
 	uint16_t i = 0;
 	uint8_t* ws2812_buff_add = (uint8_t*)&WS2812_Buff;
 	
-	//WS2812�ڷ�����ʱ�������жϴ�Ϸ�������
+	// WS2812 does not allow interrupts when sending data, otherwise it is abnormal
 	
-	__set_PRIMASK(1);//�����ж�
+	__set_PRIMASK(1);// Turn off the total interrupt
 	
 	GPIOD->BRR = GPIO_Pin_4;
 	delay(250);
@@ -165,6 +165,6 @@ void WS2812_Refresh(void)
 		ws2812_buff_add++;
 	}
 	
-	__set_PRIMASK(0);//�����ж�
+	__set_PRIMASK(0);// Enable total interrupt
 	//GPIOD->BSRR = GPIO_Pin_4;
 }

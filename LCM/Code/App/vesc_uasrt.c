@@ -6,52 +6,52 @@ uint8_t VESC_RX_Flag = 0;
 
 dataPackage data;
 
-uint8_t protocol_buff[256]; //���ͻ�����
+uint8_t protocol_buff[256]; // send buffer
 /**************************************************
  * @brie   :Send_Pack_Data()
- * @note   :����һ������
- * @param  :payload Ҫ�������ݰ�����ʼ��ַ
- *          len ���ݰ�����
- * @retval :��
+ * @note : Send a packet of data
+ * @param : The starting address of the data packet to be sent by the payload
+ * len packet length
+ * @retval : None
  **************************************************/
 void Send_Pack_Data(uint8_t *payload,uint16_t len) 
 {
-//	uint8_t protocol_buff[256]; //���ͻ�����
+//	uint8_t protocol_buff[256]; // send buffer
 	uint8_t count = 0;
-	uint16_t crcpayload = crc16(payload, len);  //����У�� 
+	uint16_t crcpayload = crc16(payload, len);  // calculate checksum
 	
 	/*
-		Э���ʽ
+		protocol format
 	
-		��ʼ�ֽڣ�һ���ֽڣ� + ���ݰ����ȣ�һ���������ֽڣ� + ���ݰ���N���ֽڣ� + У�飨�����ֽڣ� + ֹͣ�ֽڣ�һ���ֽڣ�
+		Start byte (one byte) + data packet length (one or two bytes) + data packet (N bytes) + checksum (two bytes) + stop byte (one byte)
 	
-		��ʼ�ֽ�:	0x02���ݰ�����1-256���ֽ�
-					0x03���ݰ����ȳ���256���ֽ�
+		Start byte: 0x02 packet length 1-256 bytes
+					0x03 Packet length exceeds 256 bytes
 	
-		���ݰ�����: ��ʼ�ֽ�0x02 ���ݰ�ռһ���ֽ�
-	                ��ʼ�ֽ�0x03 ���ݰ�ռ�����ֽ�
+		Data packet length: start byte 0x02 data packet occupies one byte
+	                Start byte 0x03 data packet occupies two bytes
 	
-		���ݰ�:  	���ݰ���һ���ֽ�Ϊ���ݰ�ID
+		Packet :  	 The first byte of the packet is the packet ID
 	
-		У��:		CRCУ�� �����ֽ� 
+		Checksum :		 CRC check two bytes 
 	    
-		ֹͣ�ֽ�:   �̶�0x03
-	
+		Stop Byte :    Fixed 0x03
+
 	*/
 	
-	if (len <= 256) //���ݰ����Ȳ�����256���ֽ�
+	if (len <= 256) // The data packet length is not greater than 256 bytes
 	{
 		protocol_buff[count++] = 2;
 		protocol_buff[count++] = len;
 	}
-	else //���ݰ����ȴ���256���ֽ�
+	else // The packet length is greater than 256 bytes
 	{
 		protocol_buff[count++] = 3;
 		protocol_buff[count++] = (uint8_t)(len >> 8);
 		protocol_buff[count++] = (uint8_t)(len & 0xFF);
 	}
 
-	memcpy(&protocol_buff[count], payload, len);  //�����ݰ����Ƶ�Э����
+	memcpy(&protocol_buff[count], payload, len);  // Copy the data packet into the protocol
 
 	count += len;
 	protocol_buff[count++] = (uint8_t)(crcpayload >> 8);
@@ -62,10 +62,10 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
 }
 
 /**************************************************
- * @brie   :Get_Vesc_Pack_Data()
- * @note   :��ȡһ������
- * @param  :id ���ݰ�id
- * @retval :��
+ * @brie :Get_Vesc_Pack_Data()
+ * @note : Get a packet of data
+ * @param: id packet id
+ * @retval : None
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
@@ -91,9 +91,9 @@ void Get_Eeprom_Data(LCM_COMMANDS command) //Retrieve data stored in eeprom
 }
 /**************************************************
  * @brie   :buffer_get_int16()
- * @note   :�����������ֽ�ƴһ��int16_t
- * @param  :buffer��ַ  index��ַƫ��
- * @retval :��
+ * @note : Two bytes in the buffer spell an int16_t
+ * @param : buffer address index address offset
+ * @retval : None
  **************************************************/
 int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 	int16_t res =	((uint16_t) buffer[*index]) << 8 |
@@ -103,9 +103,9 @@ int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint16()
- * @note   :�����������ֽ�ƴһ��uint16_t
- * @param  :buffer��ַ  index��ַƫ��
- * @retval :��
+ * @note : Two bytes in the buffer spell a uint16_t
+ * @param : buffer address index address offset
+ * @retval : None
  **************************************************/
 uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 	uint16_t res = 	((uint16_t) buffer[*index]) << 8 |
@@ -115,9 +115,9 @@ uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_int32()
- * @note   :�������ĸ��ֽ�ƴһ��int32_t
- * @param  :buffer��ַ  index��ַƫ��
- * @retval :��
+ * @note : The four bytes of the buffer spell an int32_t
+ * @param : buffer address index address offset
+ * @retval : None
  **************************************************/
 int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 	int32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -129,9 +129,9 @@ int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint32()
- * @note   :�������ĸ��ֽ�ƴһ��uint32_t
- * @param  :buffer��ַ  index��ַƫ��
- * @retval :��
+ * @note : The four bytes of the buffer spell an int32_t
+ * @param : buffer address index address offset
+ * @retval : None
  **************************************************/
 uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 	uint32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -143,18 +143,18 @@ uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_float16()
- * @note   :�����������ֽ�ƴһ��float
- * @param  :buffer��ַ  index��ַƫ��  scale��ĸ
- * @retval :��
+ * @note : Two bytes in the buffer spell a float
+ * @param : buffer address index address offset scale denominator
+ * @retval : None
  **************************************************/
 float buffer_get_float16(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int16(buffer, index) / scale;
 }
 /**************************************************
  * @brie   :buffer_get_float32()
- * @note   :�������ĸ��ֽ�ƴһ��float
- * @param  :buffer��ַ  index��ַƫ��	scale��ĸ
- * @retval :��
+ * @note : The four bytes of the buffer spell a float
+ * @param : buffer address index address offset scale denominator
+ * @retval : None
  **************************************************/
 float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int32(buffer, index) / scale;
@@ -162,9 +162,9 @@ float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
 
 /**************************************************
  * @brie   :Protocol_Parse()
- * @note   :Э�����
- * @param  :message ���յ����ݵ���ʼ��ַ
- * @retval :0 �����ɹ� 1����ʧ��
+ * @note : protocol analysis
+ * @param: the start address of the message received data
+ * @retval :0 parsing success 1 parsing failure
  **************************************************/
 uint8_t Protocol_Parse(uint8_t * message)
 {
@@ -196,7 +196,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 	if(crcpayload != (((uint16_t)message[counter+len])<<8|
 		             ((uint16_t)message[counter+len+1])))
 	{
-		return 1; //crc����
+		return 1; //crc is wrong
 	}
 	
 	id = message[counter++];
@@ -210,13 +210,13 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.tempMotor          = buffer_get_float16(pdata, 10.0, &ind);
 			data.avgMotorCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
 			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
-			ind += 8; // ����8���ֽ�
+			ind += 8; // skip 8 bytes
 			data.dutyCycleNow 		= buffer_get_float16(pdata, 1000.0, &ind);
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
 			data.ampHours 			= buffer_get_float32(pdata, 10000.0, &ind);
 			data.ampHoursCharged 	= buffer_get_float32(pdata, 10000.0, &ind);
-			ind += 8; // ����8���ֽ�
+			ind += 8; // skip 8 bytes
 			data.tachometer 		= buffer_get_int32(pdata, &ind);
 			data.tachometerAbs 		= buffer_get_int32(pdata, &ind);
 		break;

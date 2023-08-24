@@ -112,7 +112,7 @@ uint16_t Shutdown_Time_S = 0;
 */
 uint8_t Shutdown_Time_M = 0;
 /*
-	��ص�ѹ
+	Battery Voltage
 */
 //float Battery_Voltage = 0;
 /*
@@ -124,31 +124,28 @@ float ADC1_Val = 0;
 */
 float ADC2_Val = 0;
 /*
-	ת��
+	Rotating Speed
 */
 //long VESC_Rpm = 0;
 /*
-	ĸ�ߵ���
+	Bus Current
 */
 //float AvgInputCurrent = 0;
 /*
-	ռ�ձ�
+	Duty Cycle
 */
 //float DutyCycleNow = 0;
 /*
-	���ڵ�ѹ
+	Charging Port Voltage
 */
 float Charge_Voltage = 0;
 /*
-	Light_Profile = 0 �տ���
-	Light_Profile = 1 ���� WS2812���� ��������һ��
-	Light_Profile = 2 ����е� WS2812�е� ������������
-	Light_Profile = 3 ������� WS2812� ������������
+	Light_Profile = 0 Just powered on.
+	Light_Profile = 1 Headlight bightness low, Lightpad brightness high, beep once
+	Light_Profile = 2 Headlight bightness mid, Lightpad brightness mid, beep twice
+	Light_Profile = 3 Headlight bightness high, Lightpad brightness low, beep thrice
 */
 uint8_t Light_Profile = 0;
-/*
-	WS2812����
-*/
 
 ///Configured cell type (gets read from EEPROM)
 uint8_t Config_Cell_Type = 0;
