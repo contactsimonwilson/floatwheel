@@ -37,12 +37,12 @@ typedef enum
 #define   ADC_THRESHOLD_UPPER       2.9         // Threshold value for footpad activation detection
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200 		// When the rotation speed is between ±100, do not switch the front and rear lights, keep the front white light and the rear red light
-#define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255)
-#define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255)
-#define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255)
-#define   MAIN_BRIGHTNESS_1			7000		// Low brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_2			4000		// Medium brightness value (0-9999)
-#define   MAIN_BRIGHTNESS_3			0			// High brightness value (0-9999)
+#define   LIGHTBAR_BRIGHTNESS_1 	140			// High brightness value (0-255) -- Stock (204)
+#define   LIGHTBAR_BRIGHTNESS_2 	70			// Medium brightness value (0-255) -- Stock (128)
+#define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255) -- Stock (30)
+#define   MAIN_BRIGHTNESS_1			7000		// Low brightness value (0-9999) -- Stock (7000)
+#define   MAIN_BRIGHTNESS_2			4000		// Medium brightness value (0-9999) -- Stock (4000)
+#define   MAIN_BRIGHTNESS_3			0			// High brightness value (0-9999) -- Stock (0000)
 #define   CHARGE_CURRENT			0.3         // Charging current unit A
 #define   CHARGE_CURRENT_L			0.1         // Charging current unit A
 #define   CHARGE_CURRENT_H			0.24        // Charging current unit A
