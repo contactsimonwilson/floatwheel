@@ -42,7 +42,7 @@ typedef enum
 #define   LIGHTBAR_BRIGHTNESS_3 	10			// Low brightness value (0-255) -- Stock (30)
 #define   MAIN_BRIGHTNESS_1			7000		// Low brightness value (0-9999) -- Stock (7000)
 #define   MAIN_BRIGHTNESS_2			4000		// Medium brightness value (0-9999) -- Stock (4000)
-#define   MAIN_BRIGHTNESS_3			0			// High brightness value (0-9999) -- Stock (0000)
+#define   MAIN_BRIGHTNESS_3			0			// High brightness value (0-9999) -- Stock (0)
 #define   CHARGE_CURRENT			0.3         // Charging current unit A
 #define   CHARGE_CURRENT_L			0.1         // Charging current unit A
 #define   CHARGE_CURRENT_H			0.24        // Charging current unit A
