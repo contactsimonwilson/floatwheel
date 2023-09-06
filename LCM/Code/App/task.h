@@ -9,10 +9,10 @@
 
 #define	  CHARGING_VOLTAGE	  		40
 #define   BATTERY_STRING      		20
-#define   SHUTDOWN_TIME		  		30
+#define   SHUTDOWN_TIME		  		10
 #define   VESC_RPM            		250
-#define   VESC_BOOT_TIME      		6000
-#define   DUTY_CYCLE          		0.7
+#define   VESC_BOOT_TIME      		4000
+#define   DUTY_CYCLE          		0.9
 #define   VOLTAGE_RECEIPT     		0.02
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200
