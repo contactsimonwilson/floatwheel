@@ -1334,4 +1334,27 @@ typedef struct __attribute__((packed)) {
 	uint64_t runtime; // Seconds
 } backup_data;
 
+typedef enum {
+	FLOAT_COMMAND_GET_INFO = 0,		// get version / package info
+	FLOAT_COMMAND_GET_RTDATA = 1,	// get rt data
+	FLOAT_COMMAND_RT_TUNE = 2,		// runtime tuning (don't write to eeprom)
+	FLOAT_COMMAND_TUNE_DEFAULTS = 3,// set tune to defaults (no eeprom)
+	FLOAT_COMMAND_CFG_SAVE = 4,		// save config to eeprom
+	FLOAT_COMMAND_CFG_RESTORE = 5,	// restore config from eeprom
+	FLOAT_COMMAND_TUNE_OTHER = 6,	// make runtime changes to startup/etc
+	FLOAT_COMMAND_RC_MOVE = 7,		// move motor while board is idle
+	FLOAT_COMMAND_BOOSTER = 8,		// change booster settings
+	FLOAT_COMMAND_PRINT_INFO = 9,	// print verbose info
+	FLOAT_COMMAND_GET_ALLDATA = 10,	// send all data, compact
+	FLOAT_COMMAND_EXPERIMENT = 11,  // generic cmd for sending data, used for testing/tuning new features
+	FLOAT_COMMAND_LOCK = 12,
+	FLOAT_COMMAND_HANDTEST = 13,
+	FLOAT_COMMAND_TUNE_TILT = 14,
+	FLOAT_COMMAND_FLYWHEEL = 22,
+	FLOAT_COMMAND_HAPTIC = 23,
+	FLOAT_COMMAND_LCM_POLL = 24,
+	FLOAT_COMMAND_LCM_CTRL = 25,
+	FLOAT_COMMAND_LCM_INFO = 26
+} float_commands;
+
 #endif /* DATATYPES_H_ */

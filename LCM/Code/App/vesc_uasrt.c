@@ -4,6 +4,7 @@ uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
 dataPackage data;
+lcmConfig_t lcmConfig;
 
 uint8_t protocol_buff[256]; //发送缓冲区
 /**************************************************
@@ -68,11 +69,18 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
-	uint8_t command[1];
+	uint8_t command[10];
+	int len = 1;
 	
 	command[0] = id;
 	
-	Send_Pack_Data(command,1);
+	if (id == COMM_CUSTOM_APP_DATA) {
+		command[1] = 101;
+		command[2] = 24; // FLOAT_COMMAND_POLL
+		len = 3;
+	}
+	
+	Send_Pack_Data(command, len);
 }
 
 /**************************************************
@@ -191,21 +199,49 @@ uint8_t Protocol_Parse(uint8_t * message)
 	{
 		case COMM_GET_VALUES: 
 
-			data.tempFET            = buffer_get_float16(pdata, 10.0, &ind);
-			data.tempMotor          = buffer_get_float16(pdata, 10.0, &ind);
-			data.avgMotorCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
-			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind);
-			ind += 8; // 跳过8个字节
+			// Not used:
+			//data.tempFET            = buffer_get_float16(pdata, 10.0, &ind);
+			//data.tempMotor          = buffer_get_float16(pdata, 10.0, &ind);
+			//data.avgMotorCurrent 	= buffer_get_float32(pdata, 100.0, &ind);	
+			ind += 8;
+			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind); // negative input current implies braking
+			ind += 8; // Skip id/iq currents
 			data.dutyCycleNow 		= buffer_get_float16(pdata, 1000.0, &ind);
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
-			data.ampHours 			= buffer_get_float32(pdata, 10000.0, &ind);
-			data.ampHoursCharged 	= buffer_get_float32(pdata, 10000.0, &ind);
-			ind += 8; // 跳过8个字节
-			data.tachometer 		= buffer_get_int32(pdata, &ind);
-			data.tachometerAbs 		= buffer_get_int32(pdata, &ind);
+			//Not used:
+			//data.ampHours 			= buffer_get_float32(pdata, 10000.0, &ind);
+			//data.ampHoursCharged 	= buffer_get_float32(pdata, 10000.0, &ind);
 
 		break;
+		
+		case COMM_CUSTOM_APP_DATA:
+
+		  if (len < 12) {
+				break;
+			}
+		  uint8_t magicnr = pdata[ind++];
+		  uint8_t floatcmd = pdata[ind++];
+		  if ((magicnr != 101) || (floatcmd != FLOAT_COMMAND_LCM_POLL)) {
+				break;
+			}
+			data.floatPackageSupported = true;
+			data.state = pdata[ind++];
+			data.fault = pdata[ind++];
+			data.dutyCycleNow = pdata[ind++];
+			data.dutyCycleNow /= 100;
+			data.rpm = buffer_get_float16(pdata, 1.0, &ind);
+			data.avgInputCurrent = buffer_get_float16(pdata, 1.0, &ind);
+			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
+
+			uint8_t lcmset = pdata[ind++];
+			if (lcmset > 0) {
+				lcmConfig.isSet = true;
+				lcmConfig.headlightBrightness = pdata[ind++];
+				lcmConfig.statusbarBrightness = pdata[ind++];
+				lcmConfig.statusbarMode = pdata[ind++];
+				lcmConfig.boardOff = pdata[ind++];
+			}
 	}
 	
 	return 0;

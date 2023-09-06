@@ -1131,6 +1131,7 @@ void Buzzer_Task(void)
 void Usart_Task(void)
 {
 	static uint8_t usart_step = 0;
+	
 	uint8_t result;
 
   if(Charge_Flag)
@@ -1138,18 +1139,33 @@ void Usart_Task(void)
 	
 	if(Power_Flag != 2)
 	{
-		data.inpVoltage = 0;
+		// legacy/motor data
 		data.rpm = 0;
-		data.avgInputCurrent = 0;
 		data.dutyCycleNow = 0;
+		data.avgInputCurrent = 0;
+		data.inpVoltage = 0;
+
+		// float package data
+		data.floatPackageSupported = false;
+		data.state = 255;
+		data.fault = 0;
+
+		lcmConfig.isSet = false;
+		lcmConfig.statusbarMode = 0;
+
 		usart_step = 0;
+		
 		return;
 	}
 	
 	switch(usart_step)
 	{
 		case 0:
-			Get_Vesc_Pack_Data(COMM_GET_VALUES);
+			if ((data.floatPackageSupported == false) && (Power_Time > VESC_BOOT_TIME * 2))
+				Get_Vesc_Pack_Data(COMM_GET_VALUES);
+			else
+				Get_Vesc_Pack_Data(COMM_CUSTOM_APP_DATA);
+
 			usart_step = 1;
 		break;
 		

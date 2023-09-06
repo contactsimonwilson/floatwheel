@@ -9,22 +9,27 @@
 
 
 typedef struct {
-	float tempFET;
-	float tempMotor;
-	float avgMotorCurrent;
+	bool floatPackageSupported;
 	float avgInputCurrent;
 	float dutyCycleNow;
-	long rpm;
 	float inpVoltage;
-	float ampHours;
-	float ampHoursCharged;
-	long tachometer;
-	long tachometerAbs;
+	long rpm;
+	char state;
+	char fault;
 }dataPackage;
-	
+
+typedef struct {
+	uint8_t headlightBrightness;
+	uint8_t statusbarBrightness;
+	uint8_t statusbarMode;
+	uint8_t boardOff;
+	bool isSet;
+}lcmConfig_t;
+
 extern uint8_t VESC_RX_Buff[256];
 extern uint8_t VESC_RX_Flag;
 extern dataPackage data;
+extern lcmConfig_t lcmConfig;
 
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id);
 uint8_t Protocol_Parse(uint8_t * message);
