@@ -790,7 +790,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 	
 	if(Flashlight_Flag == 4)
 	{
-		TIM_SetCompare2(TIM1,9000);//从10%开始
+		TIM_SetCompare2(TIM1,9500);//从10%开始
 		return;
 	}
 	
@@ -825,7 +825,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 			else
 			{
-				TIM_SetCompare2(TIM1,9000);//从10%开始
+				TIM_SetCompare2(TIM1,9500);//从10%开始
 				flashlight_bright_step = 4;
 			}
 		break;
@@ -839,7 +839,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 			if(Flashlight_Time >= 2000)
 			{
-				TIM_SetCompare2(TIM1,9000);
+				TIM_SetCompare2(TIM1,9500);
 				flashlight_bright_step = 5;
 			}
 		break;
@@ -852,7 +852,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 				{
 					case 1:
 						brightness = (Flashlight_Time*1)+1000;
-						brightness = 9999-brightness+1;
+						brightness = 9999;
 					break;
 					
 					case 2:
@@ -877,7 +877,7 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 				switch(Gear_Position)
 				{
 					case 1:
-						TIM_SetCompare2(TIM1,7000);
+						TIM_SetCompare2(TIM1,9999);
 					break;
 					
 					case 2:
@@ -981,7 +981,7 @@ void Flashlight_Detection(void)
 				switch(Gear_Position)
 				{
 					case 1:
-						TIM_SetCompare2(TIM1,7000);
+						TIM_SetCompare2(TIM1,9999);
 					break;
 					
 					case 2:
@@ -1003,7 +1003,7 @@ void Flashlight_Detection(void)
 				switch(Gear_Position)
 				{
 					case 1:
-						TIM_SetCompare2(TIM1,7000);
+						TIM_SetCompare2(TIM1,9999);
 					break;
 					
 					case 2:
@@ -1026,7 +1026,7 @@ void Flashlight_Detection(void)
 		{
 			if(Flashlight_Detection_Time >= 3000)
 			{
-				TIM_SetCompare2(TIM1,9000);
+				TIM_SetCompare2(TIM1,9500);
 				Flashlight_Detection_Time = 3100;
 			}
 		}
