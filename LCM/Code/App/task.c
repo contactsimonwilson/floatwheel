@@ -901,23 +901,28 @@ void Flashlight_Bright(uint8_t red_white,uint8_t bright)
 			}
 			if(Flashlight_Time >= 2000)
 			{
-				switch(Gear_Position)
-				{
-					case 1:
-						TIM_SetCompare2(TIM1,9999);
-					break;
-					
-					case 2:
-						TIM_SetCompare2(TIM1,4000);
-					break;
-					
-					case 3:
-						TIM_SetCompare2(TIM1,0);
-					break;
-					
-					default:
+				if (lcmConfig.isSet) {
+					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
+				}
+				else {
+					switch(Gear_Position)
+					{
+						case 1:
+							TIM_SetCompare2(TIM1,9999);
+						break;
 						
-					break;
+						case 2:
+							TIM_SetCompare2(TIM1,4000);
+						break;
+						
+						case 3:
+							TIM_SetCompare2(TIM1,0);
+						break;
+						
+						default:
+							
+						break;
+					}
 				}
 				
 				flashlight_bright_step = 5;
@@ -1005,45 +1010,55 @@ void Flashlight_Detection(void)
 		{
 			if(ADC1_Val < 2.5 && ADC2_Val < 2.5)
 			{
-				switch(Gear_Position)
-				{
-					case 1:
-						TIM_SetCompare2(TIM1,9999);
-					break;
-					
-					case 2:
-						TIM_SetCompare2(TIM1,4000);
-					break;
-					
-					case 3:
-						TIM_SetCompare2(TIM1,0);
-					break;
-					
-					default:
+				if (lcmConfig.isSet) {
+					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
+				}
+				else {
+					switch(Gear_Position)
+					{
+						case 1:
+							TIM_SetCompare2(TIM1,9999);
+						break;
 						
-					break;	
+						case 2:
+							TIM_SetCompare2(TIM1,4000);
+						break;
+						
+						case 3:
+							TIM_SetCompare2(TIM1,0);
+						break;
+						
+						default:
+							
+						break;	
+					}
 				}
 				Flashlight_Detection_Time = 0;
 			}
 			else
 			{
-				switch(Gear_Position)
-				{
-					case 1:
-						TIM_SetCompare2(TIM1,9999);
-					break;
-					
-					case 2:
-						TIM_SetCompare2(TIM1,4000);
-					break;
-					
-					case 3:
-						TIM_SetCompare2(TIM1,0);
-					break;
-					
-					default:
+				if (lcmConfig.isSet) {
+					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
+				}
+				else {
+					switch(Gear_Position)
+					{
+						case 1:
+							TIM_SetCompare2(TIM1,9999);
+						break;
 						
-					break;	
+						case 2:
+							TIM_SetCompare2(TIM1,4000);
+						break;
+						
+						case 3:
+							TIM_SetCompare2(TIM1,0);
+						break;
+						
+						default:
+							
+						break;	
+					}
 				}
 				Flashlight_Detection_Time = 3100;
 			}
