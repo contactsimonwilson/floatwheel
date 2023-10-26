@@ -14,6 +14,7 @@ extern uint16_t WS2812_Counter;
 extern uint8_t WS2812_Buff[WS2812_N][24];
 
 void WS2812_Init(void);
+void WS2812_Set_AllColours(uint8_t num,uint8_t red,uint8_t green,uint8_t blue);
 void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue);
 void WS2812_Task(void);
 void WS2812_Refresh(void);

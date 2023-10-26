@@ -46,7 +46,6 @@ void KEY1_Task(void)
 				{
 					Gear_Position = 1;
 				}
-				
 			}
 		break;
 		
@@ -223,45 +222,71 @@ void Power_Display(void)
 void WS2812(void)
 {
 	uint8_t i;
+	uint8_t pos, red;
+	uint8_t green = 0;
+	uint8_t blue = WS2812_Measure;
+	if (data.floatPackageSupported) {
+		// make footpad indicators purple if float package commands are received successfully!
+		green = WS2812_Measure / 3;
+		blue = WS2812_Measure / 3;
+	}
 	
 	switch(WS2812_Flag)
 	{
-		case 1://左侧5个蓝灯     右侧5个灯不发光   adc1>2.5V  adc2<2.5V
-			for(i=0;i<5;i++)
-			{
-				WS2812_Set_Colour(i,0,0,WS2812_Measure);
-			}
-				for(i=5;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
+		case 1:// Half Foot Sensors: adc1>2.5V  adc2<2.5V
+				WS2812_Set_AllColours(5,0,green,blue);
 		break;
 		
-		case 2://左侧5个灯不发光 右侧5个蓝灯       adc1<2.5V  adc2>2.5V
+		case 2:// Half Foot Sensors: adc1<2.5V  adc2>2.5V
 			for(i=0;i<5;i++)
 			{
 				WS2812_Set_Colour(i,0,0,0);
 			}
 				for(i=5;i<10;i++)
 			{
-				WS2812_Set_Colour(i,0,0,WS2812_Measure);
+				WS2812_Set_Colour(i,green,0,blue);
 			}
 		break;
 		
-		case 3://10个灯都量蓝灯                    adc1>2.5V  adc2>2.5V
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,WS2812_Measure);
-			}
+		case 3:// Both Foot Sensors: adc1>2.5V  adc2>2.5V
+				WS2812_Set_AllColours(10,0,green,blue);
 		break;
 			
-		case 4://关闭10个灯 
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
+		case 4:// Riding
+			
+		  if ((data.state != RUNNING_WHEELSLIP) && (lcmConfig.statusbarMode == 0)) {
+				if (data.dutyCycleNow > 0.9) {
+					WS2812_Set_AllColours(10,WS2812_Measure,0,0);
+				}
+				else if (data.dutyCycleNow > 0.85) {
+					WS2812_Set_AllColours(9,WS2812_Measure,0,0);
+				}
+				else if (data.dutyCycleNow > 0.8) {
+					WS2812_Set_AllColours(8,WS2812_Measure,WS2812_Measure/2,0);
+				}
+				else if (data.dutyCycleNow > 0.7) {
+					WS2812_Set_AllColours(7,WS2812_Measure/3,WS2812_Measure/3,0);
+				}
+				else if (data.dutyCycleNow > 0.6) {
+					WS2812_Set_AllColours(6,0,WS2812_Measure/3,0);
+				}
+				else if (data.dutyCycleNow > 0.5) {
+					WS2812_Set_AllColours(5,0,WS2812_Measure/4,0);
+				}
+				else {
+					WS2812_Set_AllColours(10,0,0,0);
+				}
 			}
 		break;
-		
+
+		case 5:
+			// Flywheel Mode: just a rando pattern fpr now
+			red = Power_Time % 255;
+			green = (Power_Time + 100) % 255;
+		  blue = (Power_Time - 100) % 255;
+		  pos = (Power_Time/100) % 10;
+			WS2812_Set_Colour(pos,green,red,blue);
+		break;			
 		default:
 			for(i=0;i<10;i++)
 			{
@@ -280,18 +305,21 @@ void WS2812(void)
 void WS2812_Boot(void)
 {
 	uint8_t i;
-	uint8_t num = floor(Power_Time / 500) + 1;
+	uint8_t num = floor(Power_Time / 100) + 1;
 	uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
 
-	if (num > 10) {
-		num = 10;
+	while (num > 10) {
+		num -= 10;
 	}
 	for (i=0;i<num;i++) {
 		WS2812_Set_Colour(i,rgbMap[i][0],rgbMap[i][1],rgbMap[i][2]);
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,0,0,0);
+		if (i == num)
+			WS2812_Set_Colour(i,rgbMap[i][0]/3,rgbMap[i][1]/3,rgbMap[i][2]/3);
+		else
+			WS2812_Set_Colour(i,0,0,0);
 	}
 
 	WS2812_Refresh();
@@ -309,7 +337,6 @@ uint8_t brightness = 1;
  **************************************************/
 uint8_t WS2812_Cal_Bri(uint8_t cnt)
 {
-	
 	
 	if(cnt < 50)
 	{
@@ -1465,18 +1492,24 @@ void Conditional_Judgment(void)
 				{
 					data.avgInputCurrent = -data.avgInputCurrent;
 				}
-				//AvgInputCurrent = 1.0;//测试需要注释
-				
-				if(data.rpm<VESC_RPM)
+
+				if(data.state == RUNNING_FLYWHEEL) {
+					WS2812_Display_Flag = 2;
+					WS2812_Flag = 5;
+				}
+				else if(data.rpm<VESC_RPM)
 				{
 					if(ADC1_Val < 2.9 && ADC2_Val <2.9)
 					{
-						WS2812_Display_Flag = 1;  //显示电量
+						if(data.avgInputCurrent < 1.0)
+						{
+							WS2812_Display_Flag = 1;
+						}
 					}
 					else if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
 					{
-						WS2812_Display_Flag = 2;  //不显示电量
-						WS2812_Flag = 3;  //10个灯都量蓝灯
+						WS2812_Display_Flag = 2;
+						WS2812_Flag = 3;
 					}
 					else if(ADC1_Val >2.9)
 					{
@@ -1491,15 +1524,9 @@ void Conditional_Judgment(void)
 				}
 				else
 				{
-					if(data.avgInputCurrent < 0.8 && data.rpm < 6000)
-					{
-						WS2812_Display_Flag = 1; //显示电量
-					}
-					else
-					{
+					// Add check for low voltage to force voltage display on WS2812!
 						WS2812_Display_Flag = 2; //不显示电量
 						WS2812_Flag = 4; //关10个灯
-					}
 				}
 				
 				if((Charge_Voltage > CHARGING_VOLTAGE) && (data.avgInputCurrent<0.8))

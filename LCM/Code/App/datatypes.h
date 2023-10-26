@@ -1357,4 +1357,23 @@ typedef enum {
 	FLOAT_COMMAND_LCM_INFO = 26
 } float_commands;
 
+typedef enum {
+	STARTUP = 0,
+	RUNNING = 1,
+	RUNNING_TILTBACK = 2,
+	RUNNING_WHEELSLIP = 3,
+	RUNNING_UPSIDEDOWN = 4,
+	RUNNING_FLYWHEEL = 5,   // we remain in "RUNNING" state in flywheel mode,
+	                        // but then report "RUNNING_FLYWHEEL" in rt data
+	FAULT_ANGLE_PITCH = 6,	// skipped 5 for compatibility
+	FAULT_ANGLE_ROLL = 7,
+	FAULT_SWITCH_HALF = 8,
+	FAULT_SWITCH_FULL = 9,
+	FAULT_DUTY = 10, 		// unused but kept for compatibility
+	FAULT_STARTUP = 11,
+	FAULT_REVERSE = 12,
+	FAULT_QUICKSTOP = 13,
+	DISABLED = 15
+} float_state;
+
 #endif /* DATATYPES_H_ */

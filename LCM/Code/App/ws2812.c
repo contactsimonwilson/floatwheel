@@ -25,6 +25,17 @@ void WS2812_Init(void)
 	}
 }
 
+void WS2812_Set_AllColours(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
+{
+	uint8_t i = 0;
+	for(i=0; i<num; i++) {
+		WS2812_Set_Colour(i,green,red,blue);
+	}
+	for(i=num; i<10; i++) {
+		WS2812_Set_Colour(i,0,0,0);
+	}
+}
+
 /**************************************************
  * @brie   :WS2812_Set_Colour()
  * @note   :WS2812ÉèÖÃÑÕÉ« 
