@@ -637,18 +637,17 @@ void WS2812_Task(void)
 		break;
 	}
 	
-	if(WS2812_Display_Flag == 1)  //显示电量
+	if(WS2812_Display_Flag == 1)  // I think this is when the board is idle
 	{
-//		if(Power_Display_Flag == power_display_flag_last) //这一次和上一次一样直接退出
-//		{
-//			return;
-//		}
-//		else
-//		{
-//			power_display_flag_last = Power_Display_Flag;
-//			Power_Display();// 电量显示
-//		}
-		Power_Display();// 电量显示
+		if (data.state == DISABLED) {
+			int brightness = WS2812_Measure;
+			if (brightness < 20)
+				brightness = 30;
+			WS2812_Set_AllColours(5, 6, brightness, 0, 0);
+		}
+		else {
+			Power_Display();	// Display power level
+		}
 	}
 	else //不显示电量
 	{
@@ -1513,27 +1512,37 @@ void Conditional_Judgment(void)
 				}
 				else if(data.rpm<VESC_RPM)
 				{
-					if(ADC1_Val < 2.9 && ADC2_Val <2.9)
-					{
-						if(data.avgInputCurrent < 1.0)
-						{
-							WS2812_Display_Flag = 1;
+					if (data.state == DISABLED) {
+						if ((ADC1_Val > 2) || (ADC2_Val > 2)) {
+							// Don't touch my board when it's disabled :)
+							Buzzer_Frequency = ((((uint8_t)(0.5*100))*4)-220);
 						}
 					}
-					else if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
-					{
-						WS2812_Display_Flag = 2;
-						WS2812_Flag = 3;
-					}
-					else if(ADC1_Val >2.9)
-					{
-						WS2812_Display_Flag = 2;//不显示电量
-						WS2812_Flag = 1;  //左侧5个蓝灯     右侧5个灯不发光
-					}
-					else
-					{
-						WS2812_Display_Flag = 2;//不显示电量
-						WS2812_Flag = 2;  //左侧5个灯不发光 右侧5个蓝灯
+					else {
+						Buzzer_Frequency = 0;
+
+						if(ADC1_Val < 2.9 && ADC2_Val <2.9)
+						{
+							if(data.avgInputCurrent < 1.0)
+							{
+								WS2812_Display_Flag = 1;
+							}
+						}
+						else if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
+						{
+							WS2812_Display_Flag = 2;
+							WS2812_Flag = 3;
+						}
+						else if(ADC1_Val >2.9)
+						{
+							WS2812_Display_Flag = 2;//不显示电量
+							WS2812_Flag = 1;  //左侧5个蓝灯     右侧5个灯不发光
+						}
+						else
+						{
+							WS2812_Display_Flag = 2;//不显示电量
+							WS2812_Flag = 2;  //左侧5个灯不发光 右侧5个蓝灯
+						}
 					}
 				}
 				else
