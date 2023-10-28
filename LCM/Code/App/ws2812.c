@@ -25,13 +25,14 @@ void WS2812_Init(void)
 	}
 }
 
-void WS2812_Set_AllColours(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
+// Set a range of LEDs to the same color
+void WS2812_Set_AllColours(uint8_t start, uint8_t end,uint8_t red,uint8_t green,uint8_t blue)
 {
-	uint8_t i = 0;
-	for(i=0; i<num; i++) {
+	uint8_t i;
+	for(i=start-1; i<end; i++) {
 		WS2812_Set_Colour(i,green,red,blue);
 	}
-	for(i=num; i<10; i++) {
+	for(i=end; i<10; i++) {
 		WS2812_Set_Colour(i,0,0,0);
 	}
 }

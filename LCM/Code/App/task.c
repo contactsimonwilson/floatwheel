@@ -234,47 +234,40 @@ void WS2812(void)
 	switch(WS2812_Flag)
 	{
 		case 1:// Half Foot Sensors: adc1>2.5V  adc2<2.5V
-				WS2812_Set_AllColours(5,0,green,blue);
+				WS2812_Set_AllColours(1, 5,0,green, blue);
 		break;
 		
 		case 2:// Half Foot Sensors: adc1<2.5V  adc2>2.5V
-			for(i=0;i<5;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-				for(i=5;i<10;i++)
-			{
-				WS2812_Set_Colour(i,green,0,blue);
-			}
+				WS2812_Set_AllColours(6, 10,0,green, blue);
 		break;
 		
 		case 3:// Both Foot Sensors: adc1>2.5V  adc2>2.5V
-				WS2812_Set_AllColours(10,0,green,blue);
+				WS2812_Set_AllColours(1, 10,0,green,blue);
 		break;
 			
 		case 4:// Riding
 			
 		  if ((data.state != RUNNING_WHEELSLIP) && (lcmConfig.statusbarMode == 0)) {
 				if (data.dutyCycleNow > 0.9) {
-					WS2812_Set_AllColours(10,WS2812_Measure,0,0);
+					WS2812_Set_AllColours(1, 10,WS2812_Measure,0,0);
 				}
 				else if (data.dutyCycleNow > 0.85) {
-					WS2812_Set_AllColours(9,WS2812_Measure,0,0);
+					WS2812_Set_AllColours(1, 9,WS2812_Measure,0,0);
 				}
 				else if (data.dutyCycleNow > 0.8) {
-					WS2812_Set_AllColours(8,WS2812_Measure,WS2812_Measure/2,0);
+					WS2812_Set_AllColours(1, 8,WS2812_Measure,WS2812_Measure/2,0);
 				}
 				else if (data.dutyCycleNow > 0.7) {
-					WS2812_Set_AllColours(7,WS2812_Measure/3,WS2812_Measure/3,0);
+					WS2812_Set_AllColours(1, 7,WS2812_Measure/3,WS2812_Measure/3,0);
 				}
 				else if (data.dutyCycleNow > 0.6) {
-					WS2812_Set_AllColours(6,0,WS2812_Measure/3,0);
+					WS2812_Set_AllColours(1, 6,0,WS2812_Measure/3,0);
 				}
 				else if (data.dutyCycleNow > 0.5) {
-					WS2812_Set_AllColours(5,0,WS2812_Measure/4,0);
+					WS2812_Set_AllColours(1, 5,0,WS2812_Measure/4,0);
 				}
 				else {
-					WS2812_Set_AllColours(10,0,0,0);
+					WS2812_Set_AllColours(1, 10,0,0,0);
 				}
 			}
 		break;
@@ -622,7 +615,10 @@ void WS2812_Task(void)
 		return;
 	}
 	
-	switch(Gear_Position)
+	if (lcmConfig.isSet) {
+		WS2812_Measure = lcmConfig.statusbarBrightness;
+	}
+	else switch(Gear_Position)
 	{
 		case 1: //1µ²
 			WS2812_Measure = WS2812_1_BRIGHTNESS;
