@@ -235,11 +235,12 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
 
 			uint8_t lcmset = pdata[ind++];
-			if (lcmset > 0) {
+			if ((lcmset > 0) && (len >= 17)) {
 				lcmConfig.isSet = true;
 				lcmConfig.headlightBrightness = pdata[ind++];
 				lcmConfig.statusbarBrightness = pdata[ind++];
 				lcmConfig.statusbarMode = pdata[ind++];
+				lcmConfig.dutyBeep = pdata[ind++] / 100.0;
 				lcmConfig.boardOff = pdata[ind++];
 			}
 	}

@@ -1410,13 +1410,12 @@ void Conditional_Judgment(void)
 			{
 				Usart_Flag = 2;
 				
-				//DutyCycleNow = 0.9;//≤‚ ‘–Ë“™◊¢ Õ
 				if(data.dutyCycleNow < 0)
 				{
 					data.dutyCycleNow = -data.dutyCycleNow;
 				}
-				/*duty cycle > DUTY_CYCLE ∑‰√˘∆˜°∞ﬂŸ°±°∞ﬂŸ°±µƒœÏ*/
-				if(data.dutyCycleNow >= DUTY_CYCLE)
+				// Duty Cycle beep
+				if ((lcmConfig.dutyBeep > 0) && (data.dutyCycleNow >= lcmConfig.dutyBeep))
 				{
 					Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow*100))*4)-220);
 				}
@@ -1425,7 +1424,10 @@ void Conditional_Judgment(void)
 					Buzzer_Frequency = 0;
 				}
 				
-				//VESC_Rpm = -10;//≤‚ ‘–Ë“™◊¢ Õ
+				// Don't buzz in wheel slip or flywheel mode
+				if (data.state > RUNNING_UPSIDEDOWN) {
+					Buzzer_Frequency = 0;
+				}
 				
 				if(ADC1_Val>2.9 || ADC2_Val > 2.9)
 				{
@@ -1507,6 +1509,7 @@ void Conditional_Judgment(void)
 				if(data.state == RUNNING_FLYWHEEL) {
 					WS2812_Display_Flag = 2;
 					WS2812_Flag = 5;
+					Buzzer_Frequency = 0;
 				}
 				else if(data.rpm<VESC_RPM)
 				{

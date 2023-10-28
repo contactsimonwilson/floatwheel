@@ -22,6 +22,7 @@ typedef struct {
 	uint8_t headlightBrightness;
 	uint8_t statusbarBrightness;
 	uint8_t statusbarMode;
+	uint8_t dutyBeep;
 	uint8_t boardOff;
 	bool isSet;
 }lcmConfig_t;
