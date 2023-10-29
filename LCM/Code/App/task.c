@@ -128,22 +128,22 @@ void WS2812(void)
 		case 4:// Riding
 			
 		  if ((data.state != RUNNING_WHEELSLIP) && (lcmConfig.statusbarMode == 0)) {
-				if (data.dutyCycleNow > 0.9) {
+				if (data.dutyCycleNow > 90) {
 					WS2812_Set_AllColours(1, 10,WS2812_Measure,0,0);
 				}
-				else if (data.dutyCycleNow > 0.85) {
+				else if (data.dutyCycleNow > 85) {
 					WS2812_Set_AllColours(1, 9,WS2812_Measure,0,0);
 				}
-				else if (data.dutyCycleNow > 0.8) {
+				else if (data.dutyCycleNow > 80) {
 					WS2812_Set_AllColours(1, 8,WS2812_Measure,WS2812_Measure/2,0);
 				}
-				else if (data.dutyCycleNow > 0.7) {
+				else if (data.dutyCycleNow > 70) {
 					WS2812_Set_AllColours(1, 7,WS2812_Measure/3,WS2812_Measure/3,0);
 				}
-				else if (data.dutyCycleNow > 0.6) {
+				else if (data.dutyCycleNow > 60) {
 					WS2812_Set_AllColours(1, 6,0,WS2812_Measure/3,0);
 				}
-				else if (data.dutyCycleNow > 0.5) {
+				else if (data.dutyCycleNow > 50) {
 					WS2812_Set_AllColours(1, 5,0,WS2812_Measure/4,0);
 				}
 				else {
@@ -1166,7 +1166,7 @@ void Conditional_Judgment(void)
 				// Duty Cycle beep
 				if ((lcmConfig.dutyBeep > 0) && (data.dutyCycleNow >= lcmConfig.dutyBeep))
 				{
-					Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow*100))*4)-220);
+					Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow))*4)-220);
 				}
 				else
 				{

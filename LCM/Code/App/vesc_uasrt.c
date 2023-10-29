@@ -206,7 +206,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 			ind += 8;
 			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind); // negative input current implies braking
 			ind += 8; // Skip id/iq currents
-			data.dutyCycleNow 		= buffer_get_float16(pdata, 1000.0, &ind);
+			data.dutyCycleNow 		= buffer_get_float16(pdata, 10.0, &ind);
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
 			//Not used:
@@ -240,7 +240,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 				lcmConfig.headlightBrightness = pdata[ind++];
 				lcmConfig.statusbarBrightness = pdata[ind++];
 				lcmConfig.statusbarMode = pdata[ind++];
-				lcmConfig.dutyBeep = pdata[ind++] / 100.0;
+				lcmConfig.dutyBeep = pdata[ind++];
 				lcmConfig.boardOff = pdata[ind++];
 			}
 	}

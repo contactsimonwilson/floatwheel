@@ -11,7 +11,7 @@
 typedef struct {
 	bool floatPackageSupported;
 	float avgInputCurrent;
-	float dutyCycleNow;
+	int dutyCycleNow;
 	float inpVoltage;
 	long rpm;
 	char state;
