@@ -75,142 +75,22 @@ void KEY1_Task(void)
 
 /**************************************************
  * @brie   :Power_Display()
- * @note   :电量显示
- * @param  :无
- * @retval :无
+ * @note   :display 1..10 leds depending on power level
  **************************************************/
-void Power_Display(void)
+void Power_Display(uint8_t brightness)
 {
-	uint8_t i;
-	uint8_t num;
-	
-	switch(Power_Display_Flag)
-	{
-		case 1://4.08V~4.2V 	10个白灯
-			num = 10;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-		break;
-		
-		case 2://4.05V~4.08V 9个白灯
-			num = 9;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 3://3.96V~4.05V 8个白灯
-			num = 8;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 4://3.87V~3.96V 7个白灯
-			num = 7;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 5://3.78V~3.87V 6个白灯
-			num = 6;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 6://3.70V~3.78V 5个白灯
-			num = 5;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 7://3.62V~3.70V 4个白灯
-			num = 4;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 8://3.50V~3.62V 3个白灯
-			num = 3;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,WS2812_Measure,WS2812_Measure,WS2812_Measure);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 9://3.35V~3.50V 2个红灯
-			num = 2;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,0,WS2812_Measure,0);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 10://2.80V~3.35V 1个红灯
-			num = 1;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,0,WS2812_Measure,0);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		default:
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-	}
-	WS2812_Refresh();//刷新显示
+	uint8_t numleds = 11 - Power_Display_Flag;
+	uint8_t r, g, b = 0;
+	// 20% and below: red
+	// 40% and below: yellow
+	// > 40% white
+	r = brightness;
+	if (numleds > 2)
+		g = WS2812_Measure;
+	if (numleds > 4)
+		b = WS2812_Measure;
+	WS2812_Set_AllColours(0, numleds, r, g, b);
+	WS2812_Refresh();
 }
 
 /**************************************************
@@ -411,154 +291,24 @@ uint8_t WS2812_Cal_Bri(uint8_t cnt)
 
 /**************************************************
  * @brie   :WS2812_Charge()
- * @note   :显示充电
- * @param  :无
- * @retval :无
+ * @note   :Power LED display while charging
  **************************************************/
 void WS2812_Charge(void)
 {
 	uint8_t i;
 	uint8_t num;
 	static uint8_t cnt = 0;
-	uint8_t brightness = 0;
-	
+	uint8_t brightness = 0;	
 	brightness = WS2812_Cal_Bri(cnt);
-	switch(Power_Display_Flag)
-	{
-		case 1://4.08V~4.2V 	10个白灯
-			
-			num = 10;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-		break;
-		
-		case 2://4.05V~4.08V 9个白灯
-			num = 9;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 3://3.96V~4.05V 8个白灯
-			num = 8;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 4://3.87V~3.96V 7个白灯
-			num = 7;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 5://3.78V~3.87V 6个白灯
-			num = 6;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 6://3.70V~3.78V 5个白灯
-			num = 5;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 7://3.62V~3.70V 4个白灯
-			num = 4;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 8://3.50V~3.62V 3个白灯
-			num = 3;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,brightness,brightness,brightness);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 9://3.35V~3.50V 2个红灯
-			num = 2;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,0,brightness,0);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		case 10://2.80V~3.35V 1个红灯
-			num = 1;
-			for(i=0;i<num;i++)
-			{
-				WS2812_Set_Colour(i,0,brightness,0);
-			}
-			for(i=num;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-		default:
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-		break;
-		
-	}
+	Power_Display(brightness);
 	
 	cnt++;
-	
 	if(cnt == 100)
 	{
 		cnt = 0;
 	}
 	
-	WS2812_Refresh();//刷新显示
+	WS2812_Refresh();
 }	
 
 /**************************************************
@@ -646,7 +396,7 @@ void WS2812_Task(void)
 			WS2812_Set_AllColours(5, 6, brightness, 0, 0);
 		}
 		else {
-			Power_Display();	// Display power level
+			Power_Display(WS2812_Measure);	// Display power level
 		}
 	}
 	else //不显示电量
