@@ -26,7 +26,7 @@ uint8_t Charge_Flag = 0;
 	Flashlight_Flag = 3；VESC前面红灯后面白灯(反转)
 	Flashlight_Flag = 4; 亮度10%
 */
-uint8_t Flashlight_Flag = 0;
+//uint8_t Flashlight_Flag = 0;
 /*
 	Brightness_Flag = 0; 刚上电
 	Brightness_Flag = 1; 开始调整亮度

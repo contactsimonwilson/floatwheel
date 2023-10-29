@@ -16,6 +16,7 @@ typedef struct {
 	long rpm;
 	char state;
 	char fault;
+	bool isForward;
 }dataPackage;
 
 typedef struct {

@@ -3,6 +3,9 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
+// Access ADC values here to determine riding state
+extern float ADC1_Val, ADC2_Val;
+
 dataPackage data;
 lcmConfig_t lcmConfig;
 
@@ -199,20 +202,21 @@ uint8_t Protocol_Parse(uint8_t * message)
 	{
 		case COMM_GET_VALUES: 
 
-			// Not used:
-			//data.tempFET            = buffer_get_float16(pdata, 10.0, &ind);
-			//data.tempMotor          = buffer_get_float16(pdata, 10.0, &ind);
-			//data.avgMotorCurrent 	= buffer_get_float32(pdata, 100.0, &ind);	
 			ind += 8;
 			data.avgInputCurrent 	= buffer_get_float32(pdata, 100.0, &ind); // negative input current implies braking
 			ind += 8; // Skip id/iq currents
 			data.dutyCycleNow 		= buffer_get_float16(pdata, 10.0, &ind);
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
-			//Not used:
-			//data.ampHours 			= buffer_get_float32(pdata, 10000.0, &ind);
-			//data.ampHoursCharged 	= buffer_get_float32(pdata, 10000.0, &ind);
 
+			if ((data.rpm > 500) || (data.rpm < -500) || (data.avgInputCurrent > 1) || (data.avgInputCurrent < -1)) {
+				data.state = RUNNING;
+			}
+			else {
+				// Use this fault as a placeholder (we only care that the board is stopped anyways)
+				data.state = FAULT_STARTUP;
+			}
+		
 		break;
 		
 		case COMM_CUSTOM_APP_DATA:
@@ -244,7 +248,11 @@ uint8_t Protocol_Parse(uint8_t * message)
 				lcmConfig.boardOff = pdata[ind++];
 			}
 	}
-	
+	if (data.rpm > 500)
+		data.isForward = true;
+	if (data.rpm < -500)
+		data.isForward = false;
+
 	return 0;
 }
 

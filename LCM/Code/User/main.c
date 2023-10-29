@@ -70,8 +70,7 @@ int main(void)
 		WS2812_Task();
 		Power_Task();
 		Charge_Task();
-		Flashlight_Task();
-		Flashlight_Detection();
+		Headlights_Task();
 		Buzzer_Task();
 		Usart_Task();
 		ADC_Task();

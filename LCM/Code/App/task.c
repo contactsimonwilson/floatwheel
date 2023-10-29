@@ -51,7 +51,6 @@ void KEY1_Task(void)
 		
 		case 3:		//长按
 			Power_Flag = 3;  //VESC关机
-			Flashlight_Flag = 0;
 			WS2812_Display_Flag =0;
 		break;
 		
@@ -436,7 +435,6 @@ void Power_Task(void)
 	{
 		case 1://VESC开机
 			PWR_ON;
-			Flashlight_Flag = 1;
 			switch(power_step)
 			{
 				case 0:
@@ -538,288 +536,62 @@ void Charge_Task(void)
 }
 
 uint8_t val = 0;
-uint8_t flashlight_flag_last_2 = 0;
-/**************************************************
- * @brie   :Flashlight_Bright()
- * @note   :照明灯亮度
- * @param  :red_white = 1 前照明灯白 后照明灯红
- *          red_white = 2 前照明灯红 后照明灯白
- *          bright = 1    亮度从0% -10% 2秒
- *          bright = 2    亮度从10%-100% 2秒
- * @retval :无
- **************************************************/
-void Flashlight_Bright(uint8_t red_white,uint8_t bright)
-{
-	static uint8_t flashlight_bright_step = 0;
-	uint16_t brightness = 0;
 
-	
-	if(flashlight_flag_last_2 != Flashlight_Flag)
-	{
-		flashlight_bright_step = 0;
-		flashlight_flag_last_2 = Flashlight_Flag;
-	}
-	
-	if(Flashlight_Flag == 4)
-	{
-		TIM_SetCompare2(TIM1,9500);//从10%开始
-		return;
-	}
-	
-	switch(flashlight_bright_step)
-	{
-		case 0:
-				if(red_white == 1)
-				{
-					LED_F_OFF;
-					LED_B_ON;
-					val = 1;
-				}
-				else
-				{
-					LED_B_OFF;
-					LED_F_ON;
-					val = 2;
-				}
-				flashlight_bright_step = 1;
-		break;
-				
-		case 1:
-				Flashlight_Time = 0;
-				flashlight_bright_step = 2;
-		break;
-		
-		case 2:
-			if(bright == 1)
-			{
-				TIM_SetCompare2(TIM1,9999); //从0%开始
-				flashlight_bright_step = 3;
-			}
-			else
-			{
-				TIM_SetCompare2(TIM1,9500);//从10%开始
-				flashlight_bright_step = 4;
-			}
-		break;
-		
-		case 3://亮度从0% -10% 2秒
-			if(Flashlight_Time%2 == 0)
-			{
-				brightness = Flashlight_Time/2;
-				brightness = 9999-brightness+1;
-				TIM_SetCompare2(TIM1,brightness);
-			}
-			if(Flashlight_Time >= 2000)
-			{
-				TIM_SetCompare2(TIM1,9500);
-				flashlight_bright_step = 5;
-			}
-		break;
-		
-		case 4://亮度从10%-100% 2秒
-		
-			if(Flashlight_Time%2 == 0)
-			{
-				switch(Gear_Position)
-				{
-					case 1:
-						brightness = (Flashlight_Time*1)+1000;
-						brightness = 9999;
-					break;
-					
-					case 2:
-						brightness = ((Flashlight_Time*2.5)+1000);
-						brightness = 9999-brightness+1;
-					break;
-					
-					case 3:
-						brightness = (Flashlight_Time*4.5)+1000;
-						brightness = 9999-brightness+1;
-					break;
-					
-					default:
-						
-					break;
-				}
-				
-				TIM_SetCompare2(TIM1,brightness);
-			}
-			if(Flashlight_Time >= 2000)
-			{
-				if (lcmConfig.isSet) {
-					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
-				}
-				else {
-					switch(Gear_Position)
-					{
-						case 1:
-							TIM_SetCompare2(TIM1,9999);
-						break;
-						
-						case 2:
-							TIM_SetCompare2(TIM1,4000);
-						break;
-						
-						case 3:
-							TIM_SetCompare2(TIM1,0);
-						break;
-						
-						default:
-							
-						break;
-					}
-				}
-				
-				flashlight_bright_step = 5;
-			}
-		break;
-		
-		case 5://亮度调整完
-			Brightness_Flag = 2;
-			flashlight_bright_step = 0;
-		break;
-		
-		default:
-			
-		break;
-	}
-
-}
-	
-/**************************************************
- * @brie   :Flashlight_Task()
- * @note   :照明灯任务 
- * @param  :无
- * @retval :无
- **************************************************/
-void Flashlight_Task(void)
+void Headlights_Task(void)
 {
-	static uint8_t flashlight_flag_last = 0;
-	
-	if(Power_Flag == 3 || Power_Flag == 0) //VESC断电照明灯关闭
+	if(Power_Flag != 2) // Lights off 
 	{
 		LED_B_OFF;
 		LED_F_OFF;
 		TIM_SetCompare2(TIM1,0);
 		return;
 	}
-	
-	if(flashlight_flag_last == Flashlight_Flag && Brightness_Flag == 2) //亮度已经调整好
-	{
-		return;
+
+	if (data.isForward)
+	{ // FORWARD
+		LED_F_OFF;
+		LED_B_ON;
 	}
-	else if(flashlight_flag_last != Flashlight_Flag)
-	{
-		flashlight_flag_last = Flashlight_Flag;
-		Brightness_Flag = 1;
+	else
+	{ // BACKWARD
+		LED_B_OFF;
+		LED_F_ON;
 	}
-	
-	switch(Flashlight_Flag)
-	{
-		case 1://VESC刚上电前后照明灯量度从0%经过2秒达到10%
-			Flashlight_Bright(1,1);
-		break; 
-		
-		case 2://VESC前面白灯后面红灯(正转)
-			Flashlight_Bright(1,2);
-		break;
-		
-		case 3://VESC前面红灯后面白灯(反转)
-			Flashlight_Bright(2,2);
-		break;
-		
-		case 4://VESC前面红灯后面白灯(反转)
-			Flashlight_Bright(2,2);
-			Brightness_Flag = 2;
-			val = 3;
-		break;
-		
-		default:
-			
-		break;
+
+	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
+		if (lcmConfig.isSet) {
+			TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
+		}
+		else {
+			switch(Gear_Position)
+			{
+				case 1:
+					// OFF
+					TIM_SetCompare2(TIM1,9999);
+				break;
+				
+				case 2:
+					// MEDIUM
+					TIM_SetCompare2(TIM1,4000);
+				break;
+				
+				case 3:
+					// HIGH
+					TIM_SetCompare2(TIM1,0);
+				break;
+				
+				default:
+					
+				break;
+			}
+		}
+	}
+	else {
+		// For now ZERO lights when stopped
+		TIM_SetCompare2(TIM1,9999);
 	}
 }
 
-void Flashlight_Detection(void)
-{
-	static uint8_t gear_position_last = 0;
-		
-	if(gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100)
-	{
-		Flashlight_Detection_Time = 3100;
-		return;
-	}
-	else
-	{
-		if(gear_position_last != Gear_Position)
-		{
-			if(ADC1_Val < 2.5 && ADC2_Val < 2.5)
-			{
-				if (lcmConfig.isSet) {
-					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
-				}
-				else {
-					switch(Gear_Position)
-					{
-						case 1:
-							TIM_SetCompare2(TIM1,9999);
-						break;
-						
-						case 2:
-							TIM_SetCompare2(TIM1,4000);
-						break;
-						
-						case 3:
-							TIM_SetCompare2(TIM1,0);
-						break;
-						
-						default:
-							
-						break;	
-					}
-				}
-				Flashlight_Detection_Time = 0;
-			}
-			else
-			{
-				if (lcmConfig.isSet) {
-					TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
-				}
-				else {
-					switch(Gear_Position)
-					{
-						case 1:
-							TIM_SetCompare2(TIM1,9999);
-						break;
-						
-						case 2:
-							TIM_SetCompare2(TIM1,4000);
-						break;
-						
-						case 3:
-							TIM_SetCompare2(TIM1,0);
-						break;
-						
-						default:
-							
-						break;	
-					}
-				}
-				Flashlight_Detection_Time = 3100;
-			}
-			gear_position_last = Gear_Position;
-		}
-		else
-		{
-			if(Flashlight_Detection_Time >= 3000)
-			{
-				TIM_SetCompare2(TIM1,9500);
-				Flashlight_Detection_Time = 3100;
-			}
-		}
-		
-	}
-}
 /**************************************************
  * @brie   :Buzzer_Task()
  * @note   :蜂鸣器任务 
@@ -1226,22 +998,6 @@ void Conditional_Judgment(void)
 					Buzzer_Frequency = 0;
 				}
 				
-				if(ADC1_Val>2.9 || ADC2_Val > 2.9)
-				{
-					if(data.rpm > VESC_RPM_WIDTH)
-					{
-						Flashlight_Flag = 2;
-					}
-					else
-					{
-						Flashlight_Flag = 3;
-					}
-				}
-				else
-				{
-					Flashlight_Flag = 4;
-				}
-				
 				if(data.rpm<0)
 				{
 					data.rpm = -data.rpm;
@@ -1308,7 +1064,6 @@ void Conditional_Judgment(void)
 					{
 						//Power_Flag = 3;
 						Charge_Flag = 1;
-						Flashlight_Flag = 0;
 						WS2812_Display_Flag =0;
 					}
 					
