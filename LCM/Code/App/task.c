@@ -1133,6 +1133,57 @@ void ADC_Task(void)
 	}
 }
 
+void CheckPowerLevel(float battery_voltage)
+{
+	static float battery_voltage_last = 0;
+
+	if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
+	{
+		if(battery_voltage>4.07)
+		{
+			Power_Display_Flag = 1;
+		}
+		else if(battery_voltage>4.025)
+		{
+			Power_Display_Flag = 2;
+		}
+		else if(battery_voltage>3.91)
+		{
+			Power_Display_Flag = 3;
+		}
+		else if(battery_voltage>3.834)
+		{
+			Power_Display_Flag = 4;
+		}
+		else if(battery_voltage>3.746)
+		{
+			Power_Display_Flag = 5;
+		}
+		else if(battery_voltage>3.607)
+		{
+			Power_Display_Flag = 6;
+		}
+		else if(battery_voltage>3.49)
+		{
+			Power_Display_Flag = 7;
+		}
+		else if(battery_voltage>3.351)
+		{
+			Power_Display_Flag = 8;
+		}
+		else if(battery_voltage>3.168)
+		{
+			Power_Display_Flag = 9;
+		}
+		else if(battery_voltage>2.81)
+		{
+			Power_Display_Flag = 10;
+		}
+
+		battery_voltage_last = battery_voltage;
+	}
+}
+
 /**************************************************
  * @brie   :Conditional_Judgment()
  * @note   :条件判断
@@ -1141,9 +1192,6 @@ void ADC_Task(void)
  **************************************************/
 void Conditional_Judgment(void)
 {
-	float battery_voltage = 0;
-	static float battery_voltage_last = 0;
-			
 	switch(Power_Flag)
 	{
 		case 1: //开机
@@ -1199,56 +1247,8 @@ void Conditional_Judgment(void)
 					data.rpm = -data.rpm;
 				}
 				
-				//Battery_Voltage = 82;//测试需要注释
-				
-				battery_voltage = (data.inpVoltage+1)/BATTERY_STRING;//+1为修正值
-				
-				if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
-				{
-					if(battery_voltage>4.07)
-					{
-						Power_Display_Flag = 1;
-					}
-					else if(battery_voltage>4.025)
-					{
-						Power_Display_Flag = 2;
-					}
-					else if(battery_voltage>3.91)
-					{
-						Power_Display_Flag = 3;
-					}
-					else if(battery_voltage>3.834)
-					{
-						Power_Display_Flag = 4;
-					}
-					else if(battery_voltage>3.746)
-					{
-						Power_Display_Flag = 5;
-					}
-					else if(battery_voltage>3.607)
-					{
-						Power_Display_Flag = 6;
-					}
-					else if(battery_voltage>3.49)
-					{
-						Power_Display_Flag = 7;
-					}
-					else if(battery_voltage>3.351)
-					{
-						Power_Display_Flag = 8;
-					}
-					else if(battery_voltage>3.168)
-					{
-						Power_Display_Flag = 9;
-					}
-					else if(battery_voltage>2.81)
-					{
-						Power_Display_Flag = 10;
-					}
-					
-					battery_voltage_last = battery_voltage;
-				}
-				
+				// Riding? Get voltage from VESC
+				CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
 				
 				if(data.avgInputCurrent < 0)
 				{
@@ -1278,28 +1278,28 @@ void Conditional_Judgment(void)
 								WS2812_Display_Flag = 1;
 							}
 						}
-						else if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
-						{
+						else {
 							WS2812_Display_Flag = 2;
-							WS2812_Flag = 3;
-						}
-						else if(ADC1_Val >2.9)
-						{
-							WS2812_Display_Flag = 2;//不显示电量
-							WS2812_Flag = 1;  //左侧5个蓝灯     右侧5个灯不发光
-						}
-						else
-						{
-							WS2812_Display_Flag = 2;//不显示电量
-							WS2812_Flag = 2;  //左侧5个灯不发光 右侧5个蓝灯
+							if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
+							{
+								WS2812_Flag = 3;
+							}
+							else if(ADC1_Val >2.9)
+							{
+								WS2812_Flag = 1;
+							}
+							else
+							{
+								WS2812_Flag = 2;
+							}
 						}
 					}
 				}
 				else
 				{
 					// Add check for low voltage to force voltage display on WS2812!
-						WS2812_Display_Flag = 2; //不显示电量
-						WS2812_Flag = 4; //关10个灯
+						WS2812_Display_Flag = 2;
+						WS2812_Flag = 4;	// Normal Riding!
 				}
 				
 				if((Charge_Voltage > CHARGING_VOLTAGE) && (data.avgInputCurrent<0.8))
@@ -1361,59 +1361,11 @@ void Conditional_Judgment(void)
 			}
 			else if(Charge_Time > 150)
 			{
-				battery_voltage = (Charge_Voltage+1)/BATTERY_STRING;//+1为修正值
 				if(Charge_Flag == 2)
 				{
-					if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
-					{
-						if(battery_voltage>4.07)
-						{
-							Power_Display_Flag = 1;
-						}
-						else if(battery_voltage>4.025)
-						{
-							Power_Display_Flag = 2;
-						}
-						else if(battery_voltage>3.91)
-						{
-							Power_Display_Flag = 3;
-						}
-						else if(battery_voltage>3.834)
-						{
-							Power_Display_Flag = 4;
-						}
-						else if(battery_voltage>3.746)
-						{
-							Power_Display_Flag = 5;
-						}
-						else if(battery_voltage>3.607)
-						{
-							Power_Display_Flag = 6;
-						}
-						else if(battery_voltage>3.49)
-						{
-							Power_Display_Flag = 7;
-						}
-						else if(battery_voltage>3.351)
-						{
-							Power_Display_Flag = 8;
-						}
-						else if(battery_voltage>3.168)
-						{
-							Power_Display_Flag = 9;
-						}
-						else if(battery_voltage>2.81)
-						{
-							Power_Display_Flag = 10;
-						}
-						battery_voltage_last = battery_voltage;
-					}
+					CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
 				}
 			}
-				
-				
-			
-				
 				
 		break;
 		
