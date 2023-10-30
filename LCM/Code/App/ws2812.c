@@ -29,6 +29,9 @@ void WS2812_Init(void)
 void WS2812_Set_AllColours(uint8_t start, uint8_t end,uint8_t red,uint8_t green,uint8_t blue)
 {
 	uint8_t i;
+	if(start < 1)
+		start = 1;
+
 	if (start > 1) {
 		for(i=0; i<start-1; i++) {
 			WS2812_Set_Colour(i,0,0,0);

@@ -65,7 +65,6 @@ int main(void)
 	}
 	while(1)
 	{
-//		LED_Task();
 		KEY1_Task();
 		WS2812_Task();
 		Power_Task();

@@ -2,21 +2,6 @@
 #include "math.h"
 
 /**************************************************
- * @brie   :LED_Task()
- * @note   :LED任务 
- * @param  :无
- * @retval :无
- **************************************************/
-void LED_Task(void)
-{
-//	if(LED_Counter >= LED_Filp_Time)
-//	{
-//		LED_Counter = 0;
-//		LED1_FILP;
-//	}
-}
-
-/**************************************************
  * @brie   :KEY1_Task()
  * @note   :KEY1任务
  * @param  :无
@@ -24,7 +9,7 @@ void LED_Task(void)
  **************************************************/
 void KEY1_Task(void)
 {
-	if(KEY1_State == 0 || Power_Flag == 3)  //充电器供电按键不起作用
+	if(KEY1_State == 0)// || Power_Flag == 3)  //充电器供电按键不起作用
 	{
 		return;
 	}
@@ -89,7 +74,7 @@ void Power_Display(uint8_t brightness)
 		g = brightness;
 	if (numleds > 4)
 		b = brightness;
-	WS2812_Set_AllColours(0, numleds, r, g, b);
+	WS2812_Set_AllColours(1, numleds, r, g, b);
 	WS2812_Refresh();
 }
 
@@ -364,7 +349,7 @@ void Power_Task(void)
 	
 	switch(Power_Flag)
 	{
-		case 1://VESC开机
+		case 1://VESC Power On
 			PWR_ON;
 			switch(power_step)
 			{
@@ -376,24 +361,21 @@ void Power_Task(void)
 				case 1:
 					if(Power_Time > VESC_BOOT_TIME)
 					{
-						Power_Flag = 2; //开机完成
-						Gear_Position = 1; //开机后默认是1挡
-						Buzzer_Flag = 2;    //开机默认蜂鸣器响
+						Power_Flag = 2; // Boot completed
+						Gear_Position = 1; // The default setting is 1st gear after power-on.
+						Buzzer_Flag = 2;    // The default buzzer sounds when powering on
 						power_step = 0;
 					}
 				break;
 			}
 			
 		break;	
-		
-		case 3://VESC关机，充电器给板子供电
-			PWR_OFF;
-			//LED1_Filp_Time(1000);	
-			//Charge_Flag = 1; //准备充电
+
+		case 3:// VESC is shut down (either auto-shutdown or button press)
+			PWR_OFF 
 		break;
-		
+
 		default:
-			
 		break;
 	}
 }
@@ -1023,6 +1005,12 @@ void Conditional_Judgment(void)
 					{
 						Power_Flag = 3;
 					}
+				}
+
+				if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff > 0))
+				{
+					// After 10 seconds of idle we allow the board to be shut down via app
+					Power_Flag = 3;
 				}
 			}
 		break;
