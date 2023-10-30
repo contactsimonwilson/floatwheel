@@ -34,17 +34,18 @@ uint8_t Charge_Flag = 0;
 */
 uint8_t Brightness_Flag = 0;
 /*
-	WS2812_Display_Flag = 0; 刚上电
-	WS2812_Display_Flag = 1；显示电量
-	WS2812_Display_Flag = 2；不显示电量
+        Lightbar_Mode_Flag = 0; Just powered on.
+        Lightbar_Mode_Flag = 1; Display battery level.
+        Lightbar_Mode_Flag = 2; Do not display battery level.
 */
 uint8_t WS2812_Display_Flag = 0;
 /*
-	WS2812_Flag = 0; 刚上电
-	WS2812_Flag = 1；左侧5个蓝灯     右侧5个灯不发光   adc1>2.5V  adc2<2.5V
-	WS2812_Flag = 2；左侧5个灯不发光 右侧5个蓝灯       adc1<2.5V  adc2>2.5V
-	WS2812_Flag = 3；10个灯都量蓝灯                    adc1>2.5V  adc2>2.5V
-	WS2812_Flag = 4；10个灯都灭
+        Footpad_Activation_Flag = 0; Just powered on.
+        Footpad_Activation_Flag = 1; Left 5 LEDs blue, Right 5 LEDs off (adc1 > 2.5V, adc2 < 2.5V).
+        Footpad_Activation_Flag = 2; Left 5 LEDs off, Right 5 LEDs blue (adc1 < 2.5V, adc2 > 2.5V).
+        Footpad_Activation_Flag = 3; All 10 LEDs blue (adc1 > 2.5V, adc2 > 2.5V).
+        Footpad_Activation_Flag = 4; All 10 LEDs off.
+        Footpad_Activation_Flag = 5; Flywheel mode, pattern
 */
 uint8_t WS2812_Flag = 0;
 /*

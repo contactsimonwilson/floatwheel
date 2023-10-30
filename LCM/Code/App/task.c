@@ -51,7 +51,6 @@ void KEY1_Task(void)
 
 		case 3:         // Long press
 			Power_Flag = 3;  // VESC power off
-			WS2812_Display_Flag =0;
 		break;
 
 		case 4:         // Three presses
@@ -126,24 +125,26 @@ void WS2812_VESC(void)
 			
 		case 4:// Riding
 			
-		  if ((data.state != RUNNING_WHEELSLIP) && (lcmConfig.statusbarMode == 0)) {
+		  if (data.state != RUNNING_WHEELSLIP) {
+				uint8_t brightness = lcmConfig.isSet ? lcmConfig.statusbarBrightness : WS2812_Measure;
+
 				if (data.dutyCycleNow > 90) {
-					WS2812_Set_AllColours(1, 10,WS2812_Measure,0,0);
+					WS2812_Set_AllColours(1, 10,brightness,0,0);
 				}
 				else if (data.dutyCycleNow > 85) {
-					WS2812_Set_AllColours(1, 9,WS2812_Measure,0,0);
+					WS2812_Set_AllColours(1, 9,brightness,0,0);
 				}
 				else if (data.dutyCycleNow > 80) {
-					WS2812_Set_AllColours(1, 8,WS2812_Measure,WS2812_Measure/2,0);
+					WS2812_Set_AllColours(1, 8,brightness,brightness/2,0);
 				}
 				else if (data.dutyCycleNow > 70) {
-					WS2812_Set_AllColours(1, 7,WS2812_Measure/3,WS2812_Measure/3,0);
+					WS2812_Set_AllColours(1, 7,brightness/3,brightness/3,0);
 				}
 				else if (data.dutyCycleNow > 60) {
-					WS2812_Set_AllColours(1, 6,0,WS2812_Measure/3,0);
+					WS2812_Set_AllColours(1, 6,0,brightness/3,0);
 				}
 				else if (data.dutyCycleNow > 50) {
-					WS2812_Set_AllColours(1, 5,0,WS2812_Measure/4,0);
+					WS2812_Set_AllColours(1, 5,0,brightness/4,0);
 				}
 				else {
 					WS2812_Set_AllColours(1, 10,0,0,0);
@@ -329,11 +330,13 @@ void WS2812_Task(void)
 			brightness = 20;
 		// 2 red LEDs in the center
 		WS2812_Set_AllColours(5, 6, brightness, 0, 0);
+		WS2812_Refresh();
 	}
 	else {
-		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle
+		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle, no footpads pressed
 		{
 			Power_Display(WS2812_Measure);	// Display power level
+			WS2812_Refresh();
 		}
 		else
 		{
@@ -638,7 +641,11 @@ void Usart_Task(void)
 		data.fault = 0;
 
 		lcmConfig.isSet = false;
+		lcmConfig.headlightBrightness = 0;
+		lcmConfig.statusbarBrightness = 50;
 		lcmConfig.statusbarMode = 0;
+		lcmConfig.dutyBeep = 90;
+		lcmConfig.boardOff = 0;
 
 		usart_step = 0;
 		
@@ -945,13 +952,13 @@ void Conditional_Judgment(void)
 					if (data.state == DISABLED) {
 						if ((ADC1_Val > 2) || (ADC2_Val > 2)) {
 							// Don't touch my board when it's disabled :)
-							Buzzer_Frequency = ((((uint8_t)(0.5*100))*4)-220);
+							Buzzer_Frequency = 100;
 						}
 					}
 					else {
 						Buzzer_Frequency = 0;
 
-						if(ADC1_Val < 2.9 && ADC2_Val <2.9)
+						if(ADC1_Val < 2.0 && ADC2_Val <2.0)
 						{
 							if(data.avgInputCurrent < 1.0)
 							{
@@ -1001,7 +1008,7 @@ void Conditional_Judgment(void)
 					脚踏板踩下或转速大于1000定时清零
 					即不踩脚踏板转速低于1000开始计时，超过关机时间关机
 				*/
-				if(ADC1_Val > 2.9 || ADC2_Val > 2.9 || data.rpm > 1000)
+				if(ADC1_Val > 2.0 || ADC2_Val > 2.0 || data.rpm > 1000)
 				{
 					Shutdown_Time_S = 0;
 					Shutdown_Time_M = 0;
