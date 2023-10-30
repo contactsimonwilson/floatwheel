@@ -233,7 +233,6 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.state = pdata[ind++];
 			data.fault = pdata[ind++];
 			data.dutyCycleNow = pdata[ind++];
-			data.dutyCycleNow /= 100;
 			data.rpm = buffer_get_float16(pdata, 1.0, &ind);
 			data.avgInputCurrent = buffer_get_float16(pdata, 1.0, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);

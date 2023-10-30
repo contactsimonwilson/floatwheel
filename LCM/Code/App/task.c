@@ -31,15 +31,15 @@ void KEY1_Task(void)
 	
 	switch(KEY1_State)
 	{
-		case 1:  	//单击
+		case 1:         // Click
 			if(Power_Flag != 2)
 			{
-				Power_Flag = 1;  //VESC开机
-			}	
+				Power_Flag = 1;  // VESC power on
+			}
 		break;
-		
-		case 2:		//双击	
-			if(Power_Flag == 2) //开机完成
+
+		case 2:         // Double click
+			if(Power_Flag == 2) // Power on completed
 			{
 				Gear_Position++;
 				if(Gear_Position == 4)
@@ -48,14 +48,14 @@ void KEY1_Task(void)
 				}
 			}
 		break;
-		
-		case 3:		//长按
-			Power_Flag = 3;  //VESC关机
+
+		case 3:         // Long press
+			Power_Flag = 3;  // VESC power off
 			WS2812_Display_Flag =0;
 		break;
-		
-		case 4:		//三按
-			if(Power_Flag == 2) //开机完成
+
+		case 4:         // Three presses
+			if(Power_Flag == 2) // Boot completed
 			{
 				if(Buzzer_Flag == 2)
 				{
@@ -67,8 +67,8 @@ void KEY1_Task(void)
 				}
 			}
 		break;
-		
 	}
+
 	KEY1_State = 0;
 }
 
@@ -79,26 +79,26 @@ void KEY1_Task(void)
 void Power_Display(uint8_t brightness)
 {
 	uint8_t numleds = 11 - Power_Display_Flag;
-	uint8_t r, g, b = 0;
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
 	// 20% and below: red
 	// 40% and below: yellow
 	// > 40% white
 	r = brightness;
 	if (numleds > 2)
-		g = WS2812_Measure;
+		g = brightness;
 	if (numleds > 4)
-		b = WS2812_Measure;
+		b = brightness;
 	WS2812_Set_AllColours(0, numleds, r, g, b);
 	WS2812_Refresh();
 }
 
 /**************************************************
- * @brie   :WS2812()
- * @note   :不显示电量WS2812
- * @param  :无
- * @retval :无
+ * @brie   : WS2812_VESC()
+ * @note   : Display VESC status
  **************************************************/
-void WS2812(void)
+void WS2812_VESC(void)
 {
 	uint8_t i;
 	uint8_t pos, red;
@@ -149,6 +149,9 @@ void WS2812(void)
 					WS2812_Set_AllColours(1, 10,0,0,0);
 				}
 			}
+			else {
+					WS2812_Set_AllColours(1, 10,0,0,0);
+			}
 		break;
 
 		case 5:
@@ -160,13 +163,10 @@ void WS2812(void)
 			WS2812_Set_Colour(pos,green,red,blue);
 		break;			
 		default:
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
+			WS2812_Set_AllColours(1, 10,0,0,0);
 		break;
 	}
-	WS2812_Refresh();//刷新显示
+	WS2812_Refresh();
 }
 
 
@@ -200,92 +200,34 @@ void WS2812_Boot(void)
 
 
 
-uint8_t brightness = 1;
+uint8_t status_brightness = 1;
 /**************************************************
- * @brie   :WS2812_Cal_Bri()
- * @note   :计算亮度
- * @param  :次数 1次表示200ms
- * @retval :亮度
- **************************************************/
-uint8_t WS2812_Cal_Bri(uint8_t cnt)
-{
-	
+ * @brie   : WS2812_Calc_Bri()
+ * @note   : Pulsate brightness
+ * @param  : times 1 means 200ms
+**************************************************/
+static uint8_t WS2812_Calc_Bri(uint8_t cnt)
+{	
 	if(cnt < 50)
 	{
-		brightness++;
+		status_brightness++;
 	}
 	else
 	{
-		brightness--;
+		status_brightness--;
 	}
 	
-	if(brightness < 1)
+	if(status_brightness < 1)
 	{
-		brightness = 1;
+		status_brightness = 1;
 	}
 	
-	if(brightness > 50)
+	if(status_brightness > 50)
 	{
-		brightness = 50;
+		status_brightness = 50;
 	}
 	
-//	if(cnt == 50)
-//	{
-//	brightness = brightness;
-//	}
-//	
-//	if(cnt == 99)
-//	{
-//	brightness = brightness;
-//	}
-//	switch(cnt)
-//	{
-//		case 0:
-//			brightness = 0x03;
-//		break;
-//		
-//		case 1:
-//			brightness = 0x04;
-//		break;
-//		
-//		case 2:
-//			brightness = 0x05;
-//		break;
-//		
-//		case 3:
-//			brightness = 0x06;
-//		break;
-//		
-//		case 4:
-//			brightness = 0x07;
-//		break;
-//		
-//		case 5:
-//			brightness = 0x08;
-//		break;
-//		
-//		case 6:
-//			brightness = 0x07;
-//		break;
-//		
-//		case 7:
-//			brightness = 0x06;
-//		break;
-//		
-//		case 8:
-//			brightness = 0x05;
-//		break;
-//		
-//		case 9:
-//			brightness = 0x04;
-//		break;
-//		
-//		case 10:
-//			brightness = 0x03;
-//		break;
-//	}
-	
-	return brightness;
+	return status_brightness;
 }
 
 /**************************************************
@@ -294,13 +236,8 @@ uint8_t WS2812_Cal_Bri(uint8_t cnt)
  **************************************************/
 void WS2812_Charge(void)
 {
-	uint8_t i;
-	uint8_t num;
 	static uint8_t cnt = 0;
-	uint8_t brightness = 0;	
-	brightness = WS2812_Cal_Bri(cnt);
-	Power_Display(brightness);
-	
+	Power_Display(WS2812_Calc_Bri(cnt));
 	cnt++;
 	if(cnt == 100)
 	{
@@ -318,11 +255,9 @@ void WS2812_Charge(void)
  **************************************************/
 void WS2812_Task(void)
 {
-//	static uint8_t ws2812_flag_last = 0; //上一次的状态
-//	static uint8_t power_display_flag_last = 0; //上一次的状态
 	uint8_t i;
 
-	if(WS2812_Counter < 20) //20ms刷新一次
+	if(WS2812_Counter < 20) // 20ms refresh period
 	{
 		return;
 	}
@@ -334,8 +269,7 @@ void WS2812_Task(void)
 			{
 				WS2812_Set_Colour(i,0,0,0);
 			}
-			WS2812_Refresh();//刷新显示
-			
+			WS2812_Refresh();
 			WS2812_Display_Flag = 0;
 			WS2812_Flag = 0;
 			Power_Display_Flag = 0;
@@ -345,25 +279,28 @@ void WS2812_Task(void)
 	
 	if(Power_Flag == 1)
 	{
-		WS2812_Boot();  //开机启动
-		return;
-	}
-	
-	if(Charge_Flag == 3) //电池电充满了
-	{
-		for(i=0;i<10;i++)
-		{
-			WS2812_Set_Colour(i,255,255,255);
+		if (data.state == DISABLED) {
+			// 2 red LEDs in the center
+			WS2812_Set_AllColours(5, 6, 50, 0, 0);
+		}
+		else {
+			WS2812_Boot();
 		}
 		return;
 	}
 	
-	if(Charge_Flag == 2) //充电呼吸显示
+	if(Charge_Flag == 3) // Battery fully charged
+	{
+		WS2812_Set_AllColours(i,10,200,255,200);	// white with a green tint
+		return;
+	}
+	if(Charge_Flag == 2) // Charge display pattern (pulsating led)
 	{
 		WS2812_Charge();
 		return;
 	}
 	
+	// Power Flag must be 2, aka board is ready or running
 	if (lcmConfig.isSet) {
 		WS2812_Measure = lcmConfig.statusbarBrightness;
 	}
@@ -385,33 +322,24 @@ void WS2812_Task(void)
 			
 		break;
 	}
-	
-	if(WS2812_Display_Flag == 1)  // I think this is when the board is idle
-	{
-		if (data.state == DISABLED) {
-			int brightness = WS2812_Measure;
-			if (brightness < 20)
-				brightness = 30;
-			WS2812_Set_AllColours(5, 6, brightness, 0, 0);
-		}
-		else {
+
+	if (data.state == DISABLED) {
+		int brightness = WS2812_Measure;
+		if (brightness < 20)
+			brightness = 20;
+		// 2 red LEDs in the center
+		WS2812_Set_AllColours(5, 6, brightness, 0, 0);
+	}
+	else {
+		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle
+		{
 			Power_Display(WS2812_Measure);	// Display power level
 		}
+		else
+		{
+			WS2812_VESC();
+		}
 	}
-	else //不显示电量
-	{
-//		if(ws2812_flag_last == WS2812_Flag) //这一次和上一次一样直接退出
-//		{
-//			return;
-//		}
-//		else
-//		{
-//			ws2812_flag_last = WS2812_Flag;
-//			WS2812();//不显示电量WS2812
-//		}
-		WS2812();//不显示电量WS2812
-	}
-	
 }
 
 /**************************************************
@@ -966,15 +894,16 @@ void Conditional_Judgment(void)
 {
 	switch(Power_Flag)
 	{
-		case 1: //开机
+		case 1: // Power on (startup)
 			 if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
 				//Power_Flag = 3;
-				Charge_Flag = 1;
+				if (Charge_Flag != 2)
+					Charge_Flag = 1;
 			 }
 		break;
 		
-		case 2: //开机完成
+		case 2: // VESC Boot completed
 			if(Usart_Flag == 1)
 			{
 				Usart_Flag = 2;
@@ -1006,11 +935,6 @@ void Conditional_Judgment(void)
 				// Riding? Get voltage from VESC
 				CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
 				
-				if(data.avgInputCurrent < 0)
-				{
-					data.avgInputCurrent = -data.avgInputCurrent;
-				}
-
 				if(data.state == RUNNING_FLYWHEEL) {
 					WS2812_Display_Flag = 2;
 					WS2812_Flag = 5;
@@ -1063,7 +987,8 @@ void Conditional_Judgment(void)
 					if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
 					{
 						//Power_Flag = 3;
-						Charge_Flag = 1;
+						if (Charge_Flag != 2)
+							Charge_Flag = 1;
 						WS2812_Display_Flag =0;
 					}
 					
@@ -1095,7 +1020,7 @@ void Conditional_Judgment(void)
 			}
 		break;
 		
-		case 3: //VESC关机，充电器给板子供电
+		case 3:  // VESC is shut down and the charger supplies power to the board.
 			if(V_I == 0 && Charge_Time > 150)
 			{
 				if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
@@ -1128,7 +1053,8 @@ void Conditional_Judgment(void)
 			if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
 				//Power_Flag = 3;
-				Charge_Flag = 1;
+				if (Charge_Flag != 2)
+					Charge_Flag = 1;
 			 }
 			 else {
 				 Charge_Flag = 0;
