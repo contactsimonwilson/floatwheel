@@ -164,20 +164,20 @@ void WS2812_Boot(void)
 {
 	uint8_t i;
 	uint8_t num = floor(Power_Time / 100) + 1;
-	uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
+	// Rainbow: uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
+	// Red, White, Blue:
+	uint8_t rgbMap[10][3] = {{255,0,0}, {255,0,0}, {255,0,0}, {255,255,255}, {255,255,255}, {255,255,255}, {255,255,255}, {0,0,255}, {0,0,255}, {0,0,255}};
 
 	while (num > 10) {
 		num -= 10;
 	}
 	for (i=0;i<num;i++) {
-		WS2812_Set_Colour(i,rgbMap[i][0],rgbMap[i][1],rgbMap[i][2]);
+		// red and green are swapped!
+		WS2812_Set_Colour(i,rgbMap[i][1] >> 1,rgbMap[i][0] >> 1,rgbMap[i][2] >> 1);
 	}
 
 	for (i = num; i < 10; i++) {
-		if (i == num)
-			WS2812_Set_Colour(i,rgbMap[i][0]/3,rgbMap[i][1]/3,rgbMap[i][2]/3);
-		else
-			WS2812_Set_Colour(i,0,0,0);
+		WS2812_Set_Colour(i,rgbMap[i][1] >> 4,rgbMap[i][0] >> 4,rgbMap[i][2] >> 4);
 	}
 
 	WS2812_Refresh();
@@ -243,6 +243,27 @@ static void WS2812_Disabled(void)
 	WS2812_Set_AllColours(5, 6, brightness, 0, 0);
 	WS2812_Refresh();
 }
+
+// Idle animation:
+static void WS2812_Idle(void)
+{
+	static int cnt = 0;
+	cnt++;
+	if(cnt == 8 * 512)
+	{
+		cnt = 0;
+	}
+	if ((cnt % 80) == 0) {
+		int r, g, b;
+		int div = cnt >> 3; // fast div by 8
+		int idx = div % 10;
+		r = div; if (r > 255) r = 0;
+		g = -128 + div; if (g < 0) g = 0; if (g > 255) g = 0;
+		b = 256 + div; if (b < 0) b = 0; if (b > 255) b = 0;
+		WS2812_Set_AllColours(idx, idx, r, g, b);
+		WS2812_Refresh();
+	}
+}	
 
 static void WS2812_Handtest(void)
 {
@@ -349,7 +370,10 @@ void WS2812_Task(void)
 	else {
 		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle, no footpads pressed
 		{
-			WS2812_Power_Display(WS2812_Measure);	// Display power level
+			//if (lcmConfig.isSet && ((lcmConfig.statusbarMode & 0x2) != 0))
+			//	WS2812_Idle();	// Idle animation
+			//else
+				WS2812_Power_Display(WS2812_Measure);	// Display power level
 			WS2812_Refresh();
 		}
 		else

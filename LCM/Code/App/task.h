@@ -16,8 +16,8 @@
 #define   VOLTAGE_RECEIPT     		0.02
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200
-#define   WS2812_1_BRIGHTNESS 		204
-#define   WS2812_2_BRIGHTNESS 		128
+#define   WS2812_1_BRIGHTNESS 		100
+#define   WS2812_2_BRIGHTNESS 		60
 #define   WS2812_3_BRIGHTNESS 		30
 #define   CHARGE_CURRENT			0.3
 #define   CHARGE_CURRENT_L			0.1
