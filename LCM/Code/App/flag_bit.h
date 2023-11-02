@@ -5,15 +5,12 @@
 
 extern uint8_t Power_Flag;
 extern uint8_t Charge_Flag;
-extern uint8_t VESC_Boot_Flag;
-extern uint8_t Flashlight_Flag;
-extern uint8_t Brightness_Flag;
 extern uint8_t WS2812_Display_Flag;
 extern uint8_t WS2812_Flag;
 extern uint8_t Power_Display_Flag;
 extern uint8_t Buzzer_Flag;
 extern uint8_t Usart_Flag;
-extern uint16_t VESC_Boot_Time;
+
 extern uint16_t Buzzer_Time;
 extern uint16_t Charge_Time;
 extern uint16_t Flashlight_Time;
@@ -22,12 +19,9 @@ extern uint16_t Usart_Time;
 extern uint16_t ADC_Time;
 extern uint16_t Shutdown_Time_S;
 extern uint8_t Shutdown_Time_M;
-//extern float Battery_Voltage;
+
 extern float ADC1_Val;
 extern float ADC2_Val;
-//extern long VESC_Rpm;
-//extern float AvgInputCurrent;
-//extern float DutyCycleNow;
 extern float Charge_Voltage;
 extern uint8_t Gear_Position;
 extern uint8_t WS2812_Measure;
@@ -37,6 +31,7 @@ extern float Charge_Current;
 extern uint8_t V_I;
 extern uint8_t Shutdown_Cnt;
 extern uint16_t Charger_Detection_1ms;
+
 #endif
 
 

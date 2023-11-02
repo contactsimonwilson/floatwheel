@@ -1,38 +1,19 @@
 #include "flag_bit.h"
 
 /*
-	Power_Flag = 0; 刚上电
-	Power_Flag = 1；VESC开机
-	Power_Flag = 2; VESC开机完成
-	Power_Flag = 3; VESC关机，充电器给板子供电
+	Power_Flag = 0; Just powered on.
+	Power_Flag = 1; VESC booting up.
+	Power_Flag = 2; VESC boot-up completed.
+	Power_Flag = 3; VESC powered off, the board is powered by the charger.
 */
 uint8_t Power_Flag = 0;
 /*
-	Charge_Flag = 0; 刚上电
-	Charge_Flag = 1；准备充电
-	Charge_Flag = 2；充电打开
-	Charge_Flag = 3；电池电充满了
+	Charge_Flag = 0; Just powered on.
+	Charge_Flag = 1; Ready for charging.
+	Charge_Flag = 2; Charging in progress.
+	Charge_Flag = 3; Battery fully charged.
 */
 uint8_t Charge_Flag = 0;
-///*
-//	VESC_Boot_Flag = 0; VESC关机
-//	VESC_Boot_Flag = 1；VESC开机
-//*/
-//uint8_t VESC_Boot_Flag = 0;
-/*
-	Flashlight_Flag = 0; 刚上电
-	Flashlight_Flag = 1; VESC开机
-	Flashlight_Flag = 2；VESC前面白灯后面红灯(正转)
-	Flashlight_Flag = 3；VESC前面红灯后面白灯(反转)
-	Flashlight_Flag = 4; 亮度10%
-*/
-//uint8_t Flashlight_Flag = 0;
-/*
-	Brightness_Flag = 0; 刚上电
-	Brightness_Flag = 1; 开始调整亮度
-	Brightness_Flag = 2；亮度调整完成
-*/
-uint8_t Brightness_Flag = 0;
 /*
         Lightbar_Mode_Flag = 0; Just powered on.
         Lightbar_Mode_Flag = 1; Display battery level.
@@ -76,11 +57,6 @@ uint8_t Buzzer_Flag = 0;
 uint8_t Usart_Flag = 0;
 
 /*
-	VESC开机时间
-*/
-uint16_t VESC_Boot_Time = 0;
-
-/*
 	蜂鸣器响的时间
 */
 uint16_t Buzzer_Time = 0;
@@ -101,21 +77,14 @@ uint16_t Power_Time = 0;
 */
 uint16_t Usart_Time = 0;
 /*
-	ADC采样时间
+	ADC sampling time.
 */
 uint16_t ADC_Time = 0;
 /*
-	关机时间 秒
+	Shutdown counter, milliseconds and minutes
 */
 uint16_t Shutdown_Time_S = 0;
-/*
-	关机时间 分钟
-*/
 uint8_t Shutdown_Time_M = 0;
-/*
-	电池电压
-*/
-//float Battery_Voltage = 0;
 /*
 	ADC1
 */
@@ -125,26 +94,14 @@ float ADC1_Val = 0;
 */
 float ADC2_Val = 0;
 /*
-	转速
-*/
-//long VESC_Rpm = 0;
-/*
-	母线电流
-*/
-//float AvgInputCurrent = 0;
-/*
-	占空比
-*/
-//float DutyCycleNow = 0;
-/*
-	充电口电压
+	Charging Port Voltage
 */
 float Charge_Voltage = 0;
 /*
-	Gear_Position = 0 刚开机
-	Gear_Position = 1 大灯最暗 WS2812最亮 蜂鸣器响一声
-	Gear_Position = 2 大灯中档 WS2812中档 蜂鸣器响两声
-	Gear_Position = 3 大灯最亮 WS2812最暗 蜂鸣器响三声
+	Light_Profile = 0 Just powered on.
+	Light_Profile = 1 Headlight bightness low, Lightpad brightness high, beep once
+	Light_Profile = 2 Headlight bightness mid, Lightpad brightness mid, beep twice
+	Light_Profile = 3 Headlight bightness high, Lightpad brightness low, beep thrice
 */
 uint8_t Gear_Position = 0;
 /*
@@ -152,20 +109,20 @@ uint8_t Gear_Position = 0;
 */
 uint8_t WS2812_Measure = 0;
 /*
-	蜂鸣器 bpm 60-180 对应占空比 70-100
+	 Buzzer frequency in BPM, beats per minute, ranging from 60 to 180, corresponding to a duty cycle of 70 to 100)
 */
 uint8_t Buzzer_Frequency = 0;
 /*
-	按键双击脚踏板没踩下 大灯亮3S
+	 When the button is double-clicked without pressing it, the headlight stays on for 3 seconds.
 */
 uint16_t Flashlight_Detection_Time = 0;
 /*
-	充电电压和充电的电流的原始值
+	Charging current and voltage original values
 */
 float Charge_Current = 0;
 /*
-	0 采样充电电流
-	1 采样充电电压
+	V_I = 0: Sampling charging current.
+	V_I = 1: Sampling charging voltage.
 */
 uint8_t V_I = 1;
 /*
@@ -173,7 +130,7 @@ uint8_t V_I = 1;
 */
 uint8_t Shutdown_Cnt = 0;
 /*
-	充电器检测时间
+	Charger detection time.
 */
 uint16_t Charger_Detection_1ms = 0;
 
