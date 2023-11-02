@@ -57,10 +57,10 @@ void KEY1_Task(void)
 }
 
 /**************************************************
- * @brie   :Power_Display()
+ * @brie   :WS2812_Power_Display()
  * @note   :display 1..10 leds depending on power level
  **************************************************/
-void Power_Display(uint8_t brightness)
+static void WS2812_Power_Display(uint8_t brightness)
 {
 	uint8_t numleds = 11 - Power_Display_Flag;
 	uint8_t r = 0;
@@ -82,7 +82,7 @@ void Power_Display(uint8_t brightness)
  * @brie   : WS2812_VESC()
  * @note   : Display VESC status
  **************************************************/
-void WS2812_VESC(void)
+static void WS2812_VESC(void)
 {
 	uint8_t i;
 	uint8_t pos, red;
@@ -220,10 +220,10 @@ static uint8_t WS2812_Calc_Bri(uint8_t cnt)
  * @brie   :WS2812_Charge()
  * @note   :Power LED display while charging
  **************************************************/
-void WS2812_Charge(void)
+static void WS2812_Charge(void)
 {
 	static uint8_t cnt = 0;
-	Power_Display(WS2812_Calc_Bri(cnt));
+	WS2812_Power_Display(WS2812_Calc_Bri(cnt));
 	cnt++;
 	if(cnt == 100)
 	{
@@ -232,6 +232,37 @@ void WS2812_Charge(void)
 	
 	WS2812_Refresh();
 }	
+
+static void WS2812_Disabled(void)
+{
+	int brightness = WS2812_Measure;
+	if (brightness < 20)
+		brightness = 20;
+
+	// 2 red LEDs in the center
+	WS2812_Set_AllColours(5, 6, brightness, 0, 0);
+	WS2812_Refresh();
+}
+
+static void WS2812_Handtest(void)
+{
+	static int pulsate = 0;
+	int brightness = WS2812_Measure;
+	if (brightness < 20)
+		brightness = 20;
+	pulsate++;
+	if (pulsate > 50)
+		pulsate = 0;
+
+	// 4 LEDs in the center
+	WS2812_Set_AllColours(4, 7, brightness, pulsate, 0);
+	if(ADC1_Val > 2.0)
+		WS2812_Set_Colour(0, 0, 0, brightness);
+	if(ADC2_Val > 2.0)
+		WS2812_Set_Colour(9, 0, 0, brightness);
+
+	WS2812_Refresh();
+}
 
 /**************************************************
  * @brie   :WS2812_Task()
@@ -267,7 +298,7 @@ void WS2812_Task(void)
 	{
 		if (data.state == DISABLED) {
 			// 2 red LEDs in the center
-			WS2812_Set_AllColours(5, 6, 50, 0, 0);
+			WS2812_Disabled();
 		}
 		else {
 			WS2812_Boot();
@@ -310,17 +341,15 @@ void WS2812_Task(void)
 	}
 
 	if (data.state == DISABLED) {
-		int brightness = WS2812_Measure;
-		if (brightness < 20)
-			brightness = 20;
-		// 2 red LEDs in the center
-		WS2812_Set_AllColours(5, 6, brightness, 0, 0);
-		WS2812_Refresh();
+		WS2812_Disabled();
+	}
+	else if (data.isHandtest) {
+		WS2812_Handtest();
 	}
 	else {
 		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle, no footpads pressed
 		{
-			Power_Display(WS2812_Measure);	// Display power level
+			WS2812_Power_Display(WS2812_Measure);	// Display power level
 			WS2812_Refresh();
 		}
 		else
@@ -624,7 +653,7 @@ void Usart_Task(void)
 
 		lcmConfig.isSet = false;
 		lcmConfig.headlightBrightness = 0;
-		lcmConfig.statusbarBrightness = 50;
+		lcmConfig.statusbarBrightness = 30;
 		lcmConfig.statusbarMode = 0;
 		lcmConfig.dutyBeep = 90;
 		lcmConfig.boardOff = 0;

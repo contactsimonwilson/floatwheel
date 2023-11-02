@@ -17,6 +17,7 @@ typedef struct {
 	char state;
 	char fault;
 	bool isForward;
+	bool isHandtest;
 }dataPackage;
 
 typedef struct {
