@@ -33,6 +33,7 @@ extern uint8_t VESC_RX_Buff[256];
 extern uint8_t VESC_RX_Flag;
 extern dataPackage data;
 extern lcmConfig_t lcmConfig;
+extern uint8_t errCode;
 
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id);
 uint8_t Protocol_Parse(uint8_t * message);

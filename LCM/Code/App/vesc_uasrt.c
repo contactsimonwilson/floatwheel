@@ -1,4 +1,5 @@
 #include "vesc_uasrt.h"
+#include "flag_bit.h"
 
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
@@ -8,6 +9,7 @@ extern float ADC1_Val, ADC2_Val;
 
 dataPackage data;
 lcmConfig_t lcmConfig;
+uint8_t errCode = 0;
 
 uint8_t protocol_buff[256]; //·¢ËÍ»º³åÇø
 /**************************************************
@@ -72,7 +74,7 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
-	uint8_t command[10];
+	uint8_t command[12];
 	int len = 1;
 	
 	command[0] = id;
@@ -81,6 +83,20 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 		command[1] = 101;
 		command[2] = 24; // FLOAT_COMMAND_POLL
 		len = 3;
+	}
+	
+	if (id == COMM_CUSTOM_DEBUG) {
+		command[0] = COMM_CUSTOM_APP_DATA;
+		command[1] = 101;
+		command[2] = 28; // FLOAT_COMMAND_LCM_DEBUG
+		command[3] = Power_Flag;
+		command[4] = Charge_Flag;
+		command[5] = Buzzer_Flag;
+		command[6] = WS2812_Display_Flag;
+		command[7] = WS2812_Flag;
+		command[8] = Gear_Position;
+		command[9] = errCode;
+		len = 10;
 	}
 	
 	Send_Pack_Data(command, len);

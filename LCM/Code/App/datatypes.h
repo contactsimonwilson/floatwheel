@@ -1066,6 +1066,8 @@ typedef enum {
 	COMM_RESET_STATS,
 } COMM_PACKET_ID;
 
+#define 	COMM_CUSTOM_DEBUG 250
+
 // CAN commands
 typedef enum {
 	CAN_PACKET_SET_DUTY = 0,

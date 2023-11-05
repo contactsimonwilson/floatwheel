@@ -149,6 +149,8 @@ static void WS2812_VESC(void)
 			WS2812_Set_Colour(pos,green,red,blue);
 		break;			
 		default:
+			if (errCode == 0)
+				errCode = 1;
 			WS2812_Set_AllColours(1, 10,0,0,0);
 		break;
 	}
@@ -493,6 +495,8 @@ void Charge_Task(void)
 			
 		
 		default:
+			if (errCode == 0)
+				errCode = 3;
 			
 		break;
 		
@@ -545,6 +549,8 @@ void Headlights_Task(void)
 				break;
 				
 				default:
+					if (errCode == 0)
+						errCode = 4;
 					
 				break;
 			}
@@ -654,6 +660,7 @@ void Buzzer_Task(void)
 void Usart_Task(void)
 {
 	static uint8_t usart_step = 0;
+	static uint8_t alternate = 0;
 	uint8_t result;
 
 	if(Charge_Flag)
@@ -687,10 +694,19 @@ void Usart_Task(void)
 	switch(usart_step)
 	{
 		case 0:
+			// Try the custom app command for the first 2 seconds then fall back to generic GET_VALUES
 			if ((data.floatPackageSupported == false) && (Power_Time > VESC_BOOT_TIME * 2))
 				Get_Vesc_Pack_Data(COMM_GET_VALUES);
-			else
-				Get_Vesc_Pack_Data(COMM_CUSTOM_APP_DATA);
+			else {
+				if (alternate) {
+					Get_Vesc_Pack_Data(COMM_CUSTOM_DEBUG);
+				}
+				else {
+					Get_Vesc_Pack_Data(COMM_CUSTOM_APP_DATA);
+				}
+			}
+
+			alternate = 1 - alternate;
 
 			usart_step = 1;
 		break;
@@ -1112,6 +1128,9 @@ void Conditional_Judgment(void)
 		break;
 		
 		default:
+			if (Power_Time > VESC_BOOT_TIME)
+				errCode = 10 + Power_Flag;
+
 			if(Charge_Voltage > CHARGING_VOLTAGE)
 			 {
 				//Power_Flag = 3;
