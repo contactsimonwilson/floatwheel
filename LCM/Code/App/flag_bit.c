@@ -126,7 +126,7 @@ float Charge_Current = 0;
 */
 uint8_t V_I = 1;
 /*
-	电流达到关机的次数
+	Counter used while detecting end of charging
 */
 uint8_t Shutdown_Cnt = 0;
 /*

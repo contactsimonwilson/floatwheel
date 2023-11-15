@@ -2,6 +2,20 @@
 #include "math.h"
 
 /**************************************************
++ * Reset LCM Config
++ **************************************************/
+static void lcmConfigReset(void)
+{
+	lcmConfig.isSet = false;
+	lcmConfig.headlightBrightness = 0;
+	lcmConfig.statusbarBrightness = 30;
+	lcmConfig.statusbarMode = 0;
+	lcmConfig.dutyBeep = 90;
+	lcmConfig.boardOff = 0;
+	errCode = 0;
+}
+
+/**************************************************
  * @brie   :KEY1_Task()
  * @note   :KEY1任务
  * @param  :无
@@ -35,6 +49,7 @@ void KEY1_Task(void)
 		break;
 
 		case 3:         // Long press
+			lcmConfigReset();
 			Power_Flag = 3;  // VESC power off
 		break;
 
@@ -74,7 +89,13 @@ static void WS2812_Power_Display(uint8_t brightness)
 		g = brightness;
 	if (numleds > 4)
 		b = brightness;
-	WS2812_Set_AllColours(1, numleds, r, g, b);
+	
+	if (Power_Display_Flag > 0) {
+		WS2812_Set_AllColours(1, numleds, r, g, b);
+	}
+	else {
+		//WS2812_Set_AllColours(5, 5, r, g, b);
+	}
 	WS2812_Refresh();
 }
 
@@ -113,7 +134,12 @@ static void WS2812_VESC(void)
 		  if (data.state != RUNNING_WHEELSLIP) {
 				uint8_t brightness = lcmConfig.isSet ? lcmConfig.statusbarBrightness : WS2812_Measure;
 
-				if (data.dutyCycleNow > 90) {
+				if (Power_Display_Flag < 3) {
+					// Voltage below 30%?
+					// Display 1/2 red dots at full brightness above anything else
+					WS2812_Power_Display(255);
+				}
+				else if (data.dutyCycleNow > 90) {
 					WS2812_Set_AllColours(1, 10,brightness,0,0);
 				}
 				else if (data.dutyCycleNow > 85) {
@@ -130,6 +156,11 @@ static void WS2812_VESC(void)
 				}
 				else if (data.dutyCycleNow > 50) {
 					WS2812_Set_AllColours(1, 5,0,brightness/4,0);
+				}
+				else if (Power_Display_Flag < 4) {
+					// Voltage below 40%?
+					// Display 1/2/3 red dots at full brightness
+					WS2812_Power_Display(255);
 				}
 				else {
 					WS2812_Set_AllColours(1, 10,0,0,0);
@@ -151,7 +182,7 @@ static void WS2812_VESC(void)
 		default:
 			if (errCode == 0)
 				errCode = 1;
-			WS2812_Set_AllColours(1, 10,0,0,0);
+			//WS2812_Set_AllColours(9, 10,50,0,0);
 		break;
 	}
 	WS2812_Refresh();
@@ -265,7 +296,7 @@ static void WS2812_Idle(void)
 		WS2812_Set_AllColours(idx, idx, r, g, b);
 		WS2812_Refresh();
 	}
-}	
+}
 
 static void WS2812_Handtest(void)
 {
@@ -303,18 +334,43 @@ void WS2812_Task(void)
 	}
 	WS2812_Counter = 0;
 	
+	if(Charge_Flag == 3) // Battery fully charged
+	{
+		WS2812_Set_AllColours(1,10,100,150,100);	// white with a green tint
+		WS2812_Refresh();
+		return;
+	}
+	if(Charge_Flag == 2) // Charge display pattern (pulsating led)
+	{
+		WS2812_Charge();
+		return;
+	}
+	
+	/*if(Power_Flag == 1) {
+		WS2812_Set_Colour(9,0,50,0);
+	}
+	if(Power_Flag == 3) {
+		WS2812_Set_Colour(9,0,0,50);
+	}
+	if(Power_Flag > 3) {
+		WS2812_Set_Colour(9,0,50,50);
+	}*/
+	
 	if(Power_Flag == 0 || (Power_Flag == 3 && Charge_Flag == 0))
 	{
-			for(i=0;i<10;i++)
-			{
-				WS2812_Set_Colour(i,0,0,0);
-			}
-			WS2812_Refresh();
-			WS2812_Display_Flag = 0;
-			WS2812_Flag = 0;
-			Power_Display_Flag = 0;
-			
-			return;
+		WS2812_Set_AllColours(1,10,0,0,0);
+		/*if(Power_Flag == 0) {
+			WS2812_Set_Colour(9,50,0,0);
+		}
+		else {
+			WS2812_Set_Colour(9,50,50,0);
+		}*/
+		WS2812_Refresh();
+		WS2812_Display_Flag = 0;
+		WS2812_Flag = 0;
+		Power_Display_Flag = 0;
+
+		return;
 	}
 	
 	if(Power_Flag == 1)
@@ -329,14 +385,8 @@ void WS2812_Task(void)
 		return;
 	}
 	
-	if(Charge_Flag == 3) // Battery fully charged
-	{
-		WS2812_Set_AllColours(i,10,200,255,200);	// white with a green tint
-		return;
-	}
-	if(Charge_Flag == 2) // Charge display pattern (pulsating led)
-	{
-		WS2812_Charge();
+	if (Power_Flag > 2) {
+		WS2812_Refresh();
 		return;
 	}
 	
@@ -420,6 +470,7 @@ void Power_Task(void)
 						Gear_Position = 1; // The default setting is 1st gear after power-on.
 						Buzzer_Flag = 2;    // The default buzzer sounds when powering on
 						power_step = 0;
+						WS2812_Display_Flag = 1;
 					}
 				break;
 			}
@@ -435,6 +486,57 @@ void Power_Task(void)
 	}
 }
 
+void CheckPowerLevel(float battery_voltage)
+{
+	static float battery_voltage_last = 0;
+
+	if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
+	{
+		if(battery_voltage>4.07)
+		{
+			Power_Display_Flag = 1;
+		}
+		else if(battery_voltage>4.025)
+		{
+			Power_Display_Flag = 2;
+		}
+		else if(battery_voltage>3.91)
+		{
+			Power_Display_Flag = 3;
+		}
+		else if(battery_voltage>3.834)
+		{
+			Power_Display_Flag = 4;
+		}
+		else if(battery_voltage>3.746)
+		{
+			Power_Display_Flag = 5;
+		}
+		else if(battery_voltage>3.607)
+		{
+			Power_Display_Flag = 6;
+		}
+		else if(battery_voltage>3.49)
+		{
+			Power_Display_Flag = 7;
+		}
+		else if(battery_voltage>3.351)
+		{
+			Power_Display_Flag = 8;
+		}
+		else if(battery_voltage>3.168)
+		{
+			Power_Display_Flag = 9;
+		}
+		else if(battery_voltage>2.81)
+		{
+			Power_Display_Flag = 10;
+		}
+
+		battery_voltage_last = battery_voltage;
+	}
+}
+
 /**************************************************
  * @brie   :Charge_Task()
  * @note   :充电任务 
@@ -444,12 +546,61 @@ void Power_Task(void)
 void Charge_Task(void)
 {
 	static uint8_t charge_step = 0; 
-		
-	if(Charge_Flag == 0)
+
+	if(Charge_Flag > 0)
 	{
-		return;
+		if(V_I == 0 && Charge_Time > 150)
+		{
+			if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
+			{
+				Charge_Flag = 3;
+				Shutdown_Cnt++;
+				if(Shutdown_Cnt>10)
+				{
+					Charge_Flag = 0;
+					Charge_Voltage = 0;
+					//Charge_Current = 0;
+					Charger_Detection_1ms = 0;
+					charge_step = 0;
+					Shutdown_Cnt = 0;
+					Charge_Time = 0;
+					V_I = 1;
+					LED1_ON; // Use ADC3 to measure charge voltage
+					CHARGE_OFF;
+				}
+			}
+			else
+			{
+				Shutdown_Cnt = 0;
+			}
+		}
+		else if(Charge_Time > 150)
+		{
+			if(Charge_Flag == 2)
+			{
+				CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
+			}
+		}
 	}
-	
+	else //	Charge_Flag == 0
+	{
+		charge_step = 0;
+		if(Charge_Voltage > CHARGING_VOLTAGE)// && (Charge_Current > 0.1))
+		{
+			if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
+			{
+				if (Charge_Flag != 2)
+					Charge_Flag = 1;
+				WS2812_Display_Flag = 0;
+			}
+			//CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
+		}
+		else {
+			Charger_Detection_1ms = 0;
+			return;
+		}
+	}
+
 	switch(charge_step)
 	{
 		case 0:
@@ -465,9 +616,10 @@ void Charge_Task(void)
 		break;
 		
 		case 2:
-			CHARGE_ON;  //打开充电器
+			CHARGE_ON;
 			Charge_Flag = 2;
 		    charge_step = 3;
+			//Power_Flag = 1;	// Boot the VESC
 		break;
 		
 		case 3:
@@ -480,7 +632,7 @@ void Charge_Task(void)
 			{
 				V_I = 1;
 				Charge_Time = 0;
-				LED1_ON; //采集充电电压
+				LED1_ON; // Use ADC3 to measure charge voltage
 				charge_step = 5;
 			}
 		break;
@@ -490,7 +642,7 @@ void Charge_Task(void)
 			{
 				V_I = 0;
 				Charge_Time = 0;
-				LED1_OFF; //采集充电流
+				LED1_OFF; // Use ADC3 to measure charge current
 				charge_step = 4;
 			}		
 		break;
@@ -504,8 +656,6 @@ void Charge_Task(void)
 		
 	}
 }
-
-uint8_t val = 0;
 
 void Headlights_Task(void)
 {
@@ -667,9 +817,6 @@ void Usart_Task(void)
 	static uint8_t alternate = 0;
 	uint8_t result;
 
-  if(Charge_Flag)
-		return;
-	
 	if(Power_Flag != 2)
 	{
 		// legacy/motor data
@@ -682,13 +829,9 @@ void Usart_Task(void)
 		data.floatPackageSupported = false;
 		data.state = 255;
 		data.fault = 0;
+		data.isForward = true;
 
-		lcmConfig.isSet = false;
-		lcmConfig.headlightBrightness = 0;
-		lcmConfig.statusbarBrightness = 30;
-		lcmConfig.statusbarMode = 0;
-		lcmConfig.dutyBeep = 90;
-		lcmConfig.boardOff = 0;
+		lcmConfigReset();
 
 		usart_step = 0;
 		
@@ -780,21 +923,9 @@ void Usart_Task(void)
 void ADC_Task(void)
 {
 	static uint8_t adc_step = 0;
-//	static uint8_t i = 0;
-//	static uint16_t adc_charge_sum[10];
 	static uint16_t adc_charge_sum_ave = 0;
 	static uint16_t adc1_val_sum_ave = 0;
 	static uint16_t adc2_val_sum_ave = 0;
-//	float old_charge_current = 0;
-	
-//	if(Power_Flag != 2)
-//	{
-//		Charge_Voltage = 0;
-//		ADC1_Val = 0;
-//		ADC2_Val = 0;
-//		adc_step = 0;
-//		return;
-//	}
 	
 	switch(adc_step)
 	{
@@ -815,47 +946,11 @@ void ADC_Task(void)
 				ADC1_Val = (float)(adc1_val_sum_ave*0.0012890625);
 				ADC2_Val = (float)(adc2_val_sum_ave*0.0012890625);
 				
-//				if(Charge_Flag == 3)
-//				{
-//					if(V_I == 1)
-//					{
-//						V_I = 0;
-//						Charge_Time = 0;
-//						Sampling_Completion = 0;
-//						LED1_OFF; //采集充电流
-//						Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125);
-//					
-//					}
-//					else
-//					{
-//						if(Charge_Time>100)
-//						{
-//							adc_charge_sum[i] = adc_charge_sum_ave;
-//							i++;
-//							
-//							if(i == 10)
-//							{
-//								LED1_ON; //采集充电压
-//								Charge_Time = 0;
-//								Sampling_Completion = 1;
-//								V_I = 1;
-//								i = 0;
-//							}
-//						}
-//					}
-//				}
-//				else
-//				{
-//					Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125);
-//				}
-				
 				if(V_I == 0)
 				{
 					if(Charge_Time>100)
 					{
 						Charge_Current = (float)(-0.008056640625*adc_charge_sum_ave+16.5);
-						//Charge_Current = Charge_Current*k + old_charge_current*(1-k);
-						//old_charge_current = Charge_Current;
 					}
 				}
 				else
@@ -867,79 +962,11 @@ void ADC_Task(void)
 				}
 			}
 			
-//			if(i == 8)
-//			{
-//				adc_charge_sum_ave >>= 3;
-//				// y=kx+b 0=k*2048+b  10=k*(0.65/3.3*4096)+b
-//				if(V_I == 0)
-//				{
-//					Charge_Current = (float)(-0.00806*adc_charge_sum_ave+16.5);
-//				}
-//				else
-//				{
-//					Charge_Voltage = (float)(adc_charge_sum_ave*0.0257080078125);
-//				}
-//				
-//				adc_charge_sum_ave = 0;
-//				i=0;
-//			}
-			
 		break;
 			
 	  default:
 			
 		break;
-	}
-}
-
-void CheckPowerLevel(float battery_voltage)
-{
-	static float battery_voltage_last = 0;
-
-	if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
-	{
-		if(battery_voltage>4.07)
-		{
-			Power_Display_Flag = 1;
-		}
-		else if(battery_voltage>4.025)
-		{
-			Power_Display_Flag = 2;
-		}
-		else if(battery_voltage>3.91)
-		{
-			Power_Display_Flag = 3;
-		}
-		else if(battery_voltage>3.834)
-		{
-			Power_Display_Flag = 4;
-		}
-		else if(battery_voltage>3.746)
-		{
-			Power_Display_Flag = 5;
-		}
-		else if(battery_voltage>3.607)
-		{
-			Power_Display_Flag = 6;
-		}
-		else if(battery_voltage>3.49)
-		{
-			Power_Display_Flag = 7;
-		}
-		else if(battery_voltage>3.351)
-		{
-			Power_Display_Flag = 8;
-		}
-		else if(battery_voltage>3.168)
-		{
-			Power_Display_Flag = 9;
-		}
-		else if(battery_voltage>2.81)
-		{
-			Power_Display_Flag = 10;
-		}
-
-		battery_voltage_last = battery_voltage;
 	}
 }
 
@@ -954,19 +981,18 @@ void Conditional_Judgment(void)
 	switch(Power_Flag)
 	{
 		case 1: // Power on (startup)
-			 if(Charge_Voltage > CHARGING_VOLTAGE)
-			 {
-				//Power_Flag = 3;
-				if (Charge_Flag != 2)
-					Charge_Flag = 1;
-			 }
 		break;
 		
 		case 2: // VESC Boot completed
 			if(Usart_Flag == 1)
 			{
 				Usart_Flag = 2;
+				if (Charge_Flag > 0)
+					break;
 				
+				// Not charging? Get voltage from VESC
+				CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
+
 				if(data.dutyCycleNow < 0)
 				{
 					data.dutyCycleNow = -data.dutyCycleNow;
@@ -990,9 +1016,6 @@ void Conditional_Judgment(void)
 				{
 					data.rpm = -data.rpm;
 				}
-				
-				// Riding? Get voltage from VESC
-				CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
 				
 				if(data.state == RUNNING_FLYWHEEL) {
 					WS2812_Display_Flag = 2;
@@ -1037,29 +1060,11 @@ void Conditional_Judgment(void)
 				else
 				{
 					// Add check for low voltage to force voltage display on WS2812!
-						WS2812_Display_Flag = 2;
-						WS2812_Flag = 4;	// Normal Riding!
+					WS2812_Display_Flag = 2;
+					WS2812_Flag = 4;	// Normal Riding!
 				}
 				
-				if((Charge_Voltage > CHARGING_VOLTAGE) && (data.avgInputCurrent<0.8))
-				{
-					if(Charger_Detection_1ms > CHARGER_DETECTION_DELAY)
-					{
-						//Power_Flag = 3;
-						if (Charge_Flag != 2)
-							Charge_Flag = 1;
-						WS2812_Display_Flag =0;
-					}
-					
-				}
-				else
-				{
-					Charger_Detection_1ms = 0;
-				}
-				/*
-					脚踏板踩下或转速大于1000定时清零
-					即不踩脚踏板转速低于1000开始计时，超过关机时间关机
-				*/
+				// No movement and no ADCs? Shutdown after timeout (10-30min)
 				if(ADC1_Val > 2.0 || ADC2_Val > 2.0 || data.rpm > 1000)
 				{
 					Shutdown_Time_S = 0;
@@ -1086,62 +1091,10 @@ void Conditional_Judgment(void)
 		break;
 		
 		case 3:  // VESC is shut down and the charger supplies power to the board.
-			if(V_I == 0 && Charge_Time > 150)
-			{
-				if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
-				//if(Charge_Current > CHARGE_CURRENT_L && Charge_Current < CHARGE_CURRENT_H)
-				{
-					Shutdown_Cnt++;
-					if(Shutdown_Cnt>10)
-					{
-//						Charge_Flag = 3;
-						Shutdown_Cnt = 0;
-						CHARGE_OFF;  //关闭充电器
-					}
-				}
-				else
-				{
-					Shutdown_Cnt = 0;
-				}
-			}
-			else if(Charge_Time > 150)
-			{
-				if(Charge_Flag == 2)
-				{
-					CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
-				}
-			}
-				
 		break;
 		
 		default:
-			if (Power_Time > VESC_BOOT_TIME)
-				errCode = 10 + Power_Flag;
-
-			if(Charge_Voltage > CHARGING_VOLTAGE)
-			 {
-				//Power_Flag = 3;
-				if (Charge_Flag != 2)
-					Charge_Flag = 1;
-			 }
-			 else {
-				 Charge_Flag = 0;
-			 }
 		break;
 			
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
