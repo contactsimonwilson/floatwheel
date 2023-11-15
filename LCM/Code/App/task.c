@@ -387,11 +387,13 @@ void WS2812_Task(void)
 
 /**************************************************
  * @brie   :Power_Task()
- * @note   :Control VESC power
+ * @note   :电源任务 
+ * @param  :无
+ * @retval :无
  **************************************************/
 void Power_Task(void)
 {
-	static uint8_t power_flag_last = 0;
+	static uint8_t power_flag_last = 0; //上一次的状态
 	static uint8_t power_step = 0;
 	
 	if(power_flag_last == Power_Flag && Power_Flag != 1)
@@ -663,9 +665,9 @@ void Usart_Task(void)
 	static uint8_t alternate = 0;
 	uint8_t result;
 
-	if(Charge_Flag)
+  if(Charge_Flag)
 		return;
-
+	
 	if(Power_Flag != 2)
 	{
 		// legacy/motor data
@@ -950,19 +952,12 @@ void Conditional_Judgment(void)
 	switch(Power_Flag)
 	{
 		case 1: // Power on (startup)
-			if(Charge_Voltage > CHARGING_VOLTAGE)
-			{
-				// Stay in power mode "1"
+			 if(Charge_Voltage > CHARGING_VOLTAGE)
+			 {
 				//Power_Flag = 3;
 				if (Charge_Flag != 2)
 					Charge_Flag = 1;
-			}
-			else if (Charge_Flag > 1) {
-				// Charger removed during/after charging?
-				Power_Flag = 3;
-				Charge_Flag = 0;
-			}
-				 
+			 }
 		break;
 		
 		case 2: // VESC Boot completed
@@ -1089,7 +1084,6 @@ void Conditional_Judgment(void)
 		break;
 		
 		case 3:  // VESC is shut down and the charger supplies power to the board.
-			lcmConfig.isSet = false;
 			if(V_I == 0 && Charge_Time > 150)
 			{
 				if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
@@ -1115,15 +1109,6 @@ void Conditional_Judgment(void)
 					CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
 				}
 			}
-			else if(Charge_Voltage > CHARGING_VOLTAGE)
-			 {
-				//Power_Flag = 3;
-				if (Charge_Flag != 2)
-					Charge_Flag = 1;
-			 }
-			 else {
-				 Charge_Flag = 0;
-			 }
 				
 		break;
 		
