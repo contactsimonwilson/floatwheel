@@ -225,7 +225,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.rpm 				= buffer_get_int32(pdata, &ind);
 			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
 
-			if ((data.rpm > 500) || (data.rpm < -500) || (data.avgInputCurrent > 1) || (data.avgInputCurrent < -1)) {
+			if ((data.rpm > 100) || (data.rpm < -100) || (data.avgInputCurrent > 1) || (data.avgInputCurrent < -1)) {
 				data.state = RUNNING;
 			}
 			else {

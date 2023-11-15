@@ -517,18 +517,18 @@ void Headlights_Task(void)
 		return;
 	}
 
-	if (data.isForward)
-	{ // FORWARD
-		LED_F_OFF;
-		LED_B_ON;
-	}
-	else
-	{ // BACKWARD
-		LED_B_OFF;
-		LED_F_ON;
-	}
-
 	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
+		if (data.isForward)
+		{ // FORWARD
+			LED_F_OFF;
+			LED_B_ON;
+		}
+		else
+		{ // BACKWARD
+			LED_B_OFF;
+			LED_F_ON;
+		}
+
 		if (lcmConfig.isSet) {
 			TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
 		}
@@ -560,6 +560,8 @@ void Headlights_Task(void)
 	}
 	else {
 		// For now ZERO lights when stopped
+		LED_F_OFF;
+		LED_B_OFF;
 		TIM_SetCompare2(TIM1,9999);
 	}
 }
