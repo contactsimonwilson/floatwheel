@@ -49,8 +49,11 @@ void KEY1_Task(void)
 		break;
 
 		case 3:         // Long press
-			lcmConfigReset();
-			Power_Flag = 3;  // VESC power off
+			if (Power_Flag < 3) {
+				lcmConfigReset();
+				Power_Flag = 4;  // VESC power off
+				Power_Time = 0;
+			}
 		break;
 
 		case 4:         // Three presses
@@ -94,7 +97,7 @@ static void WS2812_Power_Display(uint8_t brightness)
 		WS2812_Set_AllColours(1, numleds, r, g, b);
 	}
 	else {
-		//WS2812_Set_AllColours(5, 5, r, g, b);
+		WS2812_Set_AllColours(5, 6, brightness, 0, brightness);
 	}
 	WS2812_Refresh();
 }
@@ -134,7 +137,7 @@ static void WS2812_VESC(void)
 		  if (data.state != RUNNING_WHEELSLIP) {
 				uint8_t brightness = lcmConfig.isSet ? lcmConfig.statusbarBrightness : WS2812_Measure;
 
-				if (Power_Display_Flag < 3) {
+				if (Power_Display_Flag > 7) {
 					// Voltage below 30%?
 					// Display 1/2 red dots at full brightness above anything else
 					WS2812_Power_Display(255);
@@ -157,10 +160,10 @@ static void WS2812_VESC(void)
 				else if (data.dutyCycleNow > 50) {
 					WS2812_Set_AllColours(1, 5,0,brightness/4,0);
 				}
-				else if (Power_Display_Flag < 4) {
+				else if (Power_Display_Flag > 6) {
 					// Voltage below 40%?
 					// Display 1/2/3 red dots at full brightness
-					WS2812_Power_Display(255);
+					WS2812_Power_Display(128);
 				}
 				else {
 					WS2812_Set_AllColours(1, 10,0,0,0);
@@ -216,8 +219,16 @@ void WS2812_Boot(void)
 	WS2812_Refresh();
 }
 
-
-
+void WS2812_Shutdown(void)
+{
+	uint8_t brightness = 100;
+	int num = 10 - floor(Power_Time / 100);
+	if (num < 1) {
+		num = 1;
+	}
+	WS2812_Set_AllColours(num, num, brightness / (11 - num), 0, 0);
+	WS2812_Refresh();
+}
 
 uint8_t status_brightness = 1;
 /**************************************************
@@ -345,7 +356,12 @@ void WS2812_Task(void)
 		WS2812_Charge();
 		return;
 	}
-	
+
+	if (WS2812_Display_Flag == 3) {
+		WS2812_Shutdown();
+		return;
+	}
+
 	if(Power_Flag == 0 || (Power_Flag == 3 && Charge_Flag == 0))
 	{
 		// Board is off
@@ -429,6 +445,13 @@ void Power_Task(void)
 {
 	static uint8_t power_flag_last = 0; //上一次的状态
 	static uint8_t power_step = 0;
+
+	if (Power_Flag == 4) {
+		if(Power_Time > VESC_SHUTDOWN_TIME)
+		{
+			Power_Flag = 3;
+		}
+	}
 	
 	if(power_flag_last == Power_Flag && Power_Flag != 1)
 	{
@@ -462,9 +485,12 @@ void Power_Task(void)
 		break;	
 
 		case 3:// VESC is shut down (either auto-shutdown or button press)
+			WS2812_Display_Flag = 0;
 			PWR_OFF 
 		break;
 
+		case 4:// New Power state for shutdown sequence
+			WS2812_Display_Flag = 3;
 		default:
 		break;
 	}
@@ -640,15 +666,29 @@ void Charge_Task(void)
 
 void Headlights_Task(void)
 {
+	static bool isForward = false;
+
 	if(Power_Flag != 2) // Lights off 
 	{
 		LED_B_OFF;
 		LED_F_OFF;
 		TIM_SetCompare2(TIM1,0);
+		Current_Headlight_Brightness = 0;
 		return;
 	}
 
 	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
+		if (Current_Headlight_Brightness < lcmConfig.headlightBrightness) {
+			Current_Headlight_Brightness++;
+		}
+		else if (Current_Headlight_Brightness > lcmConfig.headlightBrightness) {
+			Current_Headlight_Brightness--;
+		}
+
+		if (isForward != data.isForward) {
+			Current_Headlight_Brightness = 0;
+			isForward = data.isForward;
+		}
 		if (data.isForward)
 		{ // FORWARD
 			LED_F_OFF;
@@ -661,7 +701,7 @@ void Headlights_Task(void)
 		}
 
 		if (lcmConfig.isSet) {
-			TIM_SetCompare2(TIM1,9999 - lcmConfig.headlightBrightness*39);
+			TIM_SetCompare2(TIM1,9999 - Current_Headlight_Brightness*39);
 		}
 		else {
 			switch(Gear_Position)
@@ -694,6 +734,7 @@ void Headlights_Task(void)
 		LED_F_OFF;
 		LED_B_OFF;
 		TIM_SetCompare2(TIM1,9999);
+		Current_Headlight_Brightness = 0;
 	}
 }
 
@@ -845,15 +886,7 @@ void Usart_Task(void)
 				VESC_RX_Flag = 0;
 				result = Protocol_Parse(VESC_RX_Buff);
 				
-				if(result == 0)
-				{
-						Usart_Flag = 1;
-				}
-				else	//解析失败
-				{
-						//LED1_Filp_Time(100);
-						Usart_Flag = 2;
-				}
+				Vesc_Data_Ready = (result == 0);
 				Usart_Time = 0;
 				usart_step = 2;
 			}
@@ -950,10 +983,10 @@ void ADC_Task(void)
  **************************************************/
 void VESC_State_Task(void)
 {
-	if ((Charge_Flag > 0) || (Power_Flag != 2) || (Usart_Flag != 1))
+	if ((Charge_Flag > 0) || (Power_Flag != 2) || !Vesc_Data_Ready)
 		return;
 
-	Usart_Flag = 2;
+	Vesc_Data_Ready = false;
 		
 	// Not charging? Get voltage from VESC
 	CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
@@ -1043,13 +1076,15 @@ void VESC_State_Task(void)
 		Shutdown_Time_M++;
 		if(Shutdown_Time_M >= SHUTDOWN_TIME)
 		{
-			Power_Flag = 3;
+			Power_Flag = 4;
+			Power_Time = 0;
 		}
 	}
 
 	if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff > 0))
 	{
 		// After 10 seconds of idle we allow the board to be shut down via app
-		Power_Flag = 3;
+		Power_Flag = 4;
+		Power_Time = 0;
 	}
 }

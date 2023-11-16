@@ -50,11 +50,9 @@ uint8_t Power_Display_Flag = 0;
 */
 uint8_t Buzzer_Flag = 0;
 /*
-	Usart_Flag = 0; 刚上电
-	Usart_Flag = 1；解析成功
-	Usart_Flag = 2；解析失败或等待下一次解析
+	Usart_Flag = Vesc_Data_Ready
 */
-uint8_t Usart_Flag = 0;
+uint8_t Vesc_Data_Ready = 0;
 
 /*
 	蜂鸣器响的时间
@@ -134,3 +132,7 @@ uint8_t Shutdown_Cnt = 0;
 */
 uint16_t Charger_Detection_1ms = 0;
 
+/*
+	The current brightness of the headlights, to slowly ramp up to target brightness
+*/
+uint8_t Current_Headlight_Brightness = 0;

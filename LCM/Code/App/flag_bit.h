@@ -9,7 +9,7 @@ extern uint8_t WS2812_Display_Flag;
 extern uint8_t WS2812_Flag;
 extern uint8_t Power_Display_Flag;
 extern uint8_t Buzzer_Flag;
-extern uint8_t Usart_Flag;
+extern uint8_t Vesc_Data_Ready;
 
 extern uint16_t Buzzer_Time;
 extern uint16_t Charge_Time;
@@ -31,7 +31,6 @@ extern float Charge_Current;
 extern uint8_t V_I;
 extern uint8_t Shutdown_Cnt;
 extern uint16_t Charger_Detection_1ms;
+extern uint8_t Current_Headlight_Brightness;
 
 #endif
-
-

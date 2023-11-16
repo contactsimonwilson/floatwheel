@@ -12,6 +12,7 @@
 #define   SHUTDOWN_TIME		  		20
 #define   VESC_RPM            		250
 #define   VESC_BOOT_TIME      		4000
+#define   VESC_SHUTDOWN_TIME      	1000
 #define   DUTY_CYCLE          		0.9
 #define   VOLTAGE_RECEIPT     		0.02
 /*******************************************************************************/
