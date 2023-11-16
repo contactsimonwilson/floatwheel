@@ -346,30 +346,14 @@ void WS2812_Task(void)
 		return;
 	}
 	
-	/*if(Power_Flag == 1) {
-		WS2812_Set_Colour(9,0,50,0);
-	}
-	if(Power_Flag == 3) {
-		WS2812_Set_Colour(9,0,0,50);
-	}
-	if(Power_Flag > 3) {
-		WS2812_Set_Colour(9,0,50,50);
-	}*/
-	
 	if(Power_Flag == 0 || (Power_Flag == 3 && Charge_Flag == 0))
 	{
+		// Board is off
 		WS2812_Set_AllColours(1,10,0,0,0);
-		/*if(Power_Flag == 0) {
-			WS2812_Set_Colour(9,50,0,0);
-		}
-		else {
-			WS2812_Set_Colour(9,50,50,0);
-		}*/
 		WS2812_Refresh();
 		WS2812_Display_Flag = 0;
 		WS2812_Flag = 0;
 		Power_Display_Flag = 0;
-
 		return;
 	}
 	
@@ -425,7 +409,7 @@ void WS2812_Task(void)
 			//if (lcmConfig.isSet && ((lcmConfig.statusbarMode & 0x2) != 0))
 			//	WS2812_Idle();	// Idle animation
 			//else
-				WS2812_Power_Display(WS2812_Measure);	// Display power level
+			WS2812_Power_Display(WS2812_Measure);	// Display power level
 			WS2812_Refresh();
 		}
 		else
@@ -539,9 +523,7 @@ void CheckPowerLevel(float battery_voltage)
 
 /**************************************************
  * @brie   :Charge_Task()
- * @note   :充电任务 
- * @param  :无
- * @retval :无
+ * @note   :Check for charge start/end conditions
  **************************************************/
 void Charge_Task(void)
 {
@@ -593,7 +575,6 @@ void Charge_Task(void)
 					Charge_Flag = 1;
 				WS2812_Display_Flag = 0;
 			}
-			//CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
 		}
 		else {
 			Charger_Detection_1ms = 0;
@@ -864,14 +845,9 @@ void Usart_Task(void)
 				VESC_RX_Flag = 0;
 				result = Protocol_Parse(VESC_RX_Buff);
 				
-				if(result == 0) //解析成功
+				if(result == 0)
 				{
-						//LED1_Filp_Time(500);				
 						Usart_Flag = 1;
-//						Battery_Voltage = data.inpVoltage; //电池电压
-//						VESC_Rpm = data.rpm;            //转速
-//						AvgInputCurrent = data.avgInputCurrent;  //母线电流
-//						DutyCycleNow = data.dutyCycleNow;   //占空比
 				}
 				else	//解析失败
 				{
@@ -913,12 +889,10 @@ void Usart_Task(void)
 	}
 	
 }
-//float k = 0.15;
+
 /**************************************************
  * @brie   :ADC_Task()
- * @note   :ADC任务 
- * @param  :无
- * @retval :无
+ * @note   :Eavluate the 3 ADCs: 2 x sensors and 1 x current/voltage (multiplexed via LED1)
  **************************************************/
 void ADC_Task(void)
 {
@@ -971,130 +945,111 @@ void ADC_Task(void)
 }
 
 /**************************************************
- * @brie   :Conditional_Judgment()
- * @note   :条件判断
- * @param  :无
- * @retval :无
+ * @brie   :VESC_State_Task()
+ * @note   :proces VESC state when power is on and we're not charging
  **************************************************/
-void Conditional_Judgment(void)
+void VESC_State_Task(void)
 {
-	switch(Power_Flag)
-	{
-		case 1: // Power on (startup)
-		break;
+	if ((Charge_Flag > 0) || (Power_Flag != 2) || (Usart_Flag != 1))
+		return;
+
+	Usart_Flag = 2;
 		
-		case 2: // VESC Boot completed
-			if(Usart_Flag == 1)
+	// Not charging? Get voltage from VESC
+	CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
+
+	if(data.dutyCycleNow < 0)
+	{
+		data.dutyCycleNow = -data.dutyCycleNow;
+	}
+	// Duty Cycle beep
+	if ((lcmConfig.dutyBeep > 0) && (data.dutyCycleNow >= lcmConfig.dutyBeep))
+	{
+		Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow))*4)-220);
+	}
+	else
+	{
+		Buzzer_Frequency = 0;
+	}
+	
+	// Don't buzz in wheel slip or flywheel mode
+	if (data.state > RUNNING_UPSIDEDOWN) {
+		Buzzer_Frequency = 0;
+	}
+	
+	if(data.rpm<0)
+	{
+		data.rpm = -data.rpm;
+	}
+	
+	if(data.state == RUNNING_FLYWHEEL) {
+		WS2812_Display_Flag = 2;
+		WS2812_Flag = 5;
+		Buzzer_Frequency = 0;
+	}
+	else if(data.rpm<VESC_RPM)
+	{
+		if (data.state == DISABLED) {
+			if ((ADC1_Val > 2) || (ADC2_Val > 2)) {
+				// Don't touch my board when it's disabled :)
+				Buzzer_Frequency = 100;
+			}
+		}
+		else {
+			Buzzer_Frequency = 0;
+
+			if(ADC1_Val < 2.0 && ADC2_Val <2.0)
 			{
-				Usart_Flag = 2;
-				if (Charge_Flag > 0)
-					break;
-				
-				// Not charging? Get voltage from VESC
-				CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
-
-				if(data.dutyCycleNow < 0)
+				if(data.avgInputCurrent < 1.0)
 				{
-					data.dutyCycleNow = -data.dutyCycleNow;
-				}
-				// Duty Cycle beep
-				if ((lcmConfig.dutyBeep > 0) && (data.dutyCycleNow >= lcmConfig.dutyBeep))
-				{
-					Buzzer_Frequency = ((((uint8_t)(data.dutyCycleNow))*4)-220);
-				}
-				else
-				{
-					Buzzer_Frequency = 0;
-				}
-				
-				// Don't buzz in wheel slip or flywheel mode
-				if (data.state > RUNNING_UPSIDEDOWN) {
-					Buzzer_Frequency = 0;
-				}
-				
-				if(data.rpm<0)
-				{
-					data.rpm = -data.rpm;
-				}
-				
-				if(data.state == RUNNING_FLYWHEEL) {
-					WS2812_Display_Flag = 2;
-					WS2812_Flag = 5;
-					Buzzer_Frequency = 0;
-				}
-				else if(data.rpm<VESC_RPM)
-				{
-					if (data.state == DISABLED) {
-						if ((ADC1_Val > 2) || (ADC2_Val > 2)) {
-							// Don't touch my board when it's disabled :)
-							Buzzer_Frequency = 100;
-						}
-					}
-					else {
-						Buzzer_Frequency = 0;
-
-						if(ADC1_Val < 2.0 && ADC2_Val <2.0)
-						{
-							if(data.avgInputCurrent < 1.0)
-							{
-								WS2812_Display_Flag = 1;
-							}
-						}
-						else {
-							WS2812_Display_Flag = 2;
-							if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
-							{
-								WS2812_Flag = 3;
-							}
-							else if(ADC1_Val >2.9)
-							{
-								WS2812_Flag = 1;
-							}
-							else
-							{
-								WS2812_Flag = 2;
-							}
-						}
-					}
-				}
-				else
-				{
-					// Add check for low voltage to force voltage display on WS2812!
-					WS2812_Display_Flag = 2;
-					WS2812_Flag = 4;	// Normal Riding!
-				}
-				
-				// No movement and no ADCs? Shutdown after timeout (10-30min)
-				if(ADC1_Val > 2.0 || ADC2_Val > 2.0 || data.rpm > 1000)
-				{
-					Shutdown_Time_S = 0;
-					Shutdown_Time_M = 0;
-				}
-				
-				if(Shutdown_Time_S>60000)
-				{
-					Shutdown_Time_S = 0;
-					
-					Shutdown_Time_M++;
-					if(Shutdown_Time_M >= SHUTDOWN_TIME)
-					{
-						Power_Flag = 3;
-					}
-				}
-
-				if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff > 0))
-				{
-					// After 10 seconds of idle we allow the board to be shut down via app
-					Power_Flag = 3;
+					WS2812_Display_Flag = 1;
 				}
 			}
-		break;
+			else {
+				WS2812_Display_Flag = 2;
+				if(ADC1_Val > 2.9 && ADC2_Val > 2.9)
+				{
+					WS2812_Flag = 3;
+				}
+				else if(ADC1_Val >2.9)
+				{
+					WS2812_Flag = 1;
+				}
+				else
+				{
+					WS2812_Flag = 2;
+				}
+			}
+		}
+	}
+	else
+	{
+		// Add check for low voltage to force voltage display on WS2812!
+		WS2812_Display_Flag = 2;
+		WS2812_Flag = 4;	// Normal Riding!
+	}
+	
+	// No movement and no ADCs? Shutdown after timeout (10-30min)
+	if(ADC1_Val > 2.0 || ADC2_Val > 2.0 || data.rpm > 1000)
+	{
+		Shutdown_Time_S = 0;
+		Shutdown_Time_M = 0;
+	}
+	
+	if(Shutdown_Time_S>60000)
+	{
+		Shutdown_Time_S = 0;
 		
-		case 3:  // VESC is shut down and the charger supplies power to the board.
-		break;
-		
-		default:
-		break;
-			
+		Shutdown_Time_M++;
+		if(Shutdown_Time_M >= SHUTDOWN_TIME)
+		{
+			Power_Flag = 3;
+		}
+	}
+
+	if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff > 0))
+	{
+		// After 10 seconds of idle we allow the board to be shut down via app
+		Power_Flag = 3;
 	}
 }

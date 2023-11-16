@@ -32,7 +32,7 @@ void Headlights_Task(void);
 void Buzzer_Task(void);
 void Usart_Task(void);
 void ADC_Task(void);
-void Conditional_Judgment(void);
+void VESC_State_Task(void);
 void Flashlight_Detection(void);
 
 #endif

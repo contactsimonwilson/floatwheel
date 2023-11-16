@@ -73,7 +73,7 @@ int main(void)
 		Buzzer_Task();
 		Usart_Task();
 		ADC_Task();
-		Conditional_Judgment();
+		VESC_State_Task();
 	}
 }
 
