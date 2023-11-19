@@ -498,52 +498,29 @@ void Power_Task(void)
 
 void CheckPowerLevel(float battery_voltage)
 {
-	static float battery_voltage_last = 0;
+	float battVoltages[10] = {4.054, 4.01, 3.908, 3.827, 3.74, 3.651, 3.571, 3.485, 3.38, 3.0}; //P42A
+	float battcellcurves[2][10] = {{4.054, 4.01, 3.908, 3.827, 3.74, 3.651, 3.571, 3.485, 3.38, 3.0},   //P42A
+								   {4.07, 4.025, 3.91, 3.834, 3.746, 3.607, 3.49, 3.351, 3.168, 2.81}}; //DG40
+	static uint8_t cell_type_last = 1; //CELL_TYPE P42A equates out to 0
 
-	if((battery_voltage > (battery_voltage_last+VOLTAGE_RECEIPT)) || (battery_voltage < (battery_voltage_last - VOLTAGE_RECEIPT)))
+	if (CELL_TYPE != cell_type_last) // If !P42a run once at boot or on change
 	{
-		if(battery_voltage>4.07)
+		cell_type_last = CELL_TYPE;
+		for (int i=0;i<10;i++)
 		{
-			Power_Display_Flag = 1;
+			battVoltages[i] = battcellcurves[cell_type_last][i];
 		}
-		else if(battery_voltage>4.025)
-		{
-			Power_Display_Flag = 2;
+	}
+
+	for (int i=0;i<10;i++) {
+		if (battery_voltage > battVoltages[i]) {
+			Power_Display_Flag = i + 1;
+			break;
 		}
-		else if(battery_voltage>3.91)
-		{
-			Power_Display_Flag = 3;
-		}
-		else if(battery_voltage>3.834)
-		{
-			Power_Display_Flag = 4;
-		}
-		else if(battery_voltage>3.746)
-		{
-			Power_Display_Flag = 5;
-		}
-		else if(battery_voltage>3.607)
-		{
-			Power_Display_Flag = 6;
-		}
-		else if(battery_voltage>3.49)
-		{
-			Power_Display_Flag = 7;
-		}
-		else if(battery_voltage>3.351)
-		{
-			Power_Display_Flag = 8;
-		}
-		else if(battery_voltage>3.168)
-		{
-			Power_Display_Flag = 9;
-		}
-		else if(battery_voltage>2.81)
-		{
+		// Between zero and min voltage
+		if (i == 9) {
 			Power_Display_Flag = 10;
 		}
-
-		battery_voltage_last = battery_voltage;
 	}
 }
 

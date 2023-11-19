@@ -7,6 +7,13 @@
 #include "flag_bit.h"
 #include "vesc_uasrt.h"
 
+typedef enum
+{
+	P42A,
+	DG40
+} CELL_TYPE;
+
+#define   CELL_TYPE                 DG40        // Cell configuration to use for voltage display (P42A, DG40)
 #define	  CHARGING_VOLTAGE	  		40
 #define   BATTERY_STRING      		20
 #define   SHUTDOWN_TIME		  		20
