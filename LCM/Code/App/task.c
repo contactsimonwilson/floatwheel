@@ -348,7 +348,7 @@ void WS2812_Task(void)
 	
 	if(Charge_Flag == 3) // Battery fully charged
 	{
-		WS2812_Set_AllColours(1,10,100,150,100);	// white with a green tint
+		WS2812_Set_AllColours(1,10,50,150,50);	// white with a strong green tint
 		WS2812_Refresh();
 		return;
 	}
@@ -543,12 +543,6 @@ void Charge_Task(void)
 				Shutdown_Cnt++;
 				if(Shutdown_Cnt>10)
 				{
-					Charge_Flag = 0;
-					Charge_Voltage = 0;
-					//Charge_Current = 0;
-					Charger_Detection_1ms = 0;
-					charge_step = 0;
-					Shutdown_Cnt = 0;
 					Charge_Time = 0;
 					V_I = 1;
 					LED1_ON; // Use ADC3 to measure charge voltage
@@ -560,11 +554,22 @@ void Charge_Task(void)
 				Shutdown_Cnt = 0;
 			}
 		}
-		else if(Charge_Time > 150)
+		else
 		{
-			if(Charge_Flag == 2)
+			if((Charge_Flag == 2) && (Charge_Time > 150))
 			{
 				CheckPowerLevel((Charge_Voltage+1)/BATTERY_STRING);
+			}
+			if((Charge_Flag == 3) && (Shutdown_Cnt > 10))
+			{
+				if (Charge_Voltage < CHARGING_VOLTAGE)
+				{
+					// wait for charger to get unplugged to reset back to normal state
+					Charge_Flag = 0;
+					charge_step = 0;
+					Charge_Voltage = 0;
+					Charger_Detection_1ms = 0;
+				}
 			}
 		}
 	}
