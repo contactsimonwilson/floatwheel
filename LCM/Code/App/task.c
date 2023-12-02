@@ -202,7 +202,8 @@ void WS2812_Boot(void)
 	uint8_t num = floor(Power_Time / 100) + 1;
 	// Rainbow: uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
 	// Red, White, Blue:
-	uint8_t rgbMap[10][3] = {{255,0,0}, {255,0,0}, {255,0,0}, {255,255,255}, {255,255,255}, {255,255,255}, {255,255,255}, {0,0,255}, {0,0,255}, {0,0,255}};
+	//uint8_t rgbMap[10][3] = {{255,0,0}, {255,0,0}, {255,0,0}, {255,255,255}, {255,255,255}, {255,255,255}, {255,255,255}, {0,0,255}, {0,0,255}, {0,0,255}};
+	uint8_t rgbMap[10][3] = {{255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}};
 
 	while (num > 10) {
 		num -= 10;
@@ -213,7 +214,7 @@ void WS2812_Boot(void)
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,rgbMap[i][1] >> 4,rgbMap[i][0] >> 4,rgbMap[i][2] >> 4);
+		WS2812_Set_Colour(i,rgbMap[i][1] >> 5,rgbMap[i][0] >> 5,rgbMap[i][2] >> 5);
 	}
 
 	WS2812_Refresh();
@@ -644,6 +645,7 @@ void Charge_Task(void)
 void Headlights_Task(void)
 {
 	static bool isForward = false;
+	static int delay = 0;
 
 	if(Power_Flag != 2) // Lights off 
 	{
@@ -651,15 +653,22 @@ void Headlights_Task(void)
 		LED_F_OFF;
 		TIM_SetCompare2(TIM1,0);
 		Current_Headlight_Brightness = 0;
+		delay = 0;
 		return;
 	}
 
 	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
-		if (Current_Headlight_Brightness < lcmConfig.headlightBrightness) {
-			Current_Headlight_Brightness++;
+		delay++;
+		if (delay >= 10) {
+			delay = 0;
 		}
-		else if (Current_Headlight_Brightness > lcmConfig.headlightBrightness) {
-			Current_Headlight_Brightness--;
+		if (delay == 0) {
+			if (Current_Headlight_Brightness < lcmConfig.headlightBrightness) {
+					Current_Headlight_Brightness++;
+			}
+			else if (Current_Headlight_Brightness > lcmConfig.headlightBrightness) {
+				Current_Headlight_Brightness--;
+			}
 		}
 
 		if (isForward != data.isForward) {
