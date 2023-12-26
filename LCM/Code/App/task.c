@@ -671,6 +671,7 @@ static void Set_Headlights_Brightness(int brightness)
  **************************************************/
 void Headlights_Task(void)
 {
+	static uint8_t gear_position_last = 0;
 	static bool isForward = false;
 	static int delay = 0;
 
@@ -713,6 +714,18 @@ void Headlights_Task(void)
 	else {
 		// For now ZERO lights when stopped
 		Target_Headlight_Brightness = 0;
+
+		if (gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100) {
+			Flashlight_Detection_Time = 3100;
+		}
+		else {
+			// User double-pressed the power button, show the new brightness when idle
+			Flashlight_Detection_Time = 0;
+			if (Gear_Position >= 1 && Gear_Position <= 3) {
+				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position];
+			}
+			gear_position_last = Gear_Position;
+		}
 	}
 }
 
