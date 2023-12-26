@@ -799,7 +799,7 @@ void Buzzer_Task(void)
 				{	
 					ring_frequency++;
 					buzzer_step = 0;
-					if(ring_frequency == Gear_Position)
+					if(ring_frequency >= Gear_Position)
 					{
 						ring_frequency = 0;
 						gear_position_last = Gear_Position;
