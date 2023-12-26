@@ -135,4 +135,5 @@ uint16_t Charger_Detection_1ms = 0;
 /*
 	The current brightness of the headlights, to slowly ramp up to target brightness
 */
-uint8_t Current_Headlight_Brightness = 0;
+int Current_Headlight_Brightness = 0;
+int Target_Headlight_Brightness = 0;

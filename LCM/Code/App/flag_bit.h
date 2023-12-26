@@ -31,6 +31,9 @@ extern float Charge_Current;
 extern uint8_t V_I;
 extern uint8_t Shutdown_Cnt;
 extern uint16_t Charger_Detection_1ms;
-extern uint8_t Current_Headlight_Brightness;
+
+// Directional headlight brightness: positive = forward, negative = reverse
+extern int Current_Headlight_Brightness;
+extern int Target_Headlight_Brightness;
 
 #endif

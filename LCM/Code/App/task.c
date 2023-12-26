@@ -15,11 +15,12 @@ static void lcmConfigReset(void)
 	errCode = 0;
 }
 
+// brightnesses for Gear 1, 2, 3:
+int headlight_brightnesses[] = { 0, 150, 255 };
+int status_brightnesses[] = { WS2812_1_BRIGHTNESS, WS2812_2_BRIGHTNESS, WS2812_3_BRIGHTNESS };
+
 /**************************************************
  * @brie   :KEY1_Task()
- * @note   :KEY1任务
- * @param  :无
- * @retval :无
  **************************************************/
 void KEY1_Task(void)
 {
@@ -395,23 +396,9 @@ void WS2812_Task(void)
 	if (lcmConfig.isSet) {
 		WS2812_Measure = lcmConfig.statusbarBrightness;
 	}
-	else switch(Gear_Position)
+	else if (Gear_Position >= 1 && Gear_Position <= 3)
 	{
-		case 1: //1挡
-			WS2812_Measure = WS2812_1_BRIGHTNESS;
-		break;
-		
-		case 2:	//2挡
-			WS2812_Measure = WS2812_2_BRIGHTNESS;
-		break;
-		
-		case 3: //3挡
-			WS2812_Measure = WS2812_3_BRIGHTNESS;
-		break;
-		
-		default:
-			
-		break;
+		WS2812_Measure = status_brightnesses[Gear_Position];
 	}
 
 	if (data.state == DISABLED) {
@@ -647,109 +634,106 @@ void Charge_Task(void)
 	}
 }
 
+/**************************************************
+ * @brief  :Set_Headlights_Brightness()
+ * @note   :
+ * Brightness can be positive (forward) or negative (backward) - 0..255 (off to max bright)
+ * Map to 9999[MIN] ... 0[MAX]
+ */
+static void Set_Headlights_Brightness(int brightness)
+{
+	if (brightness > 0) { // FORWARD
+		LED_F_OFF;
+		LED_B_ON;
+	}
+	else if (brightness == 0) {
+		if (Target_Headlight_Brightness == 0) {
+			LED_B_OFF;
+			LED_F_OFF;
+		}
+	}
+	else { // BACKWARD
+		LED_B_OFF;
+		LED_F_ON;
+		brightness = -brightness;
+	}
+	int mapped_brightness = 9999 - brightness * 40;
+	if (mapped_brightness < 0)
+		mapped_brightness = 0;
+	TIM_SetCompare2(TIM1, mapped_brightness);
+}
+
+/**************************************************
+ * @brief  :Headlights_Task()
+ * @note   :Handle direction changes and fading of headlights
+ * Smooth fading during transitions is achieved by using positive and 
+ * negative brightnesses for forward/backward
+ **************************************************/
 void Headlights_Task(void)
 {
 	static bool isForward = false;
 	static int delay = 0;
+
+	delay++;
+	if (delay < 10) {
+		return;
+	}
+	delay = 0;
 
 	if(Power_Flag != 2) // Lights off 
 	{
 		LED_B_OFF;
 		LED_F_OFF;
 		TIM_SetCompare2(TIM1,0);
+		Target_Headlight_Brightness = 0;
 		Current_Headlight_Brightness = 0;
-		delay = 0;
 		return;
 	}
 
+	if (Current_Headlight_Brightness < Target_Headlight_Brightness) {
+		Current_Headlight_Brightness++;
+	}
+	else if (Current_Headlight_Brightness > Target_Headlight_Brightness) {
+		Current_Headlight_Brightness--;
+	}
+	Set_Headlights_Brightness(Current_Headlight_Brightness);
+
+	// Set new target
 	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
-		delay++;
-		if (delay >= 10) {
-			delay = 0;
-		}
-		if (delay == 0) {
-			if (Current_Headlight_Brightness < lcmConfig.headlightBrightness) {
-					Current_Headlight_Brightness++;
-			}
-			else if (Current_Headlight_Brightness > lcmConfig.headlightBrightness) {
-				Current_Headlight_Brightness--;
-			}
-		}
-
-		if (isForward != data.isForward) {
-			Current_Headlight_Brightness = 0;
-			isForward = data.isForward;
-		}
-		if (data.isForward)
-		{ // FORWARD
-			LED_F_OFF;
-			LED_B_ON;
-		}
-		else
-		{ // BACKWARD
-			LED_B_OFF;
-			LED_F_ON;
-		}
-
 		if (lcmConfig.isSet) {
-			TIM_SetCompare2(TIM1,9999 - Current_Headlight_Brightness*39);
+			Target_Headlight_Brightness = lcmConfig.headlightBrightness;
 		}
 		else {
-			switch(Gear_Position)
-			{
-				case 1:
-					// OFF
-					TIM_SetCompare2(TIM1,9999);
-				break;
-				
-				case 2:
-					// MEDIUM
-					TIM_SetCompare2(TIM1,4000);
-				break;
-				
-				case 3:
-					// HIGH
-					TIM_SetCompare2(TIM1,0);
-				break;
-				
-				default:
-					if (errCode == 0)
-						errCode = 4;
-					
-				break;
+			if (Gear_Position >= 1 && Gear_Position <= 3) {
+				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position];
 			}
 		}
+		Target_Headlight_Brightness *= data.isForward ? 1 : -1;
 	}
 	else {
 		// For now ZERO lights when stopped
-		LED_F_OFF;
-		LED_B_OFF;
-		TIM_SetCompare2(TIM1,9999);
-		Current_Headlight_Brightness = 0;
+		Target_Headlight_Brightness = 0;
 	}
 }
 
 /**************************************************
  * @brie   :Buzzer_Task()
- * @note   :蜂鸣器任务 
- * @param  :无
- * @retval :无
  **************************************************/
 void Buzzer_Task(void)
 {
 	static uint8_t buzzer_step = 0;
-	static uint8_t gear_position_last = 0; //上一次的档位
+	static uint8_t gear_position_last = 0;
 	static uint8_t ring_frequency = 0;
 	static uint16_t sound_frequency = 0;
 	
-	if(Power_Flag != 2 || Buzzer_Flag == 1) //VESC断电或蜂鸣器关闭 
+	if(Power_Flag != 2 || Buzzer_Flag == 1)
 	{
 		BUZZER_OFF;
 		buzzer_step = 0;
 		return;
 	}
 	
-	if(Buzzer_Frequency == 0 && gear_position_last == Gear_Position) //蜂鸣器响的频率为0或上一次的档位等于这次的档位
+	if(Buzzer_Frequency == 0 && gear_position_last == Gear_Position)
 	{
 		BUZZER_OFF;
 		buzzer_step = 0;
@@ -820,9 +804,6 @@ void Buzzer_Task(void)
 
 /**************************************************
  * @brie   :Usart_Task()
- * @note   :串口任务 
- * @param  :无
- * @retval :无
  **************************************************/
 void Usart_Task(void)
 {
