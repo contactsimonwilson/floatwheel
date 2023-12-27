@@ -398,7 +398,7 @@ void WS2812_Task(void)
 	}
 	else if (Gear_Position >= 1 && Gear_Position <= 3)
 	{
-		WS2812_Measure = status_brightnesses[Gear_Position];
+		WS2812_Measure = status_brightnesses[Gear_Position - 1];
 	}
 
 	if (data.state == DISABLED) {
@@ -706,7 +706,7 @@ void Headlights_Task(void)
 		}
 		else {
 			if (Gear_Position >= 1 && Gear_Position <= 3) {
-				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position];
+				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position - 1];
 			}
 		}
 		Target_Headlight_Brightness *= data.isForward ? 1 : -1;
@@ -722,7 +722,7 @@ void Headlights_Task(void)
 			// User double-pressed the power button, show the new brightness when idle
 			Flashlight_Detection_Time = 0;
 			if (Gear_Position >= 1 && Gear_Position <= 3) {
-				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position];
+				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position - 1];
 			}
 			gear_position_last = Gear_Position;
 		}
