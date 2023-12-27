@@ -648,8 +648,8 @@ static void Set_Headlights_Brightness(int brightness)
 	}
 	else if (brightness == 0) {
 		if (Target_Headlight_Brightness == 0) {
-			LED_B_OFF;
-			LED_F_OFF;
+			LED_B_ON;// ON means OFF, WTF
+			LED_F_ON;
 		}
 	}
 	else { // BACKWARD
