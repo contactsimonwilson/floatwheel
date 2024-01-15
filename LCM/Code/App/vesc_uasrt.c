@@ -11,52 +11,52 @@ dataPackage data;
 lcmConfig_t lcmConfig;
 uint8_t errCode = 0;
 
-uint8_t protocol_buff[256]; //·¢ËÍ»º³åÇø
+uint8_t protocol_buff[256]; //å‘é€ç¼“å†²åŒº
 /**************************************************
  * @brie   :Send_Pack_Data()
- * @note   :·¢ËÍÒ»°üÊı¾İ
- * @param  :payload Òª·¢ËÍÊı¾İ°üµÄÆğÊ¼µØÖ·
- *          len Êı¾İ°ü³¤¶È
- * @retval :ÎŞ
+ * @note   :å‘é€ä¸€åŒ…æ•°æ®
+ * @param  :payload è¦å‘é€æ•°æ®åŒ…çš„èµ·å§‹åœ°å€
+ *          len æ•°æ®åŒ…é•¿åº¦
+ * @retval :æ— 
  **************************************************/
 void Send_Pack_Data(uint8_t *payload,uint16_t len) 
 {
-//	uint8_t protocol_buff[256]; //·¢ËÍ»º³åÇø
+//	uint8_t protocol_buff[256]; //å‘é€ç¼“å†²åŒº
 	uint8_t count = 0;
-	uint16_t crcpayload = crc16(payload, len);  //¼ÆËãĞ£Ñé 
+	uint16_t crcpayload = crc16(payload, len);  //è®¡ç®—æ ¡éªŒ 
 	
 	/*
-		Ğ­Òé¸ñÊ½
+		åè®®æ ¼å¼
 	
-		ÆğÊ¼×Ö½Ú£¨Ò»¸ö×Ö½Ú£© + Êı¾İ°ü³¤¶È£¨Ò»¸ö»òÁ½¸ö×Ö½Ú£© + Êı¾İ°ü£¨N¸ö×Ö½Ú£© + Ğ£Ñé£¨Á½¸ö×Ö½Ú£© + Í£Ö¹×Ö½Ú£¨Ò»¸ö×Ö½Ú£©
+		èµ·å§‹å­—èŠ‚ï¼ˆä¸€ä¸ªå­—èŠ‚ï¼‰ + æ•°æ®åŒ…é•¿åº¦ï¼ˆä¸€ä¸ªæˆ–ä¸¤ä¸ªå­—èŠ‚ï¼‰ + æ•°æ®åŒ…ï¼ˆNä¸ªå­—èŠ‚ï¼‰ + æ ¡éªŒï¼ˆä¸¤ä¸ªå­—èŠ‚ï¼‰ + åœæ­¢å­—èŠ‚ï¼ˆä¸€ä¸ªå­—èŠ‚ï¼‰
 	
-		ÆğÊ¼×Ö½Ú:	0x02Êı¾İ°ü³¤¶È1-256¸ö×Ö½Ú
-					0x03Êı¾İ°ü³¤¶È³¬¹ı256¸ö×Ö½Ú
+		èµ·å§‹å­—èŠ‚:	0x02æ•°æ®åŒ…é•¿åº¦1-256ä¸ªå­—èŠ‚
+					0x03æ•°æ®åŒ…é•¿åº¦è¶…è¿‡256ä¸ªå­—èŠ‚
 	
-		Êı¾İ°ü³¤¶È: ÆğÊ¼×Ö½Ú0x02 Êı¾İ°üÕ¼Ò»¸ö×Ö½Ú
-	                ÆğÊ¼×Ö½Ú0x03 Êı¾İ°üÕ¼Á½¸ö×Ö½Ú
+		æ•°æ®åŒ…é•¿åº¦: èµ·å§‹å­—èŠ‚0x02 æ•°æ®åŒ…å ä¸€ä¸ªå­—èŠ‚
+	                èµ·å§‹å­—èŠ‚0x03 æ•°æ®åŒ…å ä¸¤ä¸ªå­—èŠ‚
 	
-		Êı¾İ°ü:  	Êı¾İ°üµÚÒ»¸ö×Ö½ÚÎªÊı¾İ°üID
+		æ•°æ®åŒ…:  	æ•°æ®åŒ…ç¬¬ä¸€ä¸ªå­—èŠ‚ä¸ºæ•°æ®åŒ…ID
 	
-		Ğ£Ñé:		CRCĞ£Ñé Á½¸ö×Ö½Ú 
+		æ ¡éªŒ:		CRCæ ¡éªŒ ä¸¤ä¸ªå­—èŠ‚ 
 	    
-		Í£Ö¹×Ö½Ú:   ¹Ì¶¨0x03
+		åœæ­¢å­—èŠ‚:   å›ºå®š0x03
 	
 	*/
 	
-	if (len <= 256) //Êı¾İ°ü³¤¶È²»´óÓÚ256¸ö×Ö½Ú
+	if (len <= 256) //æ•°æ®åŒ…é•¿åº¦ä¸å¤§äº256ä¸ªå­—èŠ‚
 	{
 		protocol_buff[count++] = 2;
 		protocol_buff[count++] = len;
 	}
-	else //Êı¾İ°ü³¤¶È´óÓÚ256¸ö×Ö½Ú
+	else //æ•°æ®åŒ…é•¿åº¦å¤§äº256ä¸ªå­—èŠ‚
 	{
 		protocol_buff[count++] = 3;
 		protocol_buff[count++] = (uint8_t)(len >> 8);
 		protocol_buff[count++] = (uint8_t)(len & 0xFF);
 	}
 
-	memcpy(&protocol_buff[count], payload, len);  //°ÑÊı¾İ°ü¸´ÖÆµ½Ğ­ÒéÀï
+	memcpy(&protocol_buff[count], payload, len);  //æŠŠæ•°æ®åŒ…å¤åˆ¶åˆ°åè®®é‡Œ
 
 	count += len;
 	protocol_buff[count++] = (uint8_t)(crcpayload >> 8);
@@ -68,9 +68,9 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
 
 /**************************************************
  * @brie   :Get_Vesc_Pack_Data()
- * @note   :»ñÈ¡Ò»°üÊı¾İ
- * @param  :id Êı¾İ°üid
- * @retval :ÎŞ
+ * @note   :è·å–ä¸€åŒ…æ•°æ®
+ * @param  :id æ•°æ®åŒ…id
+ * @retval :æ— 
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
@@ -104,9 +104,9 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 
 /**************************************************
  * @brie   :buffer_get_int16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öint16_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºä¸¤ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªint16_t
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»
+ * @retval :æ— 
  **************************************************/
 int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 	int16_t res =	((uint16_t) buffer[*index]) << 8 |
@@ -116,9 +116,9 @@ int16_t buffer_get_int16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öuint16_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºä¸¤ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªuint16_t
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»
+ * @retval :æ— 
  **************************************************/
 uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 	uint16_t res = 	((uint16_t) buffer[*index]) << 8 |
@@ -128,9 +128,9 @@ uint16_t buffer_get_uint16(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_int32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öint32_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºå››ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªint32_t
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»
+ * @retval :æ— 
  **************************************************/
 int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 	int32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -142,9 +142,9 @@ int32_t buffer_get_int32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_uint32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öuint32_t
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºå››ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªuint32_t
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»
+ * @retval :æ— 
  **************************************************/
 uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 	uint32_t res =	((uint32_t) buffer[*index]) << 24 |
@@ -156,18 +156,18 @@ uint32_t buffer_get_uint32(const uint8_t *buffer, int32_t *index) {
 }
 /**************************************************
  * @brie   :buffer_get_float16()
- * @note   :»º³åÇøÁ½¸ö×Ö½ÚÆ´Ò»¸öfloat
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ  scale·ÖÄ¸
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºä¸¤ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªfloat
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»  scaleåˆ†æ¯
+ * @retval :æ— 
  **************************************************/
 float buffer_get_float16(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int16(buffer, index) / scale;
 }
 /**************************************************
  * @brie   :buffer_get_float32()
- * @note   :»º³åÇøËÄ¸ö×Ö½ÚÆ´Ò»¸öfloat
- * @param  :bufferµØÖ·  indexµØÖ·Æ«ÒÆ	scale·ÖÄ¸
- * @retval :ÎŞ
+ * @note   :ç¼“å†²åŒºå››ä¸ªå­—èŠ‚æ‹¼ä¸€ä¸ªfloat
+ * @param  :bufferåœ°å€  indexåœ°å€åç§»	scaleåˆ†æ¯
+ * @retval :æ— 
  **************************************************/
 float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int32(buffer, index) / scale;
@@ -175,9 +175,9 @@ float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
 
 /**************************************************
  * @brie   :Protocol_Parse()
- * @note   :Ğ­Òé½âÎö
- * @param  :message ½ÓÊÕµ½Êı¾İµÄÆğÊ¼µØÖ·
- * @retval :0 ½âÎö³É¹¦ 1½âÎöÊ§°Ü
+ * @note   :åè®®è§£æ
+ * @param  :message æ¥æ”¶åˆ°æ•°æ®çš„èµ·å§‹åœ°å€
+ * @retval :0 è§£ææˆåŠŸ 1è§£æå¤±è´¥
  **************************************************/
 uint8_t Protocol_Parse(uint8_t * message)
 {
@@ -208,7 +208,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 	if(crcpayload != (((uint16_t)message[counter+len])<<8|
 		             ((uint16_t)message[counter+len+1])))
 	{
-		return 1; //crc²»¶Ô
+		return 1; //crcä¸å¯¹
 	}
 	
 	id = message[counter++];
@@ -254,22 +254,36 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.dutyCycleNow = pdata[ind++];
 			data.rpm = buffer_get_float16(pdata, 1.0, &ind);
 			data.avgInputCurrent = buffer_get_float16(pdata, 1.0, &ind);
-			data.inpVoltage 		= buffer_get_float16(pdata, 10.0, &ind);
+			data.inpVoltage = buffer_get_float16(pdata, 10.0, &ind);
 
 			uint8_t lcmset = pdata[ind++];
 			if ((lcmset > 0) && (len >= 17)) {
-				lcmConfig.isSet = true;
-				lcmConfig.headlightBrightness = pdata[ind++];
-				lcmConfig.statusbarBrightness = pdata[ind++];
-				lcmConfig.statusbarMode = pdata[ind++];
-				lcmConfig.dutyBeep = pdata[ind++];
-				lcmConfig.boardOff = pdata[ind++];
+				// Float package is 0-100 range. Adjust as needed
+				uint8_t headlightBrightness = pdata[ind++] * 255/100;
+				uint8_t headlightIdleBrightness = pdata[ind++] * 255/100;
+				uint8_t statusbarBrightness = pdata[ind++] * 255/100;
+				uint8_t statusbarMode = pdata[ind++];
+				uint8_t dutyBeep = pdata[ind++];
+				uint8_t boardOff = pdata[ind++];
+
+				// Only set isSet if something changed
+				// Allows use of the power button to go back to default behaviour
+				if (headlightBrightness != lcmConfig.headlightBrightness || headlightIdleBrightness != lcmConfig.headlightIdleBrightness || statusbarBrightness != lcmConfig.statusbarBrightness || statusbarMode != lcmConfig.statusbarMode || dutyBeep != lcmConfig.dutyBeep || boardOff != lcmConfig.boardOff) {
+					lcmConfig.isSet = true;
+				}
+
+				lcmConfig.headlightBrightness = headlightBrightness;
+				lcmConfig.headlightIdleBrightness = headlightIdleBrightness;
+				lcmConfig.statusbarBrightness = statusbarBrightness;
+				lcmConfig.statusbarMode = statusbarMode;
+				lcmConfig.dutyBeep = dutyBeep;
+				lcmConfig.boardOff = boardOff;
 			}
 	}
 	if (data.rpm > 500)
-		data.isForward = true;
+		data.isForward = data.state != RUNNING_UPSIDEDOWN;
 	if (data.rpm < -500)
-		data.isForward = false;
+		data.isForward = data.state == RUNNING_UPSIDEDOWN;
 
 	return 0;
 }
