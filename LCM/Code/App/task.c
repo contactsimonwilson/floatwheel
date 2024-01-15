@@ -24,7 +24,7 @@ int status_brightnesses[] = { WS2812_1_BRIGHTNESS, WS2812_2_BRIGHTNESS, WS2812_3
  **************************************************/
 void KEY1_Task(void)
 {
-	if(KEY1_State == 0)// || Power_Flag == 3)  //³äµçÆ÷¹©µç°´¼ü²»Æð×÷ÓÃ
+	if(KEY1_State == 0)// || Power_Flag == 3)  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç°´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		return;
 	}
@@ -41,6 +41,7 @@ void KEY1_Task(void)
 		case 2:         // Double click
 			if(Power_Flag == 2) // Power on completed
 			{
+				lcmConfig.isSet = false; // Ignore LCM config when manually changing brightness
 				Gear_Position++;
 				if(Gear_Position == 4)
 				{
@@ -333,9 +334,9 @@ static void WS2812_Handtest(void)
 
 /**************************************************
  * @brie   :WS2812_Task()
- * @note   :WS2812ÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :WS2812ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void WS2812_Task(void)
 {
@@ -425,13 +426,13 @@ void WS2812_Task(void)
 
 /**************************************************
  * @brie   :Power_Task()
- * @note   :µçÔ´ÈÎÎñ 
- * @param  :ÎÞ
- * @retval :ÎÞ
+ * @note   :ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ 
+ * @param  :ï¿½ï¿½
+ * @retval :ï¿½ï¿½
  **************************************************/
 void Power_Task(void)
 {
-	static uint8_t power_flag_last = 0; //ÉÏÒ»´ÎµÄ×´Ì¬
+	static uint8_t power_flag_last = 0; //ï¿½ï¿½Ò»ï¿½Îµï¿½×´Ì¬
 	static uint8_t power_step = 0;
 
 	if (Power_Flag == 4) {
@@ -586,7 +587,7 @@ void Charge_Task(void)
 		break;
 		
 		case 1:
-			if(Charge_Time > 1000)  //ÑÓÊ±1S
+			if(Charge_Time > 1000)  //ï¿½ï¿½Ê±1S
 			{
 				charge_step = 2;
 			}
@@ -714,6 +715,9 @@ void Headlights_Task(void)
 	else {
 		// For now ZERO lights when stopped
 		Target_Headlight_Brightness = 0;
+		if (lcmConfig.isSet) {
+			Target_Headlight_Brightness = lcmConfig.headlightIdleBrightness;
+		}
 
 		if (gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100) {
 			Flashlight_Detection_Time = 3100;
@@ -721,7 +725,7 @@ void Headlights_Task(void)
 		else {
 			// User double-pressed the power button, show the new brightness when idle
 			Flashlight_Detection_Time = 0;
-			if (Gear_Position >= 1 && Gear_Position <= 3) {
+			if (Gear_Position >= 1 && Gear_Position <= 3 && !lcmConfig.isSet) {
 				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position - 1];
 			}
 			gear_position_last = Gear_Position;

@@ -22,6 +22,7 @@ typedef struct {
 
 typedef struct {
 	uint8_t headlightBrightness;
+	uint8_t headlightIdleBrightness;
 	uint8_t statusbarBrightness;
 	uint8_t statusbarMode;
 	uint8_t dutyBeep;
