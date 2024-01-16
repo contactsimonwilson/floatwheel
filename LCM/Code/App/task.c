@@ -24,7 +24,7 @@ int status_brightnesses[] = { WS2812_1_BRIGHTNESS, WS2812_2_BRIGHTNESS, WS2812_3
  **************************************************/
 void KEY1_Task(void)
 {
-	if(KEY1_State == 0)// || Power_Flag == 3)  //��������簴����������
+	if(KEY1_State == 0)// || Power_Flag == 3)  //充电器供电按键不起作用
 	{
 		return;
 	}
@@ -334,9 +334,9 @@ static void WS2812_Handtest(void)
 
 /**************************************************
  * @brie   :WS2812_Task()
- * @note   :WS2812���� 
- * @param  :��
- * @retval :��
+ * @note   :WS2812任务 
+ * @param  :无
+ * @retval :无
  **************************************************/
 void WS2812_Task(void)
 {
@@ -426,9 +426,9 @@ void WS2812_Task(void)
 
 /**************************************************
  * @brie   :Power_Task()
- * @note   :��Դ���� 
- * @param  :��
- * @retval :��
+ * @note   :电源任务 
+ * @param  :无
+ * @retval :无
  **************************************************/
 void Power_Task(void)
 {
