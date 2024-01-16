@@ -25,7 +25,7 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
 	uint8_t count = 0;
 	uint16_t crcpayload = crc16(payload, len);  //计算校验 
 	
-/*
+	/*
 		协议格式
 	
 		起始字节（一个字节） + 数据包长度（一个或两个字节） + 数据包（N个字节） + 校验（两个字节） + 停止字节（一个字节）

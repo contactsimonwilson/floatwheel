@@ -432,7 +432,7 @@ void WS2812_Task(void)
  **************************************************/
 void Power_Task(void)
 {
-	static uint8_t power_flag_last = 0; //��һ�ε�״̬
+	static uint8_t power_flag_last = 0; //上一次的状态
 	static uint8_t power_step = 0;
 
 	if (Power_Flag == 4) {
