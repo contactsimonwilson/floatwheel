@@ -82,6 +82,8 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 	if (id == COMM_CUSTOM_APP_DATA) {
 		command[1] = 101;
 		command[2] = 24; // FLOAT_COMMAND_POLL
+		// Broadcast hardware string
+		// Broadcast firmware version
 		len = 3;
 	}
 	
@@ -265,6 +267,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 				uint8_t statusbarMode = pdata[ind++];
 				uint8_t dutyBeep = pdata[ind++];
 				uint8_t boardOff = pdata[ind++];
+				// Iterate through the rest of the payload (command + data pairs, mapping through to various supprted actions)
 
 				// Only set isSet if something changed
 				// Allows use of the power button to go back to default behaviour
@@ -275,9 +278,6 @@ uint8_t Protocol_Parse(uint8_t * message)
 				lcmConfig.headlightBrightness = headlightBrightness;
 				lcmConfig.headlightIdleBrightness = headlightIdleBrightness;
 				lcmConfig.statusbarBrightness = statusbarBrightness;
-				lcmConfig.statusbarMode = statusbarMode;
-				lcmConfig.dutyBeep = dutyBeep;
-				lcmConfig.boardOff = boardOff;
 			}
 	}
 	if (data.rpm > 500)
