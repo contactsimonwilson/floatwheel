@@ -4,12 +4,21 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
+#define FIRMWARE_ID "FWADV_1_0_0"
+
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;
 
 dataPackage data;
 lcmConfig_t lcmConfig;
 uint8_t errCode = 0;
+
+
+typedef enum {
+	STATUSBAR_MODE = 0,
+	DUTY_BEEP = 1,
+	POWER_OFF = 2,
+} ControlCommands;
 
 uint8_t protocol_buff[256]; //发送缓冲区
 /**************************************************
@@ -74,7 +83,7 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
  **************************************************/
 void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 {
-	uint8_t command[12];
+	uint8_t command[32];
 	int len = 1;
 	
 	command[0] = id;
@@ -82,9 +91,13 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 	if (id == COMM_CUSTOM_APP_DATA) {
 		command[1] = 101;
 		command[2] = 24; // FLOAT_COMMAND_POLL
-		// Broadcast hardware string
-		// Broadcast firmware version
 		len = 3;
+		if (!lcmConfig.isSet) {
+			// write firmware id string to command
+			int firmwareIdSize = sizeof(FIRMWARE_ID);
+			memcpy(&command[3], FIRMWARE_ID, firmwareIdSize);
+			len += firmwareIdSize;
+		}
 	}
 	
 	if (id == COMM_CUSTOM_DEBUG) {
@@ -173,6 +186,21 @@ float buffer_get_float16(const uint8_t *buffer, float scale, int32_t *index) {
  **************************************************/
 float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
     return (float)buffer_get_int32(buffer, index) / scale;
+}
+
+void Process_Command(uint8_t command, uint8_t data)
+{
+	switch (command) {
+		case STATUSBAR_MODE:
+			lcmConfig.statusbarMode = data;
+			return;
+		case DUTY_BEEP:
+			lcmConfig.dutyBeep = data;
+			return;
+		case POWER_OFF:
+			lcmConfig.boardOff = data;
+			return;
+		}
 }
 
 /**************************************************
@@ -278,6 +306,11 @@ uint8_t Protocol_Parse(uint8_t * message)
 				lcmConfig.headlightBrightness = headlightBrightness;
 				lcmConfig.headlightIdleBrightness = headlightIdleBrightness;
 				lcmConfig.statusbarBrightness = statusbarBrightness;
+
+				// Process generic command/config
+				while (ind < len) {
+					Process_Command(pdata[ind++], pdata[ind++]);
+				}
 			}
 	}
 	if (data.rpm > 500)
