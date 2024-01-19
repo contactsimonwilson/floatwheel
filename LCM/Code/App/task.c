@@ -10,9 +10,11 @@ static void lcmConfigReset(void)
 	lcmConfig.headlightBrightness = 0;
 	lcmConfig.statusbarBrightness = 30;
 	lcmConfig.statusbarMode = 0;
-	lcmConfig.dutyBeep = 90;
 	lcmConfig.boardOff = 0;
 	errCode = 0;
+	// Persist across power cycles
+	// lcmConfig.bootAnimation = DEFAULT;
+	// lcmConfig.dutyBeep = 90;
 }
 
 // brightnesses for Gear 1, 2, 3:
@@ -202,21 +204,30 @@ void WS2812_Boot(void)
 {
 	uint8_t i;
 	uint8_t num = floor(Power_Time / 100) + 1;
-	// Rainbow: uint8_t rgbMap[10][3] = {{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}};
-	// Red, White, Blue:
-	//uint8_t rgbMap[10][3] = {{255,0,0}, {255,0,0}, {255,0,0}, {255,255,255}, {255,255,255}, {255,255,255}, {255,255,255}, {0,0,255}, {0,0,255}, {0,0,255}};
-	uint8_t rgbMap[10][3] = {{255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}};
+	uint8_t bootAnims[][10][3] = {
+		// Default
+		{{0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}},
+		// Rainbow
+		{{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}},
+		// Red White Blue
+		{{255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}}
+};
+
+	if (lcmConfig.bootAnimation >= sizeof(bootAnims)) {
+		// Invalid boot animation
+		lcmConfig.bootAnimation = 0;
+	}
 
 	while (num > 10) {
 		num -= 10;
 	}
 	for (i=0;i<num;i++) {
 		// red and green are swapped!
-		WS2812_Set_Colour(i,rgbMap[i][1] >> 1,rgbMap[i][0] >> 1,rgbMap[i][2] >> 1);
+		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 1,bootAnims[lcmConfig.bootAnimation][i][0] >> 1,bootAnims[lcmConfig.bootAnimation][i][2] >> 1);
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,rgbMap[i][1] >> 5,rgbMap[i][0] >> 5,rgbMap[i][2] >> 5);
+		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 5,bootAnims[lcmConfig.bootAnimation][i][0] >> 5,bootAnims[lcmConfig.bootAnimation][i][2] >> 5);
 	}
 
 	WS2812_Refresh();
@@ -1070,7 +1081,7 @@ void VESC_State_Task(void)
 		}
 	}
 
-	if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff > 0))
+	if(((Shutdown_Time_M > 0) || (Shutdown_Time_S >= 10000)) && (lcmConfig.boardOff))
 	{
 		// After 10 seconds of idle we allow the board to be shut down via app
 		Power_Flag = 4;
