@@ -13,14 +13,20 @@ dataPackage data;
 lcmConfig_t lcmConfig;
 uint8_t errCode = 0;
 
-
 typedef enum {
-	STATUSBAR_MODE = 0,
-	DUTY_BEEP = 1,
-	POWER_OFF = 2,
+	// Core light control
+	HEADLIGHT_BRIGHTNESS = 0,
+	HEADLIGHT_IDLE_BRIGHTNESS = 1,
+	STATUSBAR_BRIGHTNESS = 2,
+	// Additional light config
+	STATUSBAR_MODE = 10,
+	BOOT_ANIMATION = 11,
+	// Misc config
+	DUTY_BEEP = 50,
+	// Sys commands
+	POWER_OFF = 100,
 } ControlCommands;
 
-uint8_t protocol_buff[256]; //发送缓冲区
 /**************************************************
  * @brie   :Send_Pack_Data()
  * @note   :发送一包数据
@@ -30,7 +36,7 @@ uint8_t protocol_buff[256]; //发送缓冲区
  **************************************************/
 void Send_Pack_Data(uint8_t *payload,uint16_t len) 
 {
-//	uint8_t protocol_buff[256]; //发送缓冲区
+	uint8_t protocol_buff[256]; //发送缓冲区
 	uint8_t count = 0;
 	uint16_t crcpayload = crc16(payload, len);  //计算校验 
 	
@@ -191,14 +197,26 @@ float buffer_get_float32(const uint8_t *buffer, float scale, int32_t *index) {
 void Process_Command(uint8_t command, uint8_t data)
 {
 	switch (command) {
+		case HEADLIGHT_BRIGHTNESS:
+			lcmConfig.headlightBrightness = data;
+			return;
+		case HEADLIGHT_IDLE_BRIGHTNESS:
+			lcmConfig.headlightIdleBrightness = data;
+			return;
+		case STATUSBAR_BRIGHTNESS:
+			lcmConfig.statusbarBrightness = data;
+			return;
 		case STATUSBAR_MODE:
 			lcmConfig.statusbarMode = data;
+			return;
+		case BOOT_ANIMATION:
+			lcmConfig.bootAnimation = data;
 			return;
 		case DUTY_BEEP:
 			lcmConfig.dutyBeep = data;
 			return;
 		case POWER_OFF:
-			lcmConfig.boardOff = data;
+			lcmConfig.boardOff = data == 1;
 			return;
 		}
 }
@@ -286,20 +304,15 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.avgInputCurrent = buffer_get_float16(pdata, 1.0, &ind);
 			data.inpVoltage = buffer_get_float16(pdata, 10.0, &ind);
 
-			uint8_t lcmset = pdata[ind++];
-			if ((lcmset > 0) && (len >= 17)) {
+			if ((len >= 16)) {
 				// Float package is 0-100 range. Adjust as needed
 				uint8_t headlightBrightness = pdata[ind++] * 255/100;
 				uint8_t headlightIdleBrightness = pdata[ind++] * 255/100;
 				uint8_t statusbarBrightness = pdata[ind++] * 255/100;
-				uint8_t statusbarMode = pdata[ind++];
-				uint8_t dutyBeep = pdata[ind++];
-				uint8_t boardOff = pdata[ind++];
-				// Iterate through the rest of the payload (command + data pairs, mapping through to various supprted actions)
 
 				// Only set isSet if something changed
 				// Allows use of the power button to go back to default behaviour
-				if (headlightBrightness != lcmConfig.headlightBrightness || headlightIdleBrightness != lcmConfig.headlightIdleBrightness || statusbarBrightness != lcmConfig.statusbarBrightness || statusbarMode != lcmConfig.statusbarMode || dutyBeep != lcmConfig.dutyBeep || boardOff != lcmConfig.boardOff) {
+				if (headlightBrightness != lcmConfig.headlightBrightness || headlightIdleBrightness != lcmConfig.headlightIdleBrightness || statusbarBrightness != lcmConfig.statusbarBrightness) {
 					lcmConfig.isSet = true;
 				}
 
@@ -309,7 +322,9 @@ uint8_t Protocol_Parse(uint8_t * message)
 
 				// Process generic command/config
 				while (ind < len) {
-					Process_Command(pdata[ind++], pdata[ind++]);
+					uint8_t command = pdata[ind++];
+					uint8_t data = pdata[ind++];
+					Process_Command(command, data);
 				}
 			}
 	}
