@@ -7,9 +7,14 @@
 static void lcmConfigReset(void)
 {
 	lcmConfig.isSet = false;
+	lcmConfig.headlightBrightness = 0;
+	lcmConfig.statusbarBrightness = 30;
+	lcmConfig.statusbarMode = 0;
 	lcmConfig.boardOff = 0;
 	errCode = 0;
-	// Intentionally dont reset most config so we can remember without EEPROM
+	// Persist across power cycles
+	// lcmConfig.bootAnimation = DEFAULT;
+	// lcmConfig.dutyBeep = 90;
 }
 
 // brightnesses for Gear 1, 2, 3:
