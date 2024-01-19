@@ -207,7 +207,7 @@ void Process_Command(uint8_t command, uint8_t data)
 			lcmConfig.statusbarBrightness = data;
 			return;
 		case STATUSBAR_MODE:
-			lcmConfig.statusbarMode = data;
+			lcmConfig.statusbarMode = data; // Currently not implemented
 			return;
 		case BOOT_ANIMATION:
 			lcmConfig.bootAnimation = data;
