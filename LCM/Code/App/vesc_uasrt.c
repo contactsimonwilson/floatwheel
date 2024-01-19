@@ -304,7 +304,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 			data.avgInputCurrent = buffer_get_float16(pdata, 1.0, &ind);
 			data.inpVoltage = buffer_get_float16(pdata, 10.0, &ind);
 
-			if ((len >= 16)) {
+			if ((len >= ind + 3)) {
 				// Float package is 0-100 range. Adjust as needed
 				uint8_t headlightBrightness = pdata[ind++] * 255/100;
 				uint8_t headlightIdleBrightness = pdata[ind++] * 255/100;
