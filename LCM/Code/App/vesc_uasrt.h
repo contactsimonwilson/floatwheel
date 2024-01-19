@@ -20,13 +20,20 @@ typedef struct {
 	bool isHandtest;
 }dataPackage;
 
+typedef enum {
+	DEFAULT = 0,
+	REDWHITEBLUE = 1,
+	RAINBOW = 2,
+} BootAnimation;
+
 typedef struct {
 	uint8_t headlightBrightness;
 	uint8_t headlightIdleBrightness;
 	uint8_t statusbarBrightness;
 	uint8_t statusbarMode;
 	uint8_t dutyBeep;
-	uint8_t boardOff;
+	bool boardOff;
+	BootAnimation bootAnimation;
 	bool isSet;
 }lcmConfig_t;
 
