@@ -1067,6 +1067,7 @@ typedef enum {
 } COMM_PACKET_ID;
 
 #define 	COMM_CUSTOM_DEBUG 250
+#define 	COMM_CHARGE_INFO 251
 
 // CAN commands
 typedef enum {

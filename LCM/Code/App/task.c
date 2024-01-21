@@ -11,6 +11,7 @@ static void lcmConfigReset(void)
 	lcmConfig.statusbarBrightness = 30;
 	lcmConfig.statusbarMode = 0;
 	lcmConfig.boardOff = 0;
+	lcmConfig.chargeCutoffVoltage = 0;
 	errCode = 0;
 	// Persist across power cycles
 	// lcmConfig.bootAnimation = DEFAULT;
@@ -534,10 +535,10 @@ void Charge_Task(void)
 
 	if(Charge_Flag > 0)
 	{
+		bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
 		if(V_I == 0 && Charge_Time > 150)
 		{
-			if(Charge_Current < CHARGE_CURRENT && Charge_Current > 0)
-			{
+			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
 				Charge_Flag = 3;
 				Shutdown_Cnt++;
 				if(Shutdown_Cnt>10)
@@ -561,7 +562,7 @@ void Charge_Task(void)
 			}
 			if((Charge_Flag == 3) && (Shutdown_Cnt > 10))
 			{
-				if (Charge_Voltage < CHARGING_VOLTAGE)
+				if (Charge_Voltage < CHARGING_VOLTAGE && !isAboveCutoff)
 				{
 					// wait for charger to get unplugged to reset back to normal state
 					Charge_Flag = 0;
@@ -837,6 +838,7 @@ void Usart_Task(void)
 {
 	static uint8_t usart_step = 0;
 	static uint8_t alternate = 0;
+	static uint16_t lastChargeStateCommandTime = 0;
 	uint8_t result;
 
 	if(Power_Flag != 2)
@@ -853,8 +855,6 @@ void Usart_Task(void)
 		data.fault = 0;
 		data.isForward = true;
 
-		lcmConfigReset();
-
 		usart_step = 0;
 		
 		return;
@@ -864,18 +864,16 @@ void Usart_Task(void)
 	{
 		case 0:
 			// Try the custom app command for the first 2 seconds then fall back to generic GET_VALUES
-			if ((data.floatPackageSupported == false) && (Power_Time > VESC_BOOT_TIME * 2))
+			if ((data.floatPackageSupported == false) && (Power_Time > VESC_BOOT_TIME * 2)) {
 				Get_Vesc_Pack_Data(COMM_GET_VALUES);
-			else {
-				if (alternate) {
-					Get_Vesc_Pack_Data(COMM_CUSTOM_DEBUG);
-				}
-				else {
-					Get_Vesc_Pack_Data(COMM_CUSTOM_APP_DATA);
-				}
+			} else if (data.floatPackageSupported == true && (Power_Time - lastChargeStateCommandTime > CHARGE_COMMAND_TIME)) {
+				// Send charge state command every x seconds
+				lastChargeStateCommandTime = Power_Time;
+				Get_Vesc_Pack_Data(COMM_CHARGE_INFO);
+			} else {
+				Get_Vesc_Pack_Data(DEBUG_ENABLED && alternate ? COMM_CUSTOM_DEBUG : COMM_CUSTOM_APP_DATA);
+				alternate = 1 - alternate;
 			}
-
-			alternate = 1 - alternate;
 
 			usart_step = 1;
 		break;

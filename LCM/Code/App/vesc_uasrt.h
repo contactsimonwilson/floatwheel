@@ -32,6 +32,7 @@ typedef struct {
 	uint8_t statusbarBrightness;
 	uint8_t statusbarMode;
 	uint8_t dutyBeep;
+	float chargeCutoffVoltage;
 	bool boardOff;
 	BootAnimation bootAnimation;
 	bool isSet;
