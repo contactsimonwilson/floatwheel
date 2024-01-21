@@ -25,6 +25,7 @@ typedef enum {
 	DUTY_BEEP = 50,
 	// Sys commands
 	POWER_OFF = 100,
+	CHARGE_CUTOFF = 101,
 } ControlCommands;
 
 /**************************************************
@@ -81,6 +82,15 @@ void Send_Pack_Data(uint8_t *payload,uint16_t len)
 	USART1_Send_Bytes(protocol_buff,count);
 }
 
+void buffer_append_int16(uint8_t* buffer, int16_t number, uint8_t *index) {
+	buffer[(*index)++] = number >> 8;
+	buffer[(*index)++] = number;
+}
+
+void buffer_append_float16(uint8_t* buffer, float number, uint8_t scale, uint8_t *index) {
+    buffer_append_int16(buffer, (int16_t)(number * scale), index);
+}
+
 /**************************************************
  * @brie   :Get_Vesc_Pack_Data()
  * @note   :获取一包数据
@@ -105,11 +115,22 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 			len += firmwareIdSize;
 		}
 	}
-	
+
+	if (id == COMM_CHARGE_INFO) {
+		command[0] = COMM_CUSTOM_APP_DATA;
+		command[1] = 101;
+		command[2] = 28; 											// FLOAT_COMMAND_CHARGESTATE
+ 		command[3] = Charge_Flag == 2 ? 1: 0; 						// -charging: 1/0 aka true/false
+		uint8_t ind = 4;
+		buffer_append_float16(command, Charge_Voltage, 10, &ind); 	// -voltage: 16bit float divided by 10
+		buffer_append_float16(command, Charge_Current, 10, &ind); 	// -current: 16bit float divided by 10
+		len = 8;
+	}
+
 	if (id == COMM_CUSTOM_DEBUG) {
 		command[0] = COMM_CUSTOM_APP_DATA;
 		command[1] = 101;
-		command[2] = 28; // FLOAT_COMMAND_LCM_DEBUG
+		command[2] = 99; // FLOAT_COMMAND_LCM_DEBUG - this doesn't exist
 		command[3] = Power_Flag;
 		command[4] = Charge_Flag;
 		command[5] = Buzzer_Flag;
@@ -217,6 +238,9 @@ void Process_Command(uint8_t command, uint8_t data)
 			return;
 		case POWER_OFF:
 			lcmConfig.boardOff = data == 1;
+			return;
+		case CHARGE_CUTOFF:
+			lcmConfig.chargeCutoffVoltage = data;
 			return;
 		}
 }
