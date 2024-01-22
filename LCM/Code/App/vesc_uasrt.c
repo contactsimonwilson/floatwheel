@@ -312,9 +312,9 @@ uint8_t Protocol_Parse(uint8_t * message)
 		  if (len < 12) {
 				break;
 			}
-		  uint8_t magicnr = pdata[ind++];
-		  uint8_t floatcmd = pdata[ind++];
-		  if ((magicnr != 101) || (floatcmd != FLOAT_COMMAND_LCM_POLL)) {
+		  	uint8_t magicnr = pdata[ind++];
+		  	uint8_t floatcmd = pdata[ind++];
+			if ((magicnr != 101) || (floatcmd != FLOAT_COMMAND_LCM_POLL)) {
 				break;
 			}
 			data.floatPackageSupported = true;

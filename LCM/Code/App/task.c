@@ -531,11 +531,11 @@ void CheckPowerLevel(float battery_voltage)
  **************************************************/
 void Charge_Task(void)
 {
-	static uint8_t charge_step = 0; 
+	static uint8_t charge_step = 0;
+	bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
 
 	if(Charge_Flag > 0)
 	{
-		bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
 		if(V_I == 0 && Charge_Time > 150)
 		{
 			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
@@ -562,7 +562,7 @@ void Charge_Task(void)
 			}
 			if((Charge_Flag == 3) && (Shutdown_Cnt > 10))
 			{
-				if (Charge_Voltage < CHARGING_VOLTAGE && !isAboveCutoff)
+				if (Charge_Voltage < CHARGING_VOLTAGE)
 				{
 					// wait for charger to get unplugged to reset back to normal state
 					Charge_Flag = 0;
@@ -837,8 +837,7 @@ void Buzzer_Task(void)
 void Usart_Task(void)
 {
 	static uint8_t usart_step = 0;
-	static uint8_t alternate = 0;
-	static uint16_t lastChargeStateCommandTime = 0;
+	static uint8_t commandIndex = 0; // Store a rotating index so we can implement relevant frequencies of commands
 	uint8_t result;
 
 	if(Power_Flag != 2)
@@ -856,6 +855,7 @@ void Usart_Task(void)
 		data.isForward = true;
 
 		usart_step = 0;
+		commandIndex = 0;
 		
 		return;
 	}
@@ -866,13 +866,24 @@ void Usart_Task(void)
 			// Try the custom app command for the first 2 seconds then fall back to generic GET_VALUES
 			if ((data.floatPackageSupported == false) && (Power_Time > VESC_BOOT_TIME * 2)) {
 				Get_Vesc_Pack_Data(COMM_GET_VALUES);
-			} else if (data.floatPackageSupported == true && (Power_Time - lastChargeStateCommandTime > CHARGE_COMMAND_TIME)) {
-				// Send charge state command every x seconds
-				lastChargeStateCommandTime = Power_Time;
-				Get_Vesc_Pack_Data(COMM_CHARGE_INFO);
 			} else {
-				Get_Vesc_Pack_Data(DEBUG_ENABLED && alternate ? COMM_CUSTOM_DEBUG : COMM_CUSTOM_APP_DATA);
-				alternate = 1 - alternate;
+				uint8_t command = COMM_CUSTOM_APP_DATA;
+
+				if (commandIndex % 20 == 0) {
+					// Sending lighting every 20th frame
+					command = COMM_CHARGE_INFO;
+				} else if (DEBUG_ENABLED && commandIndex % 2 == 0) {
+					// Send debug info every 2nd frame if enabled
+					command = COMM_CUSTOM_DEBUG;
+				}
+
+				Get_Vesc_Pack_Data(command);
+
+				if (commandIndex == 255) {
+					commandIndex = 0;
+				} else {
+					commandIndex++;
+				}
 			}
 
 			usart_step = 1;
