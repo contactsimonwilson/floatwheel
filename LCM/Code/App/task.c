@@ -533,10 +533,9 @@ void Charge_Task(void)
 {
 	static uint8_t charge_step = 0; 
 	bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
+
 	if(Charge_Flag > 0)
 	{
-
-	if(Charge_Flag > 0) {
 		if(V_I == 0 && Charge_Time > 150)
 		{
 			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0)) {
