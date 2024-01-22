@@ -532,13 +532,14 @@ void CheckPowerLevel(float battery_voltage)
 void Charge_Task(void)
 {
 	static uint8_t charge_step = 0; 
-
+	bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
 	if(Charge_Flag > 0)
 	{
-		bool isAboveCutoff = lcmConfig.chargeCutoffVoltage > 0 && Charge_Voltage > lcmConfig.chargeCutoffVoltage;
+
+	if(Charge_Flag > 0) {
 		if(V_I == 0 && Charge_Time > 150)
 		{
-			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
+			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0)) {
 				Charge_Flag = 3;
 				Shutdown_Cnt++;
 				if(Shutdown_Cnt>10)
@@ -562,7 +563,7 @@ void Charge_Task(void)
 			}
 			if((Charge_Flag == 3) && (Shutdown_Cnt > 10))
 			{
-				if (Charge_Voltage < CHARGING_VOLTAGE && !isAboveCutoff)
+				if (Charge_Voltage < CHARGING_VOLTAGE)
 				{
 					// wait for charger to get unplugged to reset back to normal state
 					Charge_Flag = 0;
