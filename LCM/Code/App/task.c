@@ -8,7 +8,8 @@ static void lcmConfigReset(void)
 {
 	lcmConfig.isSet = false;
 	lcmConfig.headlightBrightness = 0;
-	lcmConfig.statusbarBrightness = 30;
+	lcmConfig.headlightIdleBrightness = 0;
+	lcmConfig.statusbarBrightness = 5;
 	lcmConfig.statusbarMode = 0;
 	lcmConfig.boardOff = 0;
 	lcmConfig.chargeCutoffVoltage = 0;
@@ -204,19 +205,19 @@ static void WS2812_VESC(void)
 void WS2812_Boot(void)
 {
 	uint8_t i;
-	uint8_t num = floor(Power_Time / 100) + 1;
+	uint8_t num = floor(Power_Time / 500) + 1;
 	uint8_t bootAnims[][10][3] = {
-		// Default
-		{{0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}, {0,255,255}},
+		// Default (blue...green)
+		{{10,0,30}, {9,3,27}, {8,6,24}, {7,9,21}, {6,12,18}, {5,15,15}, {4,18,12}, {3,21,9}, {2,24,6}, {1,27,3}},
 		// Rainbow
-		{{255,0,0}, {255,127,0}, {255,255,0}, {127,255,0}, {0,255,0}, {0,255,127}, {0,255,255}, {0,127,255}, {0,0,255}, {127,0,255}},
+		{{30,0,0}, {30,15,0}, {30,30,0}, {15,30,0}, {0,30,0}, {0,30,15}, {0,30,30}, {0,15,30}, {0,0,30}, {15,0,30}},
 		// Red White Blue
-		{{255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}, {255,255,255}, {0,0,255}, {255,0,0}}
+		{{30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}}
 };
 
 	if (lcmConfig.bootAnimation >= sizeof(bootAnims)) {
 		// Invalid boot animation
-		lcmConfig.bootAnimation = 0;
+		lcmConfig.bootAnimation = 1;
 	}
 
 	while (num > 10) {
@@ -228,7 +229,7 @@ void WS2812_Boot(void)
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 5,bootAnims[lcmConfig.bootAnimation][i][0] >> 5,bootAnims[lcmConfig.bootAnimation][i][2] >> 5);
+		WS2812_Set_Colour(i,0,0,0);//bootAnims[lcmConfig.bootAnimation][i][1] >> 5,bootAnims[lcmConfig.bootAnimation][i][0] >> 5,bootAnims[lcmConfig.bootAnimation][i][2] >> 5);
 	}
 
 	WS2812_Refresh();
@@ -661,8 +662,8 @@ static void Set_Headlights_Brightness(int brightness)
 	}
 	else if (brightness == 0) {
 		if (Target_Headlight_Brightness == 0) {
-			LED_B_ON;// ON means OFF, WTF
-			LED_F_ON;
+			LED_B_OFF;
+			LED_F_OFF;
 		}
 	}
 	else { // BACKWARD
@@ -698,7 +699,7 @@ void Headlights_Task(void)
 	{
 		LED_B_OFF;
 		LED_F_OFF;
-		TIM_SetCompare2(TIM1,0);
+		TIM_SetCompare2(TIM1,9999);
 		Target_Headlight_Brightness = 0;
 		Current_Headlight_Brightness = 0;
 		return;

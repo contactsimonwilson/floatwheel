@@ -4,7 +4,7 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
-#define FIRMWARE_ID "FWADV_1_0_0"
+#define FIRMWARE_ID "FWADV_2_0_0"
 
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;
@@ -120,8 +120,9 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 		command[0] = COMM_CUSTOM_APP_DATA;
 		command[1] = 101;
 		command[2] = 28; 											// FLOAT_COMMAND_CHARGESTATE
- 		command[3] = Charge_Flag == 2 ? 1: 0; 						// -charging: 1/0 aka true/false
-		uint8_t ind = 4;
+ 		command[3] = 151; 											// -charging: 1/0 aka true/false
+ 		command[4] = Charge_Flag == 2 ? 1: 0; 						// -charging: 1/0 aka true/false
+		uint8_t ind = 5;
 		buffer_append_float16(command, Charge_Voltage, 10, &ind); 	// -voltage: 16bit float divided by 10
 		buffer_append_float16(command, Charge_Current, 10, &ind); 	// -current: 16bit float divided by 10
 		len = 8;

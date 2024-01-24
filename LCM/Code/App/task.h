@@ -18,7 +18,7 @@ typedef enum
 #define   BATTERY_STRING      		20
 #define   SHUTDOWN_TIME		  		20
 #define   VESC_RPM            		250
-#define   VESC_BOOT_TIME      		4000
+#define   VESC_BOOT_TIME      		5000
 #define   VESC_SHUTDOWN_TIME      	1000
 #define   DUTY_CYCLE          		0.9
 #define   VOLTAGE_RECEIPT     		0.02
@@ -26,9 +26,9 @@ typedef enum
 #define   DEBUG_ENABLED				false		// enable debug messages	
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200
-#define   WS2812_1_BRIGHTNESS 		100
-#define   WS2812_2_BRIGHTNESS 		60
-#define   WS2812_3_BRIGHTNESS 		30
+#define   WS2812_1_BRIGHTNESS 		20
+#define   WS2812_2_BRIGHTNESS 		10
+#define   WS2812_3_BRIGHTNESS 		5
 #define   CHARGE_CURRENT			0.24
 #define   DETECTION_SWITCH_TIME     500
 #define   CHARGER_DETECTION_DELAY	1000
