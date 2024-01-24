@@ -1392,6 +1392,7 @@ typedef enum {
 	// Sys commands
 	POWER_OFF = 100,
 	CHARGE_CUTOFF = 101,
+	DEBUG = 255,
 } control_commands;
 
 #endif /* DATATYPES_H_ */
