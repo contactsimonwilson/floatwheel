@@ -23,7 +23,6 @@ typedef enum
 #define   DUTY_CYCLE          		0.9
 #define   VOLTAGE_RECEIPT     		0.02
 #define	  CHARGE_COMMAND_TIME		1000 		// frequency of notifying the float package of current charge state
-#define   DEBUG_ENABLED				false		// enable debug messages	
 /*******************************************************************************/
 #define   VESC_RPM_WIDTH      		-200
 #define   WS2812_1_BRIGHTNESS 		20
