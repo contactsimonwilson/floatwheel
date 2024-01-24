@@ -26,6 +26,7 @@ typedef enum {
 	// Sys commands
 	POWER_OFF = 100,
 	CHARGE_CUTOFF = 101,
+	DEBUG = 255,
 } ControlCommands;
 
 /**************************************************
@@ -130,7 +131,7 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 	if (id == COMM_CUSTOM_DEBUG) {
 		command[0] = COMM_CUSTOM_APP_DATA;
 		command[1] = 101;
-		command[2] = 99; // FLOAT_COMMAND_LCM_DEBUG - this doesn't exist
+		command[2] = 99; // FLOAT_COMMAND_LCM_DEBUG
 		command[3] = Power_Flag;
 		command[4] = Charge_Flag;
 		command[5] = Buzzer_Flag;
@@ -241,6 +242,9 @@ void Process_Command(uint8_t command, uint8_t data)
 			return;
 		case CHARGE_CUTOFF:
 			lcmConfig.chargeCutoffVoltage = data;
+			return;
+		case DEBUG:
+			lcmConfig.debug = data == 1;
 			return;
 		}
 }

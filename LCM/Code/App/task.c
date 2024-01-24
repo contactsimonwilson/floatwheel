@@ -16,6 +16,7 @@ static void lcmConfigReset(void)
 	// Persist across power cycles
 	// lcmConfig.bootAnimation = DEFAULT;
 	// lcmConfig.dutyBeep = 90;
+	// lcmConfig.debug = false;
 }
 
 // brightnesses for Gear 1, 2, 3:
@@ -872,7 +873,7 @@ void Usart_Task(void)
 				if (commandIndex % 20 == 0) {
 					// Sending lighting every 20th frame
 					command = COMM_CHARGE_INFO;
-				} else if (DEBUG_ENABLED && commandIndex % 2 == 0) {
+				} else if (lcmConfig.debug && commandIndex % 2 == 0) {
 					// Send debug info every 2nd frame if enabled
 					command = COMM_CUSTOM_DEBUG;
 				}
