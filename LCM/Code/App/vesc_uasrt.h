@@ -36,6 +36,7 @@ typedef struct {
 	bool boardOff;
 	BootAnimation bootAnimation;
 	bool isSet;
+	bool debug;
 }lcmConfig_t;
 
 extern uint8_t VESC_RX_Buff[256];
