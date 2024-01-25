@@ -687,13 +687,11 @@ void Headlights_Task(void)
 {
 	static uint8_t gear_position_last = 0;
 	static bool isForward = false;
-	static int delay = 0;
 
-	delay++;
-	if (delay < 10) {
+	if (Flashlight_Time < 10) {
 		return;
 	}
-	delay = 0;
+	Flashlight_Time = 0;
 
 	if(Power_Flag != 2) // Lights off 
 	{
@@ -714,22 +712,22 @@ void Headlights_Task(void)
 	Set_Headlights_Brightness(Current_Headlight_Brightness);
 
 	// Set new target
+	int new_brightness = Target_Headlight_Brightness;
 	if ((data.state < RUNNING_FLYWHEEL) || (ADC1_Val > 2) || (ADC2_Val > 2)) {
 		if (lcmConfig.isSet) {
-			Target_Headlight_Brightness = lcmConfig.headlightBrightness;
+			new_brightness = lcmConfig.headlightBrightness;
 		}
 		else {
 			if (Gear_Position >= 1 && Gear_Position <= 3) {
-				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position - 1];
+				new_brightness = headlight_brightnesses[Gear_Position - 1];
 			}
 		}
-		Target_Headlight_Brightness *= data.isForward ? 1 : -1;
+		new_brightness *= data.isForward ? 1 : -1;
 	}
 	else {
-		// For now ZERO lights when stopped
-		Target_Headlight_Brightness = 0;
+		new_brightness = 0;
 		if (lcmConfig.isSet) {
-			Target_Headlight_Brightness = lcmConfig.headlightIdleBrightness;
+			new_brightness = lcmConfig.headlightIdleBrightness;
 		}
 
 		if (gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100) {
@@ -739,10 +737,14 @@ void Headlights_Task(void)
 			// User double-pressed the power button, show the new brightness when idle
 			Flashlight_Detection_Time = 0;
 			if (Gear_Position >= 1 && Gear_Position <= 3 && !lcmConfig.isSet) {
-				Target_Headlight_Brightness = headlight_brightnesses[Gear_Position - 1];
+				new_brightness = headlight_brightnesses[Gear_Position - 1];
 			}
 			gear_position_last = Gear_Position;
 		}
+	}
+	if (new_brightness != Target_Headlight_Brightness) {
+		Target_Headlight_Brightness = new_brightness;
+		Flashlight_Time = 0;
 	}
 }
 

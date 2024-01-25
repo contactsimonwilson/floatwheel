@@ -353,9 +353,9 @@ uint8_t Protocol_Parse(uint8_t * message)
 				}
 			}
 	}
-	if (data.rpm > 500)
+	if (data.rpm > 100)
 		data.isForward = data.state != RUNNING_UPSIDEDOWN;
-	if (data.rpm < -500)
+	if (data.rpm < -100)
 		data.isForward = data.state == RUNNING_UPSIDEDOWN;
 
 	return 0;
