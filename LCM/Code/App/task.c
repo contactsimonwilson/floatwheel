@@ -225,11 +225,11 @@ void WS2812_Boot(void)
 	}
 	for (i=0;i<num;i++) {
 		// red and green are swapped!
-		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 1,bootAnims[lcmConfig.bootAnimation][i][0] >> 1,bootAnims[lcmConfig.bootAnimation][i][2] >> 1);
+		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1],bootAnims[lcmConfig.bootAnimation][i][0],bootAnims[lcmConfig.bootAnimation][i][2]);
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,0,0,0);//bootAnims[lcmConfig.bootAnimation][i][1] >> 5,bootAnims[lcmConfig.bootAnimation][i][0] >> 5,bootAnims[lcmConfig.bootAnimation][i][2] >> 5);
+		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 4,bootAnims[lcmConfig.bootAnimation][i][0] >> 4,bootAnims[lcmConfig.bootAnimation][i][2] >> 4);
 	}
 
 	WS2812_Refresh();
