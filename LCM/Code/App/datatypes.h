@@ -1379,4 +1379,19 @@ typedef enum {
 	DISABLED = 15
 } float_state;
 
+typedef enum {
+	// Core light control
+	HEADLIGHT_BRIGHTNESS = 0,
+	HEADLIGHT_IDLE_BRIGHTNESS = 1,
+	STATUSBAR_BRIGHTNESS = 2,
+	// Additional light config
+	STATUSBAR_MODE = 10,
+	BOOT_ANIMATION = 11,
+	// Misc config
+	DUTY_BEEP = 50,
+	// Sys commands
+	POWER_OFF = 100,
+	CHARGE_CUTOFF = 101,
+} control_commands;
+
 #endif /* DATATYPES_H_ */

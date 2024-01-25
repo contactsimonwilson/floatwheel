@@ -1,5 +1,6 @@
 #include "vesc_uasrt.h"
 #include "flag_bit.h"
+#include "eeprom.h"
 
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
@@ -12,21 +13,6 @@ extern float ADC1_Val, ADC2_Val;
 dataPackage data;
 lcmConfig_t lcmConfig;
 uint8_t errCode = 0;
-
-typedef enum {
-	// Core light control
-	HEADLIGHT_BRIGHTNESS = 0,
-	HEADLIGHT_IDLE_BRIGHTNESS = 1,
-	STATUSBAR_BRIGHTNESS = 2,
-	// Additional light config
-	STATUSBAR_MODE = 10,
-	BOOT_ANIMATION = 11,
-	// Misc config
-	DUTY_BEEP = 50,
-	// Sys commands
-	POWER_OFF = 100,
-	CHARGE_CUTOFF = 101,
-} ControlCommands;
 
 /**************************************************
  * @brie   :Send_Pack_Data()
@@ -125,7 +111,7 @@ void Get_Vesc_Pack_Data(COMM_PACKET_ID id)
 		uint8_t ind = 5;
 		buffer_append_float16(command, Charge_Voltage, 10, &ind); 	// -voltage: 16bit float divided by 10
 		buffer_append_float16(command, Charge_Current, 10, &ind); 	// -current: 16bit float divided by 10
-		len = 8;
+		len = 9;
 	}
 
 	if (id == COMM_CUSTOM_DEBUG) {
@@ -229,13 +215,23 @@ void Process_Command(uint8_t command, uint8_t data)
 			lcmConfig.statusbarBrightness = data;
 			return;
 		case STATUSBAR_MODE:
-			lcmConfig.statusbarMode = data; // Currently not implemented
+			if (data != lcmConfig.statusbarMode) {
+				lcmConfig.statusbarMode = data; // Currently not implemented
+				// Just write into the position of the command IDs since they'll all be bytes anyway
+				EEPROM_WriteByte(STATUSBAR_MODE, data);
+			}
 			return;
 		case BOOT_ANIMATION:
-			lcmConfig.bootAnimation = data;
+			if (data != lcmConfig.bootAnimation) {
+				lcmConfig.bootAnimation = data;
+				EEPROM_WriteByte(BOOT_ANIMATION, data);
+			}
 			return;
 		case DUTY_BEEP:
-			lcmConfig.dutyBeep = data;
+			if (data != lcmConfig.dutyBeep) {
+				lcmConfig.dutyBeep = data;
+				EEPROM_WriteByte(DUTY_BEEP, data);
+			}
 			return;
 		case POWER_OFF:
 			lcmConfig.boardOff = data == 1;

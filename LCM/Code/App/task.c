@@ -1,5 +1,8 @@
 #include "task.h"
 #include "math.h"
+#include "eeprom.h"
+
+#define  BOOT_ANIMATION_COUNT  3
 
 /**************************************************
 + * Reset LCM Config
@@ -13,10 +16,20 @@ static void lcmConfigReset(void)
 	lcmConfig.statusbarMode = 0;
 	lcmConfig.boardOff = 0;
 	lcmConfig.chargeCutoffVoltage = 0;
+	lcmConfig.bootAnimation = DEFAULT;
+	lcmConfig.dutyBeep = 90;
 	errCode = 0;
-	// Persist across power cycles
-	// lcmConfig.bootAnimation = DEFAULT;
-	// lcmConfig.dutyBeep = 90;
+
+	EEPROM_ReadByte(BOOT_ANIMATION, &lcmConfig.bootAnimation);
+	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation > (BOOT_ANIMATION_COUNT - 1)) {
+		lcmConfig.bootAnimation = 0;
+	}
+
+	EEPROM_ReadByte(DUTY_BEEP, &lcmConfig.dutyBeep);
+	if (lcmConfig.dutyBeep < 1 || lcmConfig.dutyBeep > 100) {
+		lcmConfig.dutyBeep = 90;
+	}
+
 }
 
 // brightnesses for Gear 1, 2, 3:
@@ -39,6 +52,7 @@ void KEY1_Task(void)
 			if(Power_Flag != 2)
 			{
 				Power_Flag = 1;  // VESC power on
+				lcmConfigReset();
 			}
 		break;
 
@@ -56,7 +70,6 @@ void KEY1_Task(void)
 
 		case 3:         // Long press
 			if (Power_Flag < 3) {
-				lcmConfigReset();
 				Power_Flag = 4;  // VESC power off
 				Power_Time = 0;
 			}
@@ -217,7 +230,7 @@ void WS2812_Boot(void)
 
 	if (lcmConfig.bootAnimation >= sizeof(bootAnims)) {
 		// Invalid boot animation
-		lcmConfig.bootAnimation = 1;
+		lcmConfig.bootAnimation = 0;
 	}
 
 	while (num > 10) {
