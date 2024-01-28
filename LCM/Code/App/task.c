@@ -775,6 +775,9 @@ void Buzzer_Task(void)
 	static uint8_t gear_position_last = 0;
 	static uint8_t ring_frequency = 0;
 	static uint16_t sound_frequency = 0;
+
+	BUZZER_OFF;
+	return;
 	
 	if(Power_Flag != 2 || Buzzer_Flag == 1)
 	{
