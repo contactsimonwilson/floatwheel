@@ -116,7 +116,8 @@ static void WS2812_Power_Display(uint8_t brightness)
 		WS2812_Set_AllColours(1, numleds, r, g, b);
 	}
 	else {
-		WS2812_Set_AllColours(5, 6, brightness, 0, brightness);
+		// Two purple LEDs in the center, only needed for dev/debug (happens right after boot)
+		//WS2812_Set_AllColours(5, 6, brightness, 0, brightness);
 	}
 	WS2812_Refresh();
 }
@@ -242,7 +243,7 @@ void WS2812_Boot(void)
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1] >> 4,bootAnims[lcmConfig.bootAnimation][i][0] >> 4,bootAnims[lcmConfig.bootAnimation][i][2] >> 4);
+		WS2812_Set_Colour(i,0,0,0);//bootAnims[lcmConfig.bootAnimation][i][1] >> 4,bootAnims[lcmConfig.bootAnimation][i][0] >> 4,bootAnims[lcmConfig.bootAnimation][i][2] >> 4);
 	}
 
 	WS2812_Refresh();
@@ -717,10 +718,14 @@ void Headlights_Task(void)
 	}
 
 	if (Current_Headlight_Brightness < Target_Headlight_Brightness) {
-		Current_Headlight_Brightness++;
+		Current_Headlight_Brightness += 3;
+		if (Current_Headlight_Brightness > Target_Headlight_Brightness)
+			Current_Headlight_Brightness = Target_Headlight_Brightness;
 	}
 	else if (Current_Headlight_Brightness > Target_Headlight_Brightness) {
-		Current_Headlight_Brightness--;
+		Current_Headlight_Brightness -= 3;
+		if (Current_Headlight_Brightness < Target_Headlight_Brightness)
+			Current_Headlight_Brightness = Target_Headlight_Brightness;
 	}
 	Set_Headlights_Brightness(Current_Headlight_Brightness);
 
@@ -862,7 +867,7 @@ void Usart_Task(void)
 		data.rpm = 0;
 		data.dutyCycleNow = 0;
 		data.avgInputCurrent = 0;
-		data.inpVoltage = 0;
+		//data.inpVoltage = 0;
 
 		// float package data
 		data.floatPackageSupported = false;
@@ -1012,9 +1017,11 @@ void VESC_State_Task(void)
 		return;
 
 	Vesc_Data_Ready = false;
-		
+
 	// Not charging? Get voltage from VESC
-	CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
+	if (data.inpVoltage > 0) {
+		CheckPowerLevel((data.inpVoltage+1)/BATTERY_STRING);
+	}
 
 	if(data.dutyCycleNow < 0)
 	{
