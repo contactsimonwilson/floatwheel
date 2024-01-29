@@ -554,10 +554,10 @@ void Charge_Task(void)
 		if(V_I == 0 && Charge_Time > 150)
 		{
 			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
-				Charge_Flag = 3;
 				Shutdown_Cnt++;
 				if(Shutdown_Cnt>10)
 				{
+					Charge_Flag = 3;
 					Charge_Time = 0;
 					V_I = 1;
 					LED1_ON; // Use ADC3 to measure charge voltage
