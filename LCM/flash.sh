@@ -5,14 +5,14 @@ firmware_file=$1
 
 # Check that the firmware file was provided
 if [ -z "$firmware_file" ]; then
-	echo "Usage: ./flash.sh <firmware hex file>"
-	exit 1
+    echo "Usage: ./flash.sh <firmware hex file>"
+    exit 1
 fi
 
 # Check that the firmware file exists
 if [ ! -f "$firmware_file" ]; then
-	echo "File not found: $firmware_file"
-	exit 1
+    echo "File not found: $firmware_file"
+    exit 1
 fi
 
 # Get the extension of the firmware file
@@ -21,29 +21,30 @@ extension="${extension##*.}"
 
 # Verify that the firmware file is a .hex
 if [ "$extension" != "hex" ]; then
-	echo "File is not a .hex file"
-	exit 1
+    echo "File is not a .hex file"
+    exit 1
 fi
 
 # Check that the pyocd command is installed
 if [ ! -x "$(command -v pyocd)" ]; then
-	echo "pyocd is not installed"
-	echo "Install it with: python -m pip install --upgrade pyocd==0.34.3"
-	exit 1
+    echo "pyocd is not installed or was not found in your PATH"
+    echo "Install it with: python -m pip install --upgrade pyocd==0.34.3"
+    echo "If you have installed pyocd and it cannot be found, please add it to your PATH"
+    exit 1
 fi
 
 # Check that the pyocd command is installed
 if [ ! -x "$(command -v st-flash)" ]; then
-	echo "ST-Link tools are not installed"
-	echo "See https://github.com/stlink-org/stlink"
-	exit 1
+    echo "ST-Link tools are not installed"
+    echo "See https://github.com/stlink-org/stlink"
+    exit 1
 fi
 
 # Check that HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack exists
 if [ ! -f "./HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack" ]; then
-	echo "HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack not found"
-	echo "Download it from https://github.com/surfdado/floatwheel"
-	exit 1
+    echo "HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack not found"
+    echo "Download it from https://github.com/surfdado/floatwheel"
+    exit 1
 fi
 
 # Delimiter to separate the output
@@ -51,11 +52,11 @@ delimiter="========"
 
 # Check that pyocd.yaml exists
 if [ ! -f "./pyocd.yaml" ]; then
-	echo "$delimiter"
-	echo "pyocd.yaml not found, generating it..."
-	printf "pack:\n  - HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack\n" >pyocd.yaml
-	echo "pyocd.yaml generated"
-	echo "$delimiter"
+    echo "$delimiter"
+    echo "pyocd.yaml not found, generating it..."
+    printf "pack:\n  - HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack\n" >pyocd.yaml
+    echo "pyocd.yaml generated"
+    echo "$delimiter"
 fi
 
 # Erase and flash the firmware
