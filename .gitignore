@@ -1,4 +1,6 @@
 .DS_Store
+*.hex
+
 LCM/Project/MDK5/Objects/
 LCM/Project/MDK5/LCM_Light_Control_IO_WS2812_New.uvguix.*
 LCM/Project/MDK5/Listings/
