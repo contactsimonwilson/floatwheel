@@ -23,11 +23,11 @@ if errorlevel 1 (
     echo.
     echo Install Python 3.7 using this link: https://www.python.org/ftp/python/3.7.9/python-3.7.9-amd64.exe
     echo.
-	echo === IMPORTANT ===
+    echo === IMPORTANT ===
     echo Choose "Custom",
     echo Accept all defaults on page 1, click Next
-	echo On page 2, check the checkbox "add to environment"
-	echo no other changes required
+    echo On page 2, check the checkbox "add to environment"
+    echo no other changes required
     pause
     exit 1
 )
@@ -49,7 +49,7 @@ st-flash >nul 2>nul
 if errorlevel 1 (
     echo ST-Link tools are not installed
     echo.
-	echo Download and run the ST-Link Installer:
+    echo Download and run the ST-Link Installer:
     echo https://www.st.com/en/development-tools/stsw-link004.html
     pause
     exit 1
@@ -76,10 +76,11 @@ if not exist "pyocd.yaml" (
 REM Erase and flash the firmware
 echo Erasing the old firmware...
 pyocd erase -c -t hk32f030mf4p6 --config pyocd.yaml
-
+echo.
 echo Flashing the new firmware...
 pyocd load "%firmware_file%" -t hk32f030mf4p6 --config pyocd.yaml
-
+echo.
 echo Please check the flashing messages to make sure the flashing was successful.
 echo Float on!
+echo.
 pause
