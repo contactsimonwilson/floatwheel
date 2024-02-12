@@ -174,12 +174,12 @@ static void WS2812_VESC(void)
 				else if (data.dutyCycleNow > 70) {
 					WS2812_Set_AllColours(1, 7,brightness/3,brightness/3,0);
 				}
-				else if (data.dutyCycleNow > 60) {
+				/*else if (data.dutyCycleNow > 60) {
 					WS2812_Set_AllColours(1, 6,0,brightness/3,0);
 				}
 				else if (data.dutyCycleNow > 50) {
 					WS2812_Set_AllColours(1, 5,0,brightness/4,0);
-				}
+				}*/
 				else if (Power_Display_Flag > 6) {
 					// Voltage below 40%?
 					// Display 1/2/3 red dots at full brightness

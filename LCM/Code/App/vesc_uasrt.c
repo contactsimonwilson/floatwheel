@@ -5,7 +5,7 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
-#define FIRMWARE_ID "FWADV_2_0_0"
+#define FIRMWARE_ID "FWADV_2_0_1"
 
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;
@@ -356,6 +356,8 @@ uint8_t Protocol_Parse(uint8_t * message)
 		data.isForward = data.state != RUNNING_UPSIDEDOWN;
 	if (data.rpm < -100)
 		data.isForward = data.state == RUNNING_UPSIDEDOWN;
+	if (data.state > RUNNING_FLYWHEEL)
+		data.isForward = true
 
 	return 0;
 }
