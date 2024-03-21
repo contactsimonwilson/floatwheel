@@ -229,7 +229,7 @@ void WS2812_Boot(void)
 		{{30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}, {30,30,30}, {0,0,30}, {30,0,0}}
 };
 
-	if (lcmConfig.bootAnimation >= sizeof(bootAnims)) {
+	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation >= BOOT_ANIMATION_COUNT) {
 		// Invalid boot animation
 		lcmConfig.bootAnimation = 0;
 	}
