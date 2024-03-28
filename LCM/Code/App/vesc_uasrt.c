@@ -5,7 +5,7 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
-#define FIRMWARE_ID "FWADV_2_0_1"
+#define FIRMWARE_ID "FWADV_2_0_2"
 
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;

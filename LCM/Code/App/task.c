@@ -132,10 +132,14 @@ static void WS2812_VESC(void)
 	uint8_t pos, red;
 	uint8_t green = 0;
 	uint8_t blue = WS2812_Measure;
+	if (data.rpm > 250) {
+		unsigned int fade = 1 + (data.rpm - 250) / 25;	// values from 1 to 31 (max rpm allowed is 1000)
+		blue = blue / fade;
+	}
 	if (data.floatPackageSupported) {
-		// make footpad indicators purple if float package commands are received successfully!
-		green = WS2812_Measure / 3;
-		blue = WS2812_Measure / 3;
+		// make footpad indicators teal if float package commands are received successfully!
+		blue = blue / 2;
+		green = blue;
 	}
 	
 	switch(WS2812_Flag)
@@ -555,7 +559,7 @@ void Charge_Task(void)
 		{
 			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
 				Shutdown_Cnt++;
-				if(Shutdown_Cnt>10)
+				if(Shutdown_Cnt>20)
 				{
 					Charge_Flag = 3;
 					Charge_Time = 0;

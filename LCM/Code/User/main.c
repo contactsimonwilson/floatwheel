@@ -75,5 +75,5 @@ int main(void)
 		ADC_Task();
 		VESC_State_Task();
 	}
+	return 0;
 }
-
