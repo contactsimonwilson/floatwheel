@@ -721,17 +721,19 @@ void Headlights_Task(void)
 		return;
 	}
 
-	if (Current_Headlight_Brightness < Target_Headlight_Brightness) {
-		Current_Headlight_Brightness += 3;
-		if (Current_Headlight_Brightness > Target_Headlight_Brightness)
-			Current_Headlight_Brightness = Target_Headlight_Brightness;
+	if ((Target_Headlight_Brightness != 0) || (Current_Headlight_Brightness != 0)) {
+		if (Current_Headlight_Brightness < Target_Headlight_Brightness) {
+			Current_Headlight_Brightness += 3;
+			if (Current_Headlight_Brightness > Target_Headlight_Brightness)
+				Current_Headlight_Brightness = Target_Headlight_Brightness;
+		}
+		else if (Current_Headlight_Brightness > Target_Headlight_Brightness) {
+			Current_Headlight_Brightness -= 3;
+			if (Current_Headlight_Brightness < Target_Headlight_Brightness)
+				Current_Headlight_Brightness = Target_Headlight_Brightness;
+		}
+		Set_Headlights_Brightness(Current_Headlight_Brightness);
 	}
-	else if (Current_Headlight_Brightness > Target_Headlight_Brightness) {
-		Current_Headlight_Brightness -= 3;
-		if (Current_Headlight_Brightness < Target_Headlight_Brightness)
-			Current_Headlight_Brightness = Target_Headlight_Brightness;
-	}
-	Set_Headlights_Brightness(Current_Headlight_Brightness);
 
 	// Set new target
 	int new_brightness = Target_Headlight_Brightness;
