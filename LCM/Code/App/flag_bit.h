@@ -29,7 +29,7 @@ extern uint8_t Buzzer_Frequency;
 extern uint16_t Flashlight_Detection_Time;
 extern float Charge_Current;
 extern uint8_t V_I;
-extern uint8_t Shutdown_Cnt;
+extern uint16_t Shutdown_Cnt;
 extern uint16_t Charger_Detection_1ms;
 
 // Directional headlight brightness: positive = forward, negative = reverse

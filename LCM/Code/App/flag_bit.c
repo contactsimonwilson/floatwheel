@@ -126,7 +126,7 @@ uint8_t V_I = 1;
 /*
 	Counter used while detecting end of charging
 */
-uint8_t Shutdown_Cnt = 0;
+uint16_t Shutdown_Cnt = 0;
 /*
 	Charger detection time.
 */

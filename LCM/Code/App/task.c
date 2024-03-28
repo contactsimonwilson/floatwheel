@@ -559,7 +559,7 @@ void Charge_Task(void)
 		{
 			if((Charge_Current < CHARGE_CURRENT && Charge_Current > 0) || isAboveCutoff) {
 				Shutdown_Cnt++;
-				if(Shutdown_Cnt>20)
+				if(Shutdown_Cnt>1000)
 				{
 					Charge_Flag = 3;
 					Charge_Time = 0;

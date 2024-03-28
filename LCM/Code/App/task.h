@@ -28,7 +28,7 @@ typedef enum
 #define   WS2812_1_BRIGHTNESS 		20
 #define   WS2812_2_BRIGHTNESS 		10
 #define   WS2812_3_BRIGHTNESS 		5
-#define   CHARGE_CURRENT			0.1
+#define   CHARGE_CURRENT			0.24
 #define   DETECTION_SWITCH_TIME     500
 #define   CHARGER_DETECTION_DELAY	1000
 
