@@ -752,6 +752,11 @@ void Headlights_Task(void)
 		new_brightness = 0;
 		if (lcmConfig.isSet) {
 			new_brightness = lcmConfig.headlightIdleBrightness;
+			float pitch = data.pitch > 0 ? data.pitch : -data.pitch;
+			if ((pitch > 75) && (pitch < 105)) {
+				// headlights off when the board is upgright (e.g. being carried or leaning against a wall)
+				new_brightness = 0;
+			}
 		}
 
 		if (gear_position_last == Gear_Position && Flashlight_Detection_Time >= 3100) {
