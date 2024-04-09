@@ -5,7 +5,7 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
-#define FIRMWARE_ID "FWADV_2_0_2"
+#define FIRMWARE_ID "FWADV_2_0_3"
 
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;
@@ -323,7 +323,7 @@ uint8_t Protocol_Parse(uint8_t * message)
 			//data.switchstate = (state >> 4) & 0x7;
 			data.isHandtest = (state & 0x80) > 0;
 			data.fault = pdata[ind++];
-			if ((state >= 1) && (state <= 5)) {
+			if ((data.state >= 1) && (data.state <= 5)) {
 				data.dutyCycleNow = pdata[ind++];
 				data.pitch = 0;
 			}

@@ -167,10 +167,10 @@ static void WS2812_VESC(void)
 					WS2812_Power_Display(255);
 				}
 				else if (data.dutyCycleNow > 90) {
-					WS2812_Set_AllColours(1, 10,brightness,0,0);
+					WS2812_Set_AllColours(1, 10,255,0,0);
 				}
 				else if (data.dutyCycleNow > 85) {
-					WS2812_Set_AllColours(1, 9,brightness,0,0);
+					WS2812_Set_AllColours(1, 9,255,0,0);
 				}
 				else if (data.dutyCycleNow > 80) {
 					WS2812_Set_AllColours(1, 8,brightness,brightness/2,0);
@@ -235,7 +235,7 @@ void WS2812_Boot(void)
 
 	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation >= BOOT_ANIMATION_COUNT) {
 		// Invalid boot animation
-		lcmConfig.bootAnimation = 0;
+		lcmConfig.bootAnimation = 1;
 	}
 
 	while (num > 10) {
