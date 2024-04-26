@@ -44,17 +44,6 @@ if errorlevel 1 (
     exit 1
 )
 
-REM Check st-flash is installed
-st-flash >nul 2>nul
-if errorlevel 1 (
-    echo ST-Link tools are not installed
-    echo.
-    echo Download and run the ST-Link Installer:
-    echo https://www.st.com/en/development-tools/stsw-link004.html
-    pause
-    exit 1
-)
-
 REM Check HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack exists
 if not exist "HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack" (
     echo HKMicroChip.HK32F030xMxx_DFP.1.0.17.pack not found
@@ -73,6 +62,11 @@ if not exist "pyocd.yaml" (
     exit 1
 )
 
+echo Before continuing, make sure you have installed the ST-Link drivers from:
+echo https://www.st.com/en/development-tools/stsw-link004.html
+echo.
+pause
+echo.
 REM Erase and flash the firmware
 echo Erasing the old firmware...
 pyocd erase -c -t hk32f030mf4p6 --config pyocd.yaml
