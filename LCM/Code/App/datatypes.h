@@ -1385,14 +1385,28 @@ typedef enum {
 	HEADLIGHT_IDLE_BRIGHTNESS = 1,
 	STATUSBAR_BRIGHTNESS = 2,
 	// Additional light config
-	STATUSBAR_MODE = 10,
+	STATUS_BAR_IDLE_MODE = 10,
 	BOOT_ANIMATION = 11,
 	// Misc config
 	DUTY_BEEP = 50,
 	// Sys commands
 	POWER_OFF = 100,
 	CHARGE_CUTOFF = 101,
+	AUTO_SHUTDOWN = 102,
+	FACTORY_RESET = 200,
 	DEBUG = 255,
 } control_commands;
+
+typedef enum {
+	BOOT_DEFAULT = 0,
+	BOOT_REDWHITEBLUE = 1,
+	BOOT_RAINBOW = 2,
+} BootAnimation;
+
+typedef enum {
+	IDLE_MODE_BATTERY = 0,
+	IDLE_MODE_KNIGHT_RIDER = 1,
+} StatusBarIdleMode;
+
 
 #endif /* DATATYPES_H_ */

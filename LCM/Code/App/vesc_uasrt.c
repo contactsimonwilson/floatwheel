@@ -5,7 +5,7 @@
 uint8_t VESC_RX_Buff[256];
 uint8_t VESC_RX_Flag = 0;
 
-#define FIRMWARE_ID "FWADV_2_0_3"
+#define FIRMWARE_ID "FWADV_2_0_4"
 
 // Access ADC values here to determine riding state
 extern float ADC1_Val, ADC2_Val;
@@ -214,11 +214,10 @@ void Process_Command(uint8_t command, uint8_t data)
 		case STATUSBAR_BRIGHTNESS:
 			lcmConfig.statusbarBrightness = data;
 			return;
-		case STATUSBAR_MODE:
-			if (data != lcmConfig.statusbarMode) {
-				lcmConfig.statusbarMode = data; // Currently not implemented
-				// Just write into the position of the command IDs since they'll all be bytes anyway
-				EEPROM_WriteByte(STATUSBAR_MODE, data);
+		case STATUS_BAR_IDLE_MODE:
+			if (data != lcmConfig.statusBarIdleMode) {
+				lcmConfig.statusBarIdleMode = data;
+				EEPROM_WriteByte(STATUS_BAR_IDLE_MODE, data);
 			}
 			return;
 		case BOOT_ANIMATION:
@@ -238,6 +237,18 @@ void Process_Command(uint8_t command, uint8_t data)
 			return;
 		case CHARGE_CUTOFF:
 			lcmConfig.chargeCutoffVoltage = data;
+			return;
+		case AUTO_SHUTDOWN:
+			if (data != lcmConfig.autoShutdownTime) {
+				lcmConfig.autoShutdownTime = data;
+				EEPROM_WriteByte(AUTO_SHUTDOWN, data);
+			}
+			return;
+		case FACTORY_RESET:
+			if (data == 1) {
+				EEPROM_EraseAll();
+				NVIC_SystemReset();
+			}
 			return;
 		case DEBUG:
 			lcmConfig.debug = data == 1;

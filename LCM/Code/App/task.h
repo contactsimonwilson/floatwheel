@@ -31,6 +31,8 @@ typedef enum
 #define   CHARGE_CURRENT			0.24
 #define   DETECTION_SWITCH_TIME     500
 #define   CHARGER_DETECTION_DELAY	1000
+#define   NUM_LEDS 					10
+#define   DEFAULT_IDLE_MODE			0
 
 void LED_Task(void);
 void KEY1_Task(void);

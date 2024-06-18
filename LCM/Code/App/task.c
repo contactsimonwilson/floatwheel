@@ -1,8 +1,10 @@
 #include "task.h"
 #include "math.h"
 #include "eeprom.h"
+#include "stdlib.h"
 
 #define  BOOT_ANIMATION_COUNT  3
+#define  STATUS_BAR_IDLE_MODE_COUNT  2
 
 /**************************************************
 + * Reset LCM Config
@@ -14,21 +16,32 @@ static void lcmConfigReset(void)
 	lcmConfig.headlightBrightness = 0;
 	lcmConfig.headlightIdleBrightness = 0;
 	lcmConfig.statusbarBrightness = 5;
-	lcmConfig.statusbarMode = 0;
+	lcmConfig.statusBarIdleMode = DEFAULT_IDLE_MODE;
 	lcmConfig.boardOff = 0;
 	lcmConfig.chargeCutoffVoltage = 0;
-	lcmConfig.bootAnimation = DEFAULT;
+	lcmConfig.bootAnimation = BOOT_DEFAULT;
 	lcmConfig.dutyBeep = 90;
+	lcmConfig.autoShutdownTime = SHUTDOWN_TIME;
 	errCode = 0;
 
 	EEPROM_ReadByte(BOOT_ANIMATION, &lcmConfig.bootAnimation);
-	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation > (BOOT_ANIMATION_COUNT - 1)) {
-		lcmConfig.bootAnimation = 0;
+	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation >= BOOT_ANIMATION_COUNT) {
+		lcmConfig.bootAnimation = BOOT_DEFAULT;
 	}
 
 	EEPROM_ReadByte(DUTY_BEEP, &lcmConfig.dutyBeep);
 	if (lcmConfig.dutyBeep < 1 || lcmConfig.dutyBeep > 100) {
 		lcmConfig.dutyBeep = 90;
+	}
+
+	EEPROM_ReadByte(STATUS_BAR_IDLE_MODE, &lcmConfig.statusBarIdleMode);
+	if (lcmConfig.statusBarIdleMode < 0 || lcmConfig.statusBarIdleMode >= STATUS_BAR_IDLE_MODE_COUNT) {
+		lcmConfig.statusBarIdleMode = DEFAULT_IDLE_MODE;
+	}
+
+	EEPROM_ReadByte(AUTO_SHUTDOWN, &lcmConfig.autoShutdownTime);
+	if (lcmConfig.autoShutdownTime <= 0) {
+		lcmConfig.autoShutdownTime = SHUTDOWN_TIME;
 	}
 }
 
@@ -114,8 +127,7 @@ static void WS2812_Power_Display(uint8_t brightness)
 	
 	if (Power_Display_Flag > 0) {
 		WS2812_Set_AllColours(1, numleds, r, g, b);
-	}
-	else {
+	} else {
 		// Two purple LEDs in the center, only needed for dev/debug (happens right after boot)
 		//WS2812_Set_AllColours(5, 6, brightness, 0, brightness);
 	}
@@ -159,24 +171,22 @@ static void WS2812_VESC(void)
 		case 4:// Riding
 			
 		  if (data.state != RUNNING_WHEELSLIP) {
-				uint8_t brightness = lcmConfig.isSet ? lcmConfig.statusbarBrightness : WS2812_Measure;
-
 				if (Power_Display_Flag > 7) {
 					// Voltage below 30%?
 					// Display 1/2 red dots at full brightness above anything else
-					WS2812_Power_Display(255);
+					WS2812_Power_Display(WS2812_Measure);
 				}
 				else if (data.dutyCycleNow > 90) {
-					WS2812_Set_AllColours(1, 10,255,0,0);
+					WS2812_Set_AllColours(1, NUM_LEDS,255,0,0);
 				}
 				else if (data.dutyCycleNow > 85) {
-					WS2812_Set_AllColours(1, 9,255,0,0);
+					WS2812_Set_AllColours(1, NUM_LEDS-1,255,0,0);
 				}
 				else if (data.dutyCycleNow > 80) {
-					WS2812_Set_AllColours(1, 8,brightness,brightness/2,0);
+					WS2812_Set_AllColours(1, NUM_LEDS-2,WS2812_Measure,WS2812_Measure/2,0);
 				}
 				else if (data.dutyCycleNow > 70) {
-					WS2812_Set_AllColours(1, 7,brightness/3,brightness/3,0);
+					WS2812_Set_AllColours(1, NUM_LEDS-3,WS2812_Measure/3,WS2812_Measure/3,0);
 				}
 				/*else if (data.dutyCycleNow > 60) {
 					WS2812_Set_AllColours(1, 6,0,brightness/3,0);
@@ -187,14 +197,14 @@ static void WS2812_VESC(void)
 				else if (Power_Display_Flag > 6) {
 					// Voltage below 40%?
 					// Display 1/2/3 red dots at full brightness
-					WS2812_Power_Display(128);
+					WS2812_Power_Display(WS2812_Measure);
 				}
 				else {
-					WS2812_Set_AllColours(1, 10,0,0,0);
+					WS2812_Set_AllColours(1, NUM_LEDS,0,0,0);
 				}
 			}
 			else {
-					WS2812_Set_AllColours(1, 10,0,0,0);
+					WS2812_Set_AllColours(1, NUM_LEDS,0,0,0);
 			}
 		break;
 
@@ -202,9 +212,9 @@ static void WS2812_VESC(void)
 			// Flywheel Mode: just a rando pattern fpr now
 			red = Power_Time % 255;
 			green = (Power_Time + 100) % 255;
-		  blue = (Power_Time - 100) % 255;
-		  pos = (Power_Time/100) % 10;
-			WS2812_Set_Colour(pos,green,red,blue);
+		  	blue = (Power_Time - 100) % 255;
+		  	pos = (Power_Time/100) % 10;
+			WS2812_Set_Colour(pos,red,green,blue);
 		break;			
 		default:
 			if (errCode == 0)
@@ -235,19 +245,18 @@ void WS2812_Boot(void)
 
 	if (lcmConfig.bootAnimation < 0 || lcmConfig.bootAnimation >= BOOT_ANIMATION_COUNT) {
 		// Invalid boot animation
-		lcmConfig.bootAnimation = 1;
+		lcmConfig.bootAnimation = BOOT_DEFAULT;
 	}
 
 	while (num > 10) {
 		num -= 10;
 	}
 	for (i=0;i<num;i++) {
-		// red and green are swapped!
-		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][1],bootAnims[lcmConfig.bootAnimation][i][0],bootAnims[lcmConfig.bootAnimation][i][2]);
+		WS2812_Set_Colour(i,bootAnims[lcmConfig.bootAnimation][i][0],bootAnims[lcmConfig.bootAnimation][i][1],bootAnims[lcmConfig.bootAnimation][i][2]);
 	}
 
 	for (i = num; i < 10; i++) {
-		WS2812_Set_Colour(i,0,0,0);//bootAnims[lcmConfig.bootAnimation][i][1] >> 4,bootAnims[lcmConfig.bootAnimation][i][0] >> 4,bootAnims[lcmConfig.bootAnimation][i][2] >> 4);
+		WS2812_Set_Colour(i,0,0,0);
 	}
 
 	WS2812_Refresh();
@@ -322,23 +331,58 @@ static void WS2812_Disabled(void)
 	WS2812_Refresh();
 }
 
-// Idle animation:
-static void WS2812_Idle(void)
-{
-	static int cnt = 0;
-	cnt++;
-	if(cnt == 8 * 512)
-	{
-		cnt = 0;
+static void WS2818_Knight_Rider(uint8_t brightness) {
+	#define ANIMATION_TICK_TIME 5
+	#define TAIL_LENGTH 4
+	static uint8_t frame = 0;
+	static int8_t direction = 1;
+	static int8_t position = 0;
+
+	if (frame == 255) {
+		frame = 0;
 	}
-	if ((cnt % 80) == 0) {
-		int r, g, b;
-		int div = cnt >> 3; // fast div by 8
-		int idx = div % 10;
-		r = div; if (r > 255) r = 0;
-		g = -128 + div; if (g < 0) g = 0; if (g > 255) g = 0;
-		b = 256 + div; if (b < 0) b = 0; if (b > 255) b = 0;
-		WS2812_Set_AllColours(idx, idx, r, g, b);
+
+	if ((frame % ANIMATION_TICK_TIME) == 0) {
+
+		for (uint8_t i = 0; i < NUM_LEDS; i++) {
+			int8_t distanceToTail = (direction == 1) ? position - i : i - position;
+
+			// Allow wrap around effect
+			if (direction == 1 && i > position) {
+				distanceToTail = i + position;
+			} else if (direction == -1 && i < position) {
+				distanceToTail = (NUM_LEDS - position - 1) + (NUM_LEDS - i - 1);
+			}
+
+
+			uint8_t brightness = (distanceToTail >= 0 && distanceToTail <= TAIL_LENGTH) ?
+								WS2812_Measure - distanceToTail * (WS2812_Measure / TAIL_LENGTH) : 0;
+
+			
+			WS2812_Set_Colour(i,brightness,0,0);
+		}
+
+		// Move the LED position
+		position += direction;
+
+		// Change direction when reaching the ends
+		if (position == NUM_LEDS - 1  || position == 0) {
+			direction *= -1;
+		}
+		WS2812_Refresh();
+	}
+
+	frame++;
+}
+
+// Idle animation:
+static void WS2812_Idle(StatusBarIdleMode mode)
+{
+	if (mode == IDLE_MODE_KNIGHT_RIDER) {
+		WS2818_Knight_Rider(WS2812_Measure);
+	} else {
+		// Battery mode
+		WS2812_Power_Display(WS2812_Measure);
 		WS2812_Refresh();
 	}
 }
@@ -440,16 +484,10 @@ void WS2812_Task(void)
 		WS2812_Handtest();
 	}
 	else {
-		if(WS2812_Display_Flag == 1)  // I think this is when the board is idle, no footpads pressed
-		{
-			//if (lcmConfig.isSet && ((lcmConfig.statusbarMode & 0x2) != 0))
-			//	WS2812_Idle();	// Idle animation
-			//else
-			WS2812_Power_Display(WS2812_Measure);	// Display power level
-			WS2812_Refresh();
-		}
-		else
-		{
+		if (WS2812_Display_Flag == 1) {
+			// Idle state - no footpads pressed
+			WS2812_Idle(lcmConfig.statusBarIdleMode);	// Idle animation
+		} else {
 			WS2812_VESC();
 		}
 	}
@@ -1120,7 +1158,7 @@ void VESC_State_Task(void)
 		Shutdown_Time_S = 0;
 		
 		Shutdown_Time_M++;
-		if(Shutdown_Time_M >= SHUTDOWN_TIME)
+		if(Shutdown_Time_M >= lcmConfig.autoShutdownTime)
 		{
 			Power_Flag = 4;
 			Power_Time = 0;

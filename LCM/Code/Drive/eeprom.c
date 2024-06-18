@@ -31,3 +31,10 @@ void EEPROM_ReadByte(uint32_t address, uint8_t *data_out)
 {
     *data_out = (*((uint8_t *)(address + HK32F030M_EE_BEGIN)));
 }
+
+void EEPROM_EraseAll(void)
+{
+    FLASH_Unlock();
+    FLASH_EraseAllPages();
+    FLASH_Lock();
+}
