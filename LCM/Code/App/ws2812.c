@@ -5,9 +5,9 @@ uint8_t WS2812_Buff[WS2812_N][24];
 
 /**************************************************
  * @brie   :WS2812_Init()
- * @note   :WS2812��ʼ�� 
- * @param  :��
- * @retval :��
+ * @note   :WS2812初始化 
+ * @param  :无
+ * @retval :无
  **************************************************/
 void WS2812_Init(void)
 {
@@ -41,12 +41,12 @@ void WS2812_Set_AllColours(uint8_t start, uint8_t end, uint8_t red, uint8_t gree
 
 /**************************************************
  * @brie   :WS2812_Set_Colour()
- * @note   :WS2812������ɫ 
- * @param  :num 	�ڼ�����
+ * @note   :WS2812设置颜色 
+ * @param  :num 	第几个灯
  *          red 	0-255
  *          green	0-255
  *          blue    0-255
- * @retval :��
+ * @retval :无
  **************************************************/
 void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 {
@@ -54,7 +54,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 	
 	for(i=0; i<24; i++)
 	{
-		if(i<8)   //���
+		if(i<8)   //红灯
 		{
 			if(green&0x80)
 			{
@@ -66,7 +66,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 			}
 			green <<= 1;
 		}
-		else if(i<16)  //�̵�
+		else if(i<16)  //绿灯
 		{
 			if(red&0x80)
 			{
@@ -78,7 +78,7 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 			}
 			red <<= 1;		
 		}
-		else if(i<24)  //����
+		else if(i<24)  //蓝灯
 		{
 			if(blue&0x80)
 			{
@@ -97,9 +97,9 @@ void WS2812_Set_Colour(uint8_t num,uint8_t red,uint8_t green,uint8_t blue)
 
 /**************************************************
  * @brie   :WS2812_Left()
- * @note   :WS2812���� 
- * @param  :��
- * @retval :��
+ * @note   :WS2812左移 
+ * @param  :无
+ * @retval :无
  **************************************************/
 void WS2812_Left(void)
 {
@@ -127,16 +127,16 @@ void WS2812_Left(void)
 
 ///**************************************************
 // * @brie   :WS2812_Refresh()
-// * @note   :WS2812ˢ��һ��
-// * @param  :��
-// * @retval :��
+// * @note   :WS2812刷新一次
+// * @param  :无
+// * @retval :无
 // **************************************************/
 //void WS2812_Refresh(void)
 //{
 //	uint16_t 	i = 0;
 //	uint8_t*	ws2812_buff_add = (uint8_t*)&WS2812_Buff;
 //	
-//	for(i=0; i<250; i++)   //��λ�ź�
+//	for(i=0; i<250; i++)   //复位信号
 //	{
 //		SPI1_Send_Byte(WS2812_R);
 //	}
@@ -159,9 +159,9 @@ void WS2812_Refresh(void)
 	uint16_t i = 0;
 	uint8_t* ws2812_buff_add = (uint8_t*)&WS2812_Buff;
 	
-	//WS2812�ڷ�����ʱ�������жϴ�Ϸ�������
+	//WS2812在发数据时不允许中断打断否则不正常
 	
-	__set_PRIMASK(1);//�����ж�
+	__set_PRIMASK(1);//关总中断
 	
 	GPIOD->BRR = GPIO_Pin_4;
 	delay(250);
