@@ -1,0 +1,229 @@
+﻿Nationstech.N32L40x_Library.0.8.0版本：
+初版修订
+
+Nationstech.N32L40x_Library.1.0.0版本：
+1、n32l40x.h V1.0.1,
+   1)COMP结构体移动RES寄存器位置修改
+2、n32l40x.h v1.0.2、n32l40x_rcc.h v1.0.1、n32l40x_rcc.c v1.0.1
+   1)修改RCC_CFG3 RCC_CFG3_TRNG1MPRES分频值描述
+3、system_n32l40x.c v1.0.1
+   1)修改RCC->CFG3写复位值
+4、USB 新增 JoyStickMouse 例程
+5、优化了部分板子烧录程序后debug进入hardfault的问题
+6、NVIC IRQ_Mask main.c v1.0.1，更新Demo工程
+7、USB 新增打印机例程
+8、ADC驱动C文件增加对校准功能的函数重入性控制 
+9、更正lpuart.h中LPUART_INT_WUF定义以及lpuart WakeUpFromStop2示例中PWR_EnterSTOP2Mode函数参数RetentionMode
+10、n32l40x.h v1.0.3、n32l40x_rcc.h v1.0.2、n32l40x_rcc.c v1.0.2
+   1)修改RCC_CFG3 RCC_CFG3_TRNG1MPRES分频值描述
+11、PWR模块LP RUNdemo优化
+12、更新RCC_CFG寄存器的MCOPRES[3:0]的定义；
+13、修改LCD驱动，初始化函数中屏蔽1/8duty+1/4bias配置，优化DEMO
+14、n32g43x.h v1.0.4 更新RCC_MCO_PLLCLK定义；
+    n32g43x_rcc.h v1.0.3 更新RCC_MCO_PLLCLK定义；
+	n32g43x_rcc.c v1.0.3 更新RCC_MCO_PLLCLK定义；
+15、1)LPUART和USART模块 HardwareFlowCtrl将Receive_RTS和Transmit_CTS合并成HardwareFlowCtrl，并更新readme
+    2)USART模块 IrDA将Receive和Transmit合并成Transmit_Receive，并更新readme
+    3)USART模块 IrDA功能增加低功耗模式测例LP_Transmit_Receive
+16、I2C代码优化
+17、STOP2系统时钟4分频异常问题优化
+18、时钟初始化更新，支持1C以后版本
+19、USB例程GPIO端口配置前先初始化
+20、修改LPTIM_Disable为清使能位。
+
+
+Nationstech.N32L40x_Library.1.2.0版本：
+1、修改CAN驱动文件中CAN_CancelTransmitMessage函数
+   将CANx->TSTS或与操作改成等于操作
+2、添加RT-Thread的设备驱动，添加RT-Thread在Keil和IAR中的Demo
+3、删除 RTC_ConfigOutput 中未使用的变量
+4、配置 SystemInit()/RCC_DeInit(void) 函数 RCC->CFG2 为默认值 
+5、将User_RTC_Config.c中的%0.2 改成%2 消除GCC警告
+6、删除flash中未使用的变量
+7、修改RCC_DeInit(void) 函数 RCC->CLKINT 清中断赋值错误问题
+8、修改USB Keyboard例程，删除打印
+9、针对GCC编译进行优化，修改了I2C例程中的中断函数需要打印输出的变量类型将u32int_t改为unsigned int
+10、RCC模块增加LSE晶体配置接口函数LSE_XtalConfig
+11、USB Demo 在Suspend里面增加通过宏控制UCDR复位
+12、删除RT-Thread中drv_gpio.c中N32L40X_pin_irq_enable()函数里的IO配置，修改RT-Thread的USB Demo的设备名称为N32L40X
+13、修改n32l40x_wdog_control函数，不使用宏，定义两个变量存储RELV和PREDIV寄存器的值，删除RT-Thread的Demo的IAR工程里的dep文件
+14、EEPROM例程修改EEPROM读函数，以及I2C_slave_int中初始化I2C_slave的函数内部变量名称
+15、LPUART模块驱动文件LPUART_GetIntStatus函数修改LPUART的WUF标志位获取问题
+16、修改 void ConfigMRVoltage1V(void) MRF清0后增加56us延时
+17、修改USB驱动usb_regs.h文件里的_BlocksOf32宏，wNBlocks << 11改为wNBlocks << 10
+18、修改枚举变量GPIO_CurrentType 枚举值
+19、修改I2C EEPROM例程i2c_eeprom.c文件，将中断模式以及DMA模式调通。
+20、修改TimeBasic6 例程main.c RCC_ConfigPclk1(RCC_HCLK_DIV4)使PCLK1 = HCLK/4
+21、修改LPTIM DEMO中的产生测试信号的函数
+22、修改SPI FLASH中的W25Q128擦除命令宏定义
+23、修改USB Demo里的Readme，把系统时钟改为48MHz
+24、增加GCC下载配置文件和启动文件
+25、修改void RCC_ConfigLse(uint8_t RCC_LSE, uint8_t LSE_Gm)函数
+26、修改n32l40x_comp.c、n32l40x_opamp.c文件中的SetBitMsk宏定义
+27、基于RCC_ConfigLse函数的改动，优化LCD_ClockConfig函数以及LPUART模块各例程中的相关函数
+28、ADC各例程中在ADC初始化前添加ADC_DeInit函数
+29、优化CAN模块的CAN_Tx_Rx例程的CAN_Recieve_Process函数和SetSysClockToPLL函数
+30、Flash_DMA_Program例程中添加GCC条件编译的宏判断
+31、修改I2C_10bit例程、I2C_Master_Int例程中last_event变量的数据类型，更正I2C_Slave_Int例程中的参数命名
+32、优化STOP2例程中的SetSysClockToPLL函数
+33、优化RCC模块例程中的部分打印代码
+34、修改demo的readme文件，添加英文描述
+35、USB demo ERROR和ESOF中断关闭
+36、修改USB demo中latency的赋值方式及大小
+37、修改CAN波特率/扩展帧标志符/CAN GPIO/工作模式为正常模式
+38、将函数void RTC_WKUP_IRQHandler(void) 中的 EXTI_ClrITPendBit(EXTI_LINE20);提到周期性唤醒标志判断外
+39、TIMx_DCTRL后面的寄存器无法应用DMA Burst功能，修改相应代码
+40、将 SYSCLKConfig_STOP(uint32_t RCC_PLLMULL) 中的FLASH->AC 更换成变量操作
+41、增加I2C MASTER INT demo中的错误中断服务函数，以及修复IIC_RCCReset函数中的引脚状态复位错误。
+
+
+Nationstech.N32L40x_Library.1.2.1版本：
+1、增加ADC_DifferentialMode 例程
+2、退出LPRUN恢复SRAM电压至1.1V
+3、修改RtcAutoWakeUp例程，进入Stop2模式前后增加时钟切换操作
+4、修改RTC_CLKSourceConfig函数,去掉复位备份寄存器操作
+5、修改获取UID/UCID函数
+6、修改SetSysClockToPLL函数PCLK1/PCLK2分频系数
+7、修改MR调节函数ConfigMRVoltage1V/ConfigMRVoltage1_1V
+8、修改SystemCoreClockUpdate函数HSI二分频判断标志
+9、修改RTC例程增加重复分频机制
+10、串口例程增加清除溢出中断机制
+11、将RCC_ConfigLse函数分步赋值修改成变量一次性赋值
+12、RTC例程增加避免重复配置机制
+13、增加 ADC_ReferenceVoltageSwitch 例程
+14、去掉Flash驱动中的PD选项位
+15、ADC启动增加延时滤波
+
+Nationstech.N32L40x_Library.1.2.2版本：
+1、修改LSE增益默认值为0x1FF
+2、删除TSC模块
+3、增加LIN主从机例程
+4、增加Smartcard例程
+5、修改RTC驱动亚秒在小于2秒时不能进入初始化
+6、修改RT_Thread USB DEMO 时钟配置
+7、修改RT_Thread DEMO 型号选择
+8、修改USB进入初始化后配置USB中断
+9、修改USB DEMO复位处理流程
+10、增加LCD STOP2模式显示例程
+11、增加软件计算CRC32，并对比软硬件计算结果
+12、TIM的demo中增加结构体初始化。
+13、修改RTC例程将时间/日期打印格式调整为%02u
+14、修改CAN_RX_Tx例程Readme.txt文件中数据帧为扩展帧
+15、修改system_n32l40x.c文件，限定选择PLL为时钟源时，系统时钟最小为32MHz
+16、修改RT_Thread drv_can文件，增加CAN_SCE_IRQHandler and CAN_RX1_IRQHandler中断处理函数
+17、修改n32l40x_adc.c文件中的Reference_Voltage_Switch()函数，使应用中切换到内部VRENUFF后PA0不会输出Vrefbuffer
+
+Nationstech. N32L40x_Library. 0.8.0 version:
+Initial release.
+
+Nationstech. N32L40x_Library. 1.0.0 version:
+1. n32l40x.h V1.0.1
+    1)COMP structure moved RES register position modification
+2. n32l40x.h v1.0.2, n32l40x_rcc.h v1.0.1, n32l40x_rcc.c v1.0.1
+	1) Modify the frequency division description of RCC_CFG3 RCC_CFG3_TRNG1MPRES
+3. system_n32l40x.c v1.0.1
+	1) Modify RCC->CFG3 write reset value
+4. USB added JoyStickMouse routine
+5. Debug the problem of entering hardfault after optimizing part of board burning program
+6. NVIC IRQ_Mask main.c v1.0.1, update Demo project
+7. USB added printer routines
+8. ADC driver C file adds functional reentrant control to the calibration function
+9. Correct the definition of LPUART_INT_WUF in lpuart.h and the parameter of PWR_EnterSTOP2Mode RetentionMode in the example of lpuart WakeUpFromStop2
+10. N32l40x_rcc.h v1.0.3, n32l40x_rcc.h v1.0.2, n32l40x_rcc.c v1.0.2
+	1) Modify the frequency division description of RCC_CFG3 RCC_CFG3_TRNG1MPRES
+11. LP RUNdemo optimization for PWR module
+12. Update the definition of RCC_CFG register MCOPRES[3:0];
+13.	Modify LCD driver, shield 1/8DUTY + 1/4BIAS configuration in initialization function, optimize DEMO
+14. n32g43x.h v1.0.4 update RCC_MCO_PLLCLK definition;
+	N32g43x_rcc.h v1.0.3 Update RCC_MCO_PLLCLK definition;
+	N32g43x_rcc.c v1.0.3 Update RCC_MCO_PLLCLK definition;
+15. 1)LPUART and USART module HardwareFlowCtrl merge Receive_RTS and Transmit_CTS into HardwareFlowCtrl and update readme
+	2)USART module IrDA merges Receive and Transmit into Transmit_Receive and updates readme
+	3) Added low power consumption test case LP_Transmit_Receive for IrDA function of USART module
+16. I2C code optimization
+17. STOP2 system clock 4 frequency division problem optimization
+18. clock initialization update, support 1C later version
+19. USB routine GPIO port is initialized before configuration
+20. Change LPTIM_Disable to enable LPTIM_Disable
+
+
+Nationstech. N32L40x_Library. 1.2.0 version:
+1. Modify CAN_CancelTransmitMessage function in CAN driver file
+	Change the CANx->TSTS or and operation to the equal operation
+2. Add device drivers for RT-Thread and Demo rt-thread in Keil and IAR
+3. Delete unused variables from RTC_ConfigOutput
+4. Set SystemInit()/RCC_DeInit(void) RCC->CFG2 as the default value
+5. Change %0.2 in user_rtc_config. c to %2 to remove GCC warning
+6. Delete unused variables from the Flash
+7. Modify RCC_DeInit(void) RCC->CLKINT to fix interrupt assignment errors
+8. Modify the USB Keyboard routine to delete printing
+9. Optimized for GCC compilation, changed the variable type u32INT_t to unsigned int in I2C routine interrupt function to print out
+10. Added interface function LSE_XtalConfig for LSE crystal configuration in RCC module
+11. Add macro control to UCDR reset in USB Demo
+12. Delete the I/O configuration of the N32L40X_pin_irq_enable() function in drv_gpio.c of rt-thread and change the USB Demo device name of rt-thread to N32L40X
+13. Alter n32L40x_wdog_control without macro, define two variables to store RELV and PREDIV register values, delete Rt-thread IAR project deP file
+14. EEPROM routine modify EEPROM read function, and I2C_slave_int initialization I2C_slave function internal variable name
+15. The LPUART module driver file LPUART_GetIntStatus function modified the WUF flag bit of LPUART
+16. modify void ConfigMRVoltage1V(void) MRF clear 0, add 56uS delay
+17. modify _BlocksOf32 macro in USB driver usb_regs.h file, wNBlocks << 11 to wNBlocks << 10
+18. Change the enumeration variable GPIO_CurrentType enumeration value
+19. Modify I2C EEPROM routine I2C_EEPROM. C file to switch on the interrupt mode and DMA mode.
+20. Change TimeBasic6 routine main.c RCC_ConfigPclk1(RCC_HCLK_DIV4) to PCLK1 = HCLK/4
+21. modify LPTIM DEMO to generate test signal function
+22. Modify the macro definition of W25Q128 erase command in SPI FLASH
+23. Modify Readme in USB Demo to change the system clock to 48MHz
+24. Add GCC download configuration file and startup file
+25. Modify the void RCC_ConfigLse(uint8_t RCC_LSE, uint8_t LSE_Gm) function
+26. Modify the SetBitMsk macro definition in n32l40x_comp.c and n32L40x_opamp. c files
+27. Optimized the LCD_ClockConfig function and related functions in each routine of THE LPUART module based on the change of RCC_ConfigLse function
+28. Add ADC_DeInit function before ADC initialization in each demo
+29. Optimize CAN_Recieve_Process function and SetSysClockToPLL function of CAN_Tx_Rx demo of CAN module
+30. Flash_DMA_Program demo to add GCC conditional compilation macro judgment
+31. Modify I2C_10bit demo, I2C_Master_Int demo last_event variable data type, correct I2C_Slave_Int demo parameter name
+32. Optimize SetSysClockToPLL function in STOP2 demo
+33. Optimize part of the printing code in the demo of RCC module
+34. Modify the Readme file of Demo and add English description
+35. USB demo ERROR and ESOF interrupt closed
+36. Modify the latency assignment method and size in USB demo
+37. Modify RT_Thread CAN baud rate/extended frame identifier/CAN GPIO/working mode to normal mode
+38. Put EXTI_ClrITPendBit(EXTI_LINE20) in front of the check wakeup flag in void RTC_WKUP_IRQHandler(void)
+39. TIMx_DCTRL's subsequent registers cannot apply the DMABurst function, and modify the corresponding code
+40. Replace FLASH->AC in SYSCLKConfig_STOP(uint32_t RCC_PLLMULL) function with variable  operation
+41. Added error interrupt service function in I2C MASTER INT demo, and fixed pin state reset error in IIC_RCCReset function.
+
+
+Nationstech. N32L40x_Library. 1.2.1 version:
+1.Add the demo of ADC_DifferentialMode
+2.Exit LPRUN mode and restore SRAM voltage to 1.1V
+3.Modify RtcAutoWakeUp Demo,Increase clock switching operation before and after entering Stop2 mode
+4.Modify RTC_CLKSourceConfig function to remove the reset bkp register operation
+5.Modify the function of obtaining UID/UCID
+6.Modify the PCLK1/PCLK2 frequency division factor of SetSysClockToPLL
+7.Modify MR adjustment function ConfigMRVoltage1V/ConfigMRVoltage1_1V
+8.Modify HSI 2 division flag of SystemCoreClockUpdate function
+9.Modify RTC Demo add repetitive frequency division mechanism 
+10.USART Demo adds the machanism of clearing overflow interrupt
+11.Modify step by step assignment of RCC_ConfigLse function to one-time assignment of variables
+12.RTC Demo add mechanism to avoid duplicate configuration
+13.Add the demo of ADC_ReferenceVoltageSwitch
+14.Remove the PD option bit in the flash drive
+15.ADC startup add delay filtering
+
+Nationstech. N32L40x_Library. 1.2.2 version:
+1.Modify the LSE gain default value to 0x1FF
+2.Delete TSC module
+3.Add the demo of LIN 
+4.Add the demo of Samrtcard
+5.Modify RTC Driver SUBS is not less than 2 befor entering the initializations mode
+6.Modify RT_Thread USB DEMO clock configure
+7.Modify RT_Thread DEMO chip type
+8.Modify configure USB interrupt when USB entey initialization
+9.Modify USB DEMO reset processing flow
+10.Add the demo of LCD display in STOP2
+11.Add software to calculate CRC32, and compare the calculation results of software and hardware
+12.Add TIM's structure initialization
+13.Modify the RTC demo to adjust the time/date printf format to %02u
+14.Modify the data frame to extend frame in readme.txt of CAN_Tx_Rx demo
+15.Modify system_n32l40x.c.file ,when PLL is selected as system clock source, the minimum system clock is 32MHz
+16.Modify RT_Thread drv_can file，add CAN_SCE_IRQHandler and CAN_RX1_IRQHandler interrupt handlers
+17.Modify Reference_Voltage_Switch() in n32l40x_adc.c, so that the application switchs to the internal VRENUFF after PA0 will not output Vrefbuffer
