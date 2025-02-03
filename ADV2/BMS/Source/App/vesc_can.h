@@ -38,68 +38,68 @@ typedef union
 
 typedef struct
 {
-	FLOAT_INT_TYP 	Total_Voltage;			//总电压
-	FLOAT_INT_TYP 	Charge_Input_Voltage;	//充电器电压
+	FLOAT_INT_TYP 	Total_Voltage;			//total voltage [总电压]
+	FLOAT_INT_TYP 	Charge_Input_Voltage;	//Charger voltage [充电器电压]
 }CAN_BMS_V_TOT;
 
 typedef struct
 {
-	FLOAT_INT_TYP 	Input_Current;			//输入电流
-	FLOAT_INT_TYP 	Input_Current_BMS_IC;	//BMS_IC电流
+	FLOAT_INT_TYP 	Input_Current;			//Input current [输入电流]
+	FLOAT_INT_TYP 	Input_Current_BMS_IC;	//BMS_IC current [BMS_IC电流]
 }CAN_BMS_I;
 
 typedef struct
 {
-	FLOAT_INT_TYP 	Ah_Counter;				//电池毫安时
-	FLOAT_INT_TYP 	Wh_Counter;				//电池W时 
+	FLOAT_INT_TYP 	Ah_Counter;				//Battery mAh [电池毫安时]
+	FLOAT_INT_TYP 	Wh_Counter;				//Battery Wh [电池W时]
 }CAN_BMS_AH_WH;
 
 typedef struct
 {
-	uint8_t         Group;					//第几组	一帧报文最多设置3组电池电压
-	uint8_t			BMS_String;				//BMS串数
-	uint16_t		BMS_Single_Voltage[20];	//单节电池电压	扩大1000倍发送
+	uint8_t         Group;					//In which group, one frame of message can set up to 3 groups of battery voltages. [第几组	一帧报文最多设置3组电池电压]
+	uint8_t			BMS_String;				//BMS string number [BMS串数]
+	uint16_t		BMS_Single_Voltage[20];	//Single cell battery voltage expanded 1000 times to send [单节电池电压	扩大1000倍发送]
 }CAN_BMS_V_CELL;
 
 typedef struct
 {
-	uint8_t			BMS_String;				//BMS串数
-	INT32_BIT_TYP	BMS_BAT;				//单节电池状态
+	uint8_t			BMS_String;				//BMS string number [BMS串数]
+	INT32_BIT_TYP	BMS_BAT;				//Single battery status [单节电池状态]
 }CAN_BMS_BAL;
 
 typedef struct
 {
-	uint8_t         Group;					//第几组	一帧报文最多设置3组电池电压
-	uint16_t		BMS_Single_Temp[10];	//电池温度	扩大100倍发送
+	uint8_t         Group;					//In which group, one frame of message can set up to 3 groups of battery voltages. [第几组	一帧报文最多设置3组电池电压]
+	uint16_t		BMS_Single_Temp[10];	//Battery temperature enlarged 100 times to send [电池温度	扩大100倍发送]
 }CAN_BMS_TEMPS;
 
 typedef struct
 {
-	uint16_t 		Humidity;				//湿度	0-10000(0%-100%);
-	int16_t			Temp_Hum_Sensor;		//温度	-10000-10000(-100°-100°)
-	int16_t			Temp_IC;				//IC温度
+	uint16_t 		Humidity;				//Humidity 0-10000(0%-100%) [湿度	0-10000(0%-100%);]
+	int16_t			Temp_Hum_Sensor;		//Temperature -10000-10000(-100°-100°) [温度	-10000-10000(-100°-100°)]
+	int16_t			Temp_IC;				//IC temperature [IC温度]
 }CAN_BMS_HUM;
 
 typedef struct
 {
-	uint16_t		V_Cell_Min;				//单节电池最低电压 扩大1000倍发送
-	uint16_t		V_Cell_Max;				//单节电池最高电压 扩大1000倍发送
-	uint8_t 		Soc;					//0-255(0%-100%) 充电状态
-	uint8_t			Soh;					//0-255(0%-100%) 健康状态
-	uint8_t			T_Cell_Max;				//单节电池最大温度
-	uint8_t			Stat;					//
+	uint16_t		V_Cell_Min;				//The lowest voltage of a single battery is enlarged 1000 times and sent [单节电池最低电压 扩大1000倍发送]
+	uint16_t		V_Cell_Max;				//The maximum voltage of a single battery is expanded 1000 times and sent [单节电池最高电压 扩大1000倍发送]
+	uint8_t 		Soc;					//Charging status 0-255(0%-100%) [0-255(0%-100%) 充电状态]
+	uint8_t			Soh;					//Health status 0-255(0%-100%) [0-255(0%-100%) 健康状态]
+	uint8_t			T_Cell_Max;				//Maximum temperature of single battery [单节电池最大温度]
+	uint8_t			Stat;					
 }CAN_BMS_SOC_SOH_TEMP_STAT;
 
 typedef struct
 {
-	FLOAT_INT_TYP	Ah_Charge_Total;		//充电安时
-	FLOAT_INT_TYP   Wh_Charge_Total;		//充电瓦时
+	FLOAT_INT_TYP	Ah_Charge_Total;		//Charging ampere hours [充电安时]
+	FLOAT_INT_TYP   Wh_Charge_Total;		//Charging watt hours [充电瓦时]
 }CAN_BMS_AH_WH_CHG_TOTAL;
 
 typedef struct
 {
-	FLOAT_INT_TYP	Ah_Discharge_Total;		//安时
-	FLOAT_INT_TYP   Wh_Discharge_Total;		//瓦时
+	FLOAT_INT_TYP	Ah_Discharge_Total;		//An hour [安时]
+	FLOAT_INT_TYP   Wh_Discharge_Total;		//Watt hour [瓦时]
 }CAN_BMS_AH_WH_DIS_TOTAL;
 
 typedef struct
@@ -119,30 +119,30 @@ typedef struct
 
 typedef struct
 {
-	FLOAT_INT_TYP 	Total_Voltage;			//总电压
-	FLOAT_INT_TYP 	Charge_Input_Voltage;	//充电器电压	
-	FLOAT_INT_TYP 	Input_Current;			//输入电流
-	FLOAT_INT_TYP 	Input_Current_BMS_IC;	//BMS_IC电流
-	FLOAT_INT_TYP 	Ah_Counter;				//电池毫安时
-	FLOAT_INT_TYP 	Wh_Counter;				//电池W时 
-	uint16_t 		Humidity;				//湿度	0-10000(0%-100%);
-	int16_t			Temp_Hum_Sensor;		//温度	-10000-10000(-100°-100°)
-	int16_t			Temp_IC;				//IC温度
-	uint16_t		V_Cell_Min;				//单节电池最低电压 扩大1000倍发送
-	uint16_t		V_Cell_Max;				//单节电池最高电压 扩大1000倍发送
+	FLOAT_INT_TYP 	Total_Voltage;			//Total voltage [总电压]
+	FLOAT_INT_TYP 	Charge_Input_Voltage;	//Charger voltage [充电器电压]
+	FLOAT_INT_TYP 	Input_Current;			//Input current [输入电流]
+	FLOAT_INT_TYP 	Input_Current_BMS_IC;	//BMS_IC current [BMS_IC电流]
+	FLOAT_INT_TYP 	Ah_Counter;				//Battery mAh [电池毫安时]
+	FLOAT_INT_TYP 	Wh_Counter;				//Battery Wh [电池W时]
+	uint16_t 		Humidity;				//Humidity 0-10000(0%-100%) [湿度	0-10000(0%-100%);]
+	int16_t			Temp_Hum_Sensor;		//Temperature -10000-10000(-100°-100°) [温度	-10000-10000(-100°-100°)]
+	int16_t			Temp_IC;				//IC temperature [IC温度]
+	uint16_t		V_Cell_Min;				//The lowest voltage of a single battery is enlarged 1000 times and sent [单节电池最低电压 扩大1000倍发送]
+	uint16_t		V_Cell_Max;				//The maximum voltage of a single battery is expanded 1000 times and sent [单节电池最高电压 扩大1000倍发送]
 	uint8_t 		Soc;					//0-255(0%-100%)
 	uint8_t			Soh;					//0-255(0%-100%)
-	uint8_t			T_Cell_Max;				//单节电池最大温度
+	uint8_t			T_Cell_Max;				//Maximum temperature of single battery [单节电池最大温度]
 	uint8_t			Stat;					//
-	FLOAT_INT_TYP	Ah_Charge_Total;		//安时
-	FLOAT_INT_TYP   Wh_Charge_Total;		//瓦时
-	FLOAT_INT_TYP	Ah_Discharge_Total;		//安时
-	FLOAT_INT_TYP   Wh_Discharge_Total;		//瓦时
-	uint8_t         Group;					//第几组	一帧报文最多设置3组电池电压
-	uint8_t			BMS_String;				//BMS串数
-	uint16_t		BMS_Single_Voltage[20];	//单节电池电压	扩大1000倍发送
-	uint16_t		BMS_Single_Temp[10];	//电池温度	扩大100倍发送
-	uint32_t		BMS_Single_Stat;		//单节电池状态	
+	FLOAT_INT_TYP	Ah_Charge_Total;		//An hour [安时]
+	FLOAT_INT_TYP   Wh_Charge_Total;		//Watt hour [瓦时]
+	FLOAT_INT_TYP	Ah_Discharge_Total;		//An hour [安时]
+	FLOAT_INT_TYP   Wh_Discharge_Total;		//Watt hour [瓦时]
+	uint8_t         Group;					//In which group, one frame of message can set up to 3 groups of battery voltages. [第几组	一帧报文最多设置3组电池电压]
+	uint8_t			BMS_String;				//BMS string number [BMS串数]
+	uint16_t		BMS_Single_Voltage[20];	//Single cell battery voltage expanded 1000 times to send [单节电池电压	扩大1000倍发送]
+	uint16_t		BMS_Single_Temp[10];	//Battery temperature enlarged 100 times to send [电池温度	扩大100倍发送]
+	uint32_t		BMS_Single_Stat;		//Single battery status [单节电池状态]
 	
 	CAN_PACKET_ID 	VESC_CAN_CMD;
 	
@@ -163,35 +163,35 @@ void VESC_Set_BMS_AH_WH_DIS_TOTAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *ves
 
 typedef struct
 {
-	int32_t Rpm;			//转速
-	float	Duty_Cycle;		//占空比
-	float	Total_Current;	//总电流
+	int32_t Rpm;			//Speed [转速]
+	float	Duty_Cycle;		//Duty Cycle [占空比]
+	float	Total_Current;	//Total Current [总电流]
 }CAN_STATUS;
 
 typedef struct
 {
-	float	Amp_Hours_Charged;	//充电的安时
-	float	Amp_Hours;			//消耗的安时
+	float	Amp_Hours_Charged;	//Charging ampere hours [充电的安时]
+	float	Amp_Hours;			//Hours consumed [消耗的安时]
 }CAN_STATUS_2;
 
 typedef struct
 {
-	float	Watt_Hours_Charged;	//充电的瓦时
-	float	Watt_Hours;			//消耗的瓦时
+	float	Watt_Hours_Charged;	//Charging watt hours [充电的瓦时]
+	float	Watt_Hours;			//Watt hours consumed [消耗的瓦时]
 }CAN_STATUS_3;
 
 typedef struct
 {
-	float 	PID_Pos;				//不清楚数据类型
-	float 	Total_Input_Current;	//输入总电流
-	float 	Motor_Temp;				//电机温度
-	float 	MOSFET_Temp;			//MOS管温度
+	float 	PID_Pos;				//Not sure about data type [不清楚数据类型]
+	float 	Total_Input_Current;	//Input total current [输入总电流]
+	float 	Motor_Temp;				//Motor temperature [电机温度]
+	float 	MOSFET_Temp;			//Mosfet temperature [MOS管温度]
 }CAN_STATUS_4;
 
 typedef struct
 {
-	float 	Input_Voltage;		//输入电压
-	int32_t Tachometer_Value;	//转速表?不确定
+	float 	Input_Voltage;		//input voltage [输入电压]
+	int32_t Tachometer_Value;	//Tachometer? Not sure [转速表?不确定]
 }CAN_STATUS_5;
 
 typedef struct
