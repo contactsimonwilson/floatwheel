@@ -2,97 +2,97 @@
 	
 CAN_BMS_V_TOT 	BMS_V_TOT = 
 {
-	.Total_Voltage = 0,				//总电压
-	.Charge_Input_Voltage = 0,		//充电器电压
+	.Total_Voltage = 0,				//total voltage [总电压]
+	.Charge_Input_Voltage = 0,		//Charger voltage [充电器电压]
 };
 
 CAN_BMS_I		BMS_I = 
 {
-	.Input_Current = 0,				//输入电流
-	.Input_Current_BMS_IC = 0,		//BMS_IC电流
+	.Input_Current = 0,				//Input current [输入电流]
+	.Input_Current_BMS_IC = 0,		//BMS_IC current [BMS_IC电流]
 };
 
 
 CAN_BMS_AH_WH	BMS_AH_WH = 
 {
-	.Ah_Counter = 0,				//电池毫安时
-	.Wh_Counter = 0,				//电池W时 
+	.Ah_Counter = 0,				//Battery mAh [电池毫安时]
+	.Wh_Counter = 0,				//Battery Wh [电池W时]
 };
 
 CAN_BMS_V_CELL	BMS_V_CELL = 		
 {
-	.Group = 0,						//第几组
-	.BMS_String = 20,				//BMS串数
-	.BMS_Single_Voltage[0] = 0,		//单节电池电压
-	.BMS_Single_Voltage[1] = 0,		//单节电池电压
-	.BMS_Single_Voltage[2] = 0,		//单节电池电压
-	.BMS_Single_Voltage[3] = 0,		//单节电池电压	
-	.BMS_Single_Voltage[4] = 0,		//单节电池电压
-	.BMS_Single_Voltage[5] = 0,		//单节电池电压
-	.BMS_Single_Voltage[6] = 0,		//单节电池电压
-	.BMS_Single_Voltage[7] = 0,		//单节电池电压	
-	.BMS_Single_Voltage[8] = 0,		//单节电池电压
-	.BMS_Single_Voltage[9] = 0,		//单节电池电压
-	.BMS_Single_Voltage[10] = 0,	//单节电池电压
-	.BMS_Single_Voltage[11] = 0,	//单节电池电压	
-	.BMS_Single_Voltage[12] = 0,	//单节电池电压
-	.BMS_Single_Voltage[13] = 0,	//单节电池电压
-	.BMS_Single_Voltage[14] = 0,	//单节电池电压
-	.BMS_Single_Voltage[15] = 0,	//单节电池电压	
-	.BMS_Single_Voltage[16] = 0,	//单节电池电压
-	.BMS_Single_Voltage[17] = 0,	//单节电池电压	
-	.BMS_Single_Voltage[18] = 0,	//单节电池电压
-	.BMS_Single_Voltage[19] = 0,	//单节电池电压
+	.Group = 0,						//Which group [第几组]
+	.BMS_String = 20,				//BMS string number [BMS串数]
+	.BMS_Single_Voltage[0] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[1] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[2] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[3] = 0,		//Single battery voltage [单节电池电压]	
+	.BMS_Single_Voltage[4] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[5] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[6] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[7] = 0,		//Single battery voltage [单节电池电压]	
+	.BMS_Single_Voltage[8] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[9] = 0,		//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[10] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[11] = 0,	//Single battery voltage [单节电池电压]	
+	.BMS_Single_Voltage[12] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[13] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[14] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[15] = 0,	//Single battery voltage [单节电池电压]	
+	.BMS_Single_Voltage[16] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[17] = 0,	//Single battery voltage [单节电池电压]	
+	.BMS_Single_Voltage[18] = 0,	//Single battery voltage [单节电池电压]
+	.BMS_Single_Voltage[19] = 0,	//Single battery voltage [单节电池电压]
 };
 
 CAN_BMS_BAL		BMS_BAL = 
 {
-	.BMS_String = 20,				//BMS串数
-	.BMS_BAT.i = 0,					//单节电池状态
+	.BMS_String = 20,				//BMS string number [BMS串数]
+	.BMS_BAT.i = 0,					//Single battery status [单节电池状态]
 };
 
 CAN_BMS_TEMPS	BMS_TEMPS =
 {
-	.Group = 0,						//第几组
-	.BMS_Single_Temp[0] = 0,		//单节电池温度
-	.BMS_Single_Temp[1] = 0,		//单节电池温度
-	.BMS_Single_Temp[2] = 0,		//单节电池温度
-	.BMS_Single_Temp[3] = 0,		//单节电池温度
-	.BMS_Single_Temp[4] = 0,		//单节电池温度
-	.BMS_Single_Temp[5] = 0,		//单节电池温度
-	.BMS_Single_Temp[6] = 0,		//单节电池温度
-	.BMS_Single_Temp[7] = 0,		//单节电池温度
-	.BMS_Single_Temp[8] = 0,		//单节电池温度
-	.BMS_Single_Temp[9] = 0,		//单节电池温度
+	.Group = 0,						//Which group [第几组]
+	.BMS_Single_Temp[0] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[1] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[2] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[3] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[4] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[5] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[6] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[7] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[8] = 0,		//Single battery temperature [单节电池温度]
+	.BMS_Single_Temp[9] = 0,		//Single battery temperature [单节电池温度]
 };
 
 CAN_BMS_HUM		BMS_HUM = 
 {
-	.Humidity = 0,					//湿度	0-10000(0%-100%);
-	.Temp_Hum_Sensor = 0,			//温度	-10000-10000(-100°-100°)
-	.Temp_IC = 0,					//IC温度
+	.Humidity = 0,					//Humidity 0-10000(0%-100%); [湿度	0-10000(0%-100%);]
+	.Temp_Hum_Sensor = 0,			//Temperature -10000-10000(-100°-100°) [温度	-10000-10000(-100°-100°)]
+	.Temp_IC = 0,					//IC Temperature [IC温度]
 };
 
 CAN_BMS_SOC_SOH_TEMP_STAT	BMS_SOC_SOH_TEMP_STAT = 
 {
-	.V_Cell_Min = 0,				//单节电池最低电压 扩大1000倍发送
-	.V_Cell_Max = 0,				//单节电池最高电压 扩大1000倍发送
+	.V_Cell_Min = 0,				//The lowest voltage of a single battery is enlarged 1000 times and sent [单节电池最低电压 扩大1000倍发送]
+	.V_Cell_Max = 0,				//The maximum voltage of a single battery is expanded 1000 times and sent [单节电池最高电压 扩大1000倍发送]
 	.Soc = 0,						//0-255(0%-100%)
 	.Soh = 0,						//0-255(0%-100%)
-	.T_Cell_Max = 0,				//单节电池最大温度
+	.T_Cell_Max = 0,				//Maximum temperature of single battery [单节电池最大温度]
 	.Stat = 0,						//
 };
 
 CAN_BMS_AH_WH_CHG_TOTAL		BMS_AH_WH_CHG_TOTAL =
 {
-	.Ah_Charge_Total = 0,			//安时
-	.Wh_Charge_Total = 0,			//瓦时
+	.Ah_Charge_Total = 0,			//An hour [安时]
+	.Wh_Charge_Total = 0,			//Watt hour [瓦时]
 };
 
 CAN_BMS_AH_WH_DIS_TOTAL		BMS_AH_WH_DIS_TOTAL =
 {
-	.Ah_Discharge_Total = 0,		//安时
-	.Wh_Discharge_Total = 0,		//瓦时
+	.Ah_Discharge_Total = 0,		//An hour [安时]
+	.Wh_Discharge_Total = 0,		//Watt hour [瓦时]
 };	
 
 VESC_CAN_TYPE VESC_CAN_DATA = 
@@ -111,10 +111,10 @@ VESC_CAN_TYPE VESC_CAN_DATA =
 
 /**************************************************
  * @brie  :VESC_Set_BMS_V_TOT()
- * @note  :设置总电压 	充电器电压
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set the total voltage charger voltage [设置总电压 	充电器电压]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_V_TOT(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -143,10 +143,10 @@ void VESC_Set_BMS_V_TOT(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data
 	
 /**************************************************
  * @brie  :VESC_Set_BMS_I()
- * @note  :设置输入电流 	BMS_IC电流
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set input current BMS_IC current [设置输入电流 	BMS_IC电流]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_I(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -175,10 +175,10 @@ void VESC_Set_BMS_I(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 
 /**************************************************
  * @brie  :VESC_Set_BMS_AH_WH()
- * @note  :设置电池毫安时 	电池W时 
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set battery mAh Battery W hours [设置电池毫安时 	电池W时 ]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_AH_WH(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -207,10 +207,10 @@ void VESC_Set_BMS_AH_WH(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data
 
 /**************************************************
  * @brie  :VESC_Set_BMS_V_CELL()
- * @note  :设置单节电池电压 
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set single battery voltage [设置单节电池电压]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_V_CELL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -247,10 +247,10 @@ void VESC_Set_BMS_V_CELL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_dat
 
 /**************************************************
  * @brie  :VESC_Set_BMS_BAL()
- * @note  :设置单节电池状态 
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set single battery status [设置单节电池状态]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_BAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -279,10 +279,10 @@ void VESC_Set_BMS_BAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 
 /**************************************************
  * @brie  :VESC_Set_BMS_TEMPS()
- * @note  :设置温度 
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set temperature [设置温度 ]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_TEMPS(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -321,10 +321,10 @@ void VESC_Set_BMS_TEMPS(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data
 
 /**************************************************
  * @brie  :VESC_Set_BMS_HUM()
- * @note  :设置湿度 温度 IC温度  
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set humidity temperature IC temperature [设置湿度 温度 IC温度 ]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_HUM(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -353,15 +353,15 @@ void VESC_Set_BMS_HUM(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 
 /**************************************************
  * @brie  :VESC_Set_BMS_SOC_SOH_TEMP_STAT()
- * @note  :设置单节电池最低电压
- *			   单节电池最高电压
- *			    Soc
- *				Soh
- *			   单节电池最大温度
- *			   状态
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set the minimum voltage of a single battery [设置单节电池最低电压]
+ *		   Maximum voltage of a single battery [单节电池最高电压]
+ *	       Soc
+ *		   Soh
+ *		   Maximum temperature of single battery [单节电池最大温度]
+ *		   State [状态]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_SOC_SOH_TEMP_STAT(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -390,10 +390,10 @@ void VESC_Set_BMS_SOC_SOH_TEMP_STAT(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *v
 
 /**************************************************
  * @brie  :VESC_Set_BMS_AH_WH_CHG_TOTAL()
- * @note  :设置充电安时 	充电瓦时
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set charging ampere-hour charging watt-hour [设置充电安时 充电瓦时]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_AH_WH_CHG_TOTAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -422,10 +422,10 @@ void VESC_Set_BMS_AH_WH_CHG_TOTAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *ves
 
 /**************************************************
  * @brie  :VESC_Set_BMS_AH_WH_DIS_TOTAL()
- * @note  :设置安时 瓦时
- * @param :can_tx_struct	CAN发送结构体
+ * @note  :Set ampere-hours watt-hours [设置安时 瓦时]
+ * @param :can_tx_struct	CAN sending structure [CAN发送结构体]
  *		   vesc_can_data	VESC_CAN_TYPE
- * @retval:无
+ * @retval:none [无]
  **************************************************/
 void VESC_Set_BMS_AH_WH_DIS_TOTAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *vesc_can_data)
 {
@@ -454,35 +454,35 @@ void VESC_Set_BMS_AH_WH_DIS_TOTAL(CanTxMessage *can_tx_struct,VESC_CAN_TYPE *ves
 
 CAN_STATUS STATUS = 
 {
-	.Rpm = 0,			//转速
-	.Duty_Cycle = 0,	//占空比
-	.Total_Current = 0,	//总电流
+	.Rpm = 0,			//Speed [转速]
+	.Duty_Cycle = 0,	//Duty cycle [占空比]
+	.Total_Current = 0,	//Total current [总电流]
 };
 
 CAN_STATUS_2 STATUS_2 = 
 {
-	.Amp_Hours_Charged = 0,	//充电的安时
-	.Amp_Hours = 0,			//消耗的安时
+	.Amp_Hours_Charged = 0,	//Charging ampere hours [充电的安时]
+	.Amp_Hours = 0,			//Hours consumed [消耗的安时]
 };
 
 CAN_STATUS_3 STATUS_3 = 
 {
-	.Watt_Hours_Charged = 0,	//充电的瓦时
-	.Watt_Hours = 0,			//消耗的瓦时
+	.Watt_Hours_Charged = 0,	//Charging watt hours [充电的瓦时]
+	.Watt_Hours = 0,			//Watt hours consumed [消耗的瓦时]
 };
 
 CAN_STATUS_4 STATUS_4 = 
 {
-	.PID_Pos = 0,				//不清楚数据类型
-	.Total_Input_Current = 0,	//输入总电流
-	.Motor_Temp = 0,			//电机温度
-	.MOSFET_Temp = 0,			//MOS管温度
+	.PID_Pos = 0,				//Not sure about data type [不清楚数据类型]
+	.Total_Input_Current = 0,	//Input total current [输入总电流]
+	.Motor_Temp = 0,			//Motor temperature [电机温度]
+	.MOSFET_Temp = 0,			//Mosfet temperature [MOS管温度]
 };
 
 CAN_STATUS_5 STATUS_5 = 
 {
-	.Input_Voltage = 0,		//输入电压
-	.Tachometer_Value = 0,	//转速表?不确定
+	.Input_Voltage = 0,		//input voltage [输入电压]
+	.Tachometer_Value = 0,	//Tachometer? Not sure [转速表?不确定]
 };
 
 VESC_CAN_RX_TYPE VESC_CAN_RX_DATA = 
